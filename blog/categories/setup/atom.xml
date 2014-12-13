@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: setup | Blogy]]></title>
+  <link href="http:///blog/categories/setup/atom.xml" rel="self"/>
+  <link href="http:///"/>
+  <updated>2014-12-13T02:44:21-05:00</updated>
+  <id>http:///</id>
+  <author>
+    <name><![CDATA[Aziz Alto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setup Octopress with github User or Organization site]]></title>
+    <link href="http:///blog/2014/07/18/setup-octopress-with-github-user-or-organization-site/"/>
+    <updated>2014-07-18T15:03:09-04:00</updated>
+    <id>http:///blog/2014/07/18/setup-octopress-with-github-user-or-organization-site</id>
+    <content type="html"><![CDATA[<p>Here is how to setup <a href="http://octopress.org/">Octopress</a> for using github pages as a host.</p>
+
+<p>From your github account:</p>
+
+<ol>
+  <li>create a new repo and name it <code>username.github.io</code>, in my case <code>iamaziz.github.io</code>.</li>
+</ol>
+
+<p>Clone Octopress blog project and install dependencies:</p>
+
+<ol>
+  <li>
+    <p><code>git clone https://github.com/imathis/octopress.git</code></p>
+  </li>
+  <li>
+    <p>Install dependencies:</p>
+
+    <p><code>gem install bundler</code></p>
+
+    <p><code>bundle install</code></p>
+  </li>
+</ol>
+
+<p>From Octopress blog root folder:</p>
+
+<ol>
+  <li>run <code>rake setup_github_pages</code>, and ansewer with your repo credentials (the one you just created). (Note: make sure you have SSH key setup between your github account and your computer.)</li>
+  <li>run <code>rake generate</code> (This will create your posts and pages)</li>
+  <li>run <code>rake deploy</code> (This will push the contents of <code>_deploy</code> to your <code>master</code> branch).</li>
+</ol>
+
+<p>It should ask for your ssh key password (if it is not already saved in the keychain) then you will see something like <code>identity added: ...</code> and deployment will start.</p>
+
+<h3 id="note">Note:</h3>
+<blockquote>
+  <p>if you get a message says <code>permission denied</code> when you run <code>rake deploy</code>, this means SSH key (public key) does not exists or not establish correctly. <a href="https://help.github.com/articles/error-permission-denied-publickey">See: error permission-denied.</a></p>
+</blockquote>
+
+<p>If everything is ok, your blog is ready at: <code>http://username.github.io/</code></p>
+
+<h3 id="one-more-thing">One more thing:</h3>
+
+<p>However, you also need to push the source of your Octopress project to <code>source</code> branch of your repo as follows, change directory to source folder and run:</p>
+
+<ol>
+  <li><code>git add .</code></li>
+  <li><code>git commit -m "your msg"</code></li>
+  <li><code>git push origin source</code></li>
+</ol>
+
+<h1 id="done">Done!</h1>
+
+<p>From now on you should be ready for blogging, as follow:</p>
+
+<ol>
+  <li>Create and edit posts: <code>rake new_post["title"]</code></li>
+  <li>Generate them: <code>rake generate</code></li>
+  <li>deploy them to your github pages: <code>rake deploy</code> 
+    <ul>
+      <li>or <code>rake preview</code> to review it locally at <code>http://localhost:4000</code></li>
+    </ul>
+  </li>
+</ol>
+]]></content>
+  </entry>
+  
+</feed>
