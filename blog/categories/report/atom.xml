@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: report | Blogy]]></title>
-  <link href="http:///blog/categories/report/atom.xml" rel="self"/>
-  <link href="http:///"/>
-  <updated>2014-12-29T20:35:21-05:00</updated>
-  <id>http:///</id>
+  <link href="http://iamaziz.github.io/blog/categories/report/atom.xml" rel="self"/>
+  <link href="http://iamaziz.github.io/"/>
+  <updated>2014-12-29T21:42:09-05:00</updated>
+  <id>http://iamaziz.github.io/</id>
   <author>
     <name><![CDATA[Aziz Alto]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Into The Asian Bermuda Triangle: AirAsia Flight QZ8501]]></title>
-    <link href="http:///blog/2014/12/29/into-the-asian-bermuda-triangle-airasia-flight-qz8501/"/>
+    <link href="http://iamaziz.github.io/blog/2014/12/29/into-the-asian-bermuda-triangle-airasia-flight-qz8501/"/>
     <updated>2014-12-29T19:53:30-05:00</updated>
-    <id>http:///blog/2014/12/29/into-the-asian-bermuda-triangle-airasia-flight-qz8501</id>
+    <id>http://iamaziz.github.io/blog/2014/12/29/into-the-asian-bermuda-triangle-airasia-flight-qz8501</id>
     <content type="html"><![CDATA[<blockquote>
   <p>Testing testing 1 2 3, can you hear me?</p>
 </blockquote>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: howto | Blogy]]></title>
-  <link href="http:///blog/categories/howto/atom.xml" rel="self"/>
-  <link href="http:///"/>
-  <updated>2014-12-29T20:35:21-05:00</updated>
-  <id>http:///</id>
+  <link href="http://iamaziz.github.io/blog/categories/howto/atom.xml" rel="self"/>
+  <link href="http://iamaziz.github.io/"/>
+  <updated>2014-12-29T21:42:09-05:00</updated>
+  <id>http://iamaziz.github.io/</id>
   <author>
     <name><![CDATA[Aziz Alto]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Setup Octopress with github User or Organization site]]></title>
-    <link href="http:///blog/2014/07/18/setup-octopress-with-github-user-or-organization-site/"/>
+    <link href="http://iamaziz.github.io/blog/2014/07/18/setup-octopress-with-github-user-or-organization-site/"/>
     <updated>2014-07-18T15:03:09-04:00</updated>
-    <id>http:///blog/2014/07/18/setup-octopress-with-github-user-or-organization-site</id>
+    <id>http://iamaziz.github.io/blog/2014/07/18/setup-octopress-with-github-user-or-organization-site</id>
     <content type="html"><![CDATA[<p>Here is how to setup <a href="http://octopress.org/">Octopress</a> for using github pages as a host.</p>
 
 <p>From your github account:</p>
