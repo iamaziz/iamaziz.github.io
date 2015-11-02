@@ -4,7 +4,7 @@
   <title><![CDATA[Blogy]]></title>
   <link href="http://iamaziz.github.io/atom.xml" rel="self"/>
   <link href="http://iamaziz.github.io/"/>
-  <updated>2015-11-02T15:16:06-05:00</updated>
+  <updated>2015-11-02T15:23:51-05:00</updated>
   <id>http://iamaziz.github.io/</id>
   <author>
     <name><![CDATA[Aziz Alto]]></name>
@@ -19,10 +19,7 @@
     <id>http://iamaziz.github.io/blog/2015/11/02/word2vec-with-nltk-retrain-and-evaluate</id>
     <content type="html"><![CDATA[<!-- [Word2vec](word2vec.googlecode.com) is a word-embedding algorithm, where words are represented as numerical vectors.
 It attempts to understand meaning and semantics relationships among words. -->
-<p>I came across the interesting post <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">Using Word2vec with NLTK</a>. It demonstrates that <a href="https://code.google.com/p/word2vec/">word2vec</a> may represent the semantic of the same word differently depending on the text context of your dataset.
- <!-- different semantic similarity of words can vary depending on the text context of your dataset. --></p>
-
-<p>The post is not too long, go <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">read it</a> then come back here.</p>
+<p>I came across the interesting post <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">Using Word2vec with NLTK</a>. It demonstrates how <a href="https://code.google.com/p/word2vec/">word2vec</a> may represent the semantic of the same word differently depending on the textual context of your dataset. Read it, then come back here.</p>
 
 <p>I wonder how the <strong>semantic similarities</strong> and <strong>accuracy</strong> (of word2vec model) would change after re-training the same model on both datasets, <code>brown</code> and <code>movie_reviews</code>. After experimenting on that, here is what I got.</p>
 
