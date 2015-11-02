@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | Blogy]]></title>
   <link href="http://iamaziz.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://iamaziz.github.io/"/>
-  <updated>2015-06-12T04:26:08-04:00</updated>
+  <updated>2015-11-02T11:51:32-05:00</updated>
   <id>http://iamaziz.github.io/</id>
   <author>
     <name><![CDATA[Aziz Alto]]></name>
@@ -75,7 +75,7 @@
 <ol>
   <li>Create and edit posts: <code>rake new_post["title"]</code></li>
   <li>Generate them: <code>rake generate</code></li>
-  <li>deploy them to your github pages: <code>rake deploy</code> 
+  <li>deploy them to your github pages: <code>rake deploy</code>
     <ul>
       <li>or <code>rake preview</code> to review it locally at <code>http://localhost:4000</code></li>
     </ul>

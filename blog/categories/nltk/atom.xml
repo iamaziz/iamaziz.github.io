@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nltk | Blogy]]></title>
+  <link href="http://iamaziz.github.io/blog/categories/nltk/atom.xml" rel="self"/>
+  <link href="http://iamaziz.github.io/"/>
+  <updated>2015-11-02T11:51:32-05:00</updated>
+  <id>http://iamaziz.github.io/</id>
+  <author>
+    <name><![CDATA[Aziz Alto]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[word2vec with NLTK retrain and evaluate]]></title>
+    <link href="http://iamaziz.github.io/blog/2015/11/02/word2vec-with-nltk-retrain-and-evaluate/"/>
+    <updated>2015-11-02T10:26:34-05:00</updated>
+    <id>http://iamaziz.github.io/blog/2015/11/02/word2vec-with-nltk-retrain-and-evaluate</id>
+    <content type="html"><![CDATA[<!-- [Word2vec](word2vec.googlecode.com) is a word-embedding algorithm, where words are represented as numerical vectors.
+It attempts to understand meaning and semantics relationships among words. -->
+<p>I came across the nice post <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">Using Word2vec with NLTK</a>.</p>
+
+<p>Please go read it then come back here.</p>
+
+<p>I wonder how the <code>semantic similarities</code> and <code>accuracy</code> (of word2vec model) would change with re-training the model. Here are the results.</p>
+
+<p>First the evaluation function</p>
+
+<p>```python
+### compute accuracy
+from <strong>future</strong> import division</p>
+
+<p>def w2v_model_accuracy(model):</p>
+
+<pre><code># https://word2vec.googlecode.com/svn/trunk/questions-words.txt
+
+questions = 'questions-words.txt'
+evals = open(questions, 'r').readlines()
+num_sections = len([l for l in evals if l.startswith(':')])
+num_sents = len(evals) - num_sections
+
+accuracy = model.accuracy(questions)
+
+sum_corr = len(accuracy[-1]['correct'])
+sum_incorr = len(accuracy[-1]['incorrect'])
+total = sum_corr + sum_incorr
+percent = lambda a: a / total * 100
+print('Total: {} out of {}, Correct: {:.2f}%, Incorrect: {:.2f}%'.format(total, num_sents, percent(sum_corr), percent(sum_incorr)))
+</code></pre>
+
+<p>```</p>
+
+<p>The tests:</p>
+
+<p>```python
+»&gt; from gensim.models import Word2Vec
+»&gt; from nltk.corpus import brown, movie_reviews, treebank</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <h1 id="training-a-model-on-brown-dataset">training a model on brown dataset</h1>
+      <p>b = Word2Vec(brown.sents())
+# RESULTS
+b.most_similar(‘money’, topn=4)
+[(u’pay’, 0.6832360029220581),
+ (u’ready’, 0.6151966452598572),
+ (u’try’, 0.584543764591217),
+ (u’care’, 0.582566499710083)]
+# ACCURACY
+w2v_model_accuracy(b)
+ Total: 5086 out of 19544, Correct: 1.63%, Incorrect: 98.37%</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <h1 id="training-a-model-on-moviereviews">training a model on movie_reviews</h1>
+      <p>mr = Word2Vec(movie_reviews.sents())
+# RESULTS
+mr.most_similar(‘money’, topn=4)
+[(u’unstoppable’, 0.6963834762573242),
+ (u’pain’, 0.6333830952644348),
+ (u’patients’, 0.6195155382156372),
+ (u’jail’, 0.6182809472084045)]
+# ACCURACY
+w2v_model_accuracy(mr)
+Total: 5613 out of 19544, Correct: 2.73%, Incorrect: 97.27%</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>```</p>
+
+<p>Now, lets see the results after re-training both models on the other’s dataset:</p>
+
+<p>```python</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <h1 id="retrain-brown-model-with-moviereviews-sentences">retrain brown model with movie_reviews sentences</h1>
+      <p>b.train(movie_reviews.sents())
+1352672
+b.most_similar(‘money’, topn=4)
+[(u’cash’, 0.7034180164337158),
+ (u’plans’, 0.6980791687965393),
+ (u’attention’, 0.6741234660148621),
+ (u’pay’, 0.6686939597129822)]
+w2v_model_accuracy(b)
+Total: 5086 out of 19544, Correct: 4.25%, Incorrect: 95.75%</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <h1 id="retrain-moviereviews-model-with-brown-sentences">retrain movie_reviews model with brown sentences</h1>
+      <p>mr.train(brown.sents())
+946806
+mr.most_similar(‘money’, topn=4)
+[(u’trouble’, 0.6961323022842407),
+ (u’worries’, 0.6873552799224854),
+ (u’stay’, 0.6835054159164429),
+ (u’comfort’, 0.6833420991897583)]
+w2v_model_accuracy(mr)
+Total: 5613 out of 19544, Correct: 5.18%, Incorrect: 94.82%
+```</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>Intuitively the accuracy of both models increased after re-training (notic: training again on the same dataset will decrease accuracy).</p>
+
+<p>Interesting thing is that, after the re-trainging, the results are still different although both models are technically trained on the same datasets. This may suggest that the order in which you feed your model more data does matter.</p>
+]]></content>
+  </entry>
+  
+</feed>
