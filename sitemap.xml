@@ -3,6 +3,24 @@
   
   
   <url>
+    <loc>http://iamaziz.github.io/blog/2015/06/12/math-to-python/</loc>
+    <lastmod>2015-06-12T03:28:00-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://iamaziz.github.io/blog/2015/05/24/simple-perceptron-implementation-in-python/</loc>
+    <lastmod>2015-05-24T22:10:47-04:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://iamaziz.github.io/blog/2015/02/24/ebola-open-data-jam/</loc>
+    <lastmod>2015-02-24T01:30:40-05:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://iamaziz.github.io/blog/2014/07/18/setup-octopress-with-github-user-or-organization-site/</loc>
     <lastmod>2014-07-18T15:03:09-04:00</lastmod>
     <priority>0.8</priority>
@@ -11,42 +29,42 @@
   
   <url>
     <loc>http://iamaziz.github.io/archives/</loc>
-    <lastmod>2014-12-30T04:08:21-05:00</lastmod>
+    <lastmod>2015-06-12T04:26:08-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://iamaziz.github.io/blog/</loc>
-    <lastmod>2014-12-30T04:08:21-05:00</lastmod>
+    <lastmod>2015-06-12T04:26:08-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://iamaziz.github.io/blog/archives/</loc>
-    <lastmod>2014-12-30T04:08:21-05:00</lastmod>
+    <lastmod>2015-06-12T04:26:08-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://iamaziz.github.io/</loc>
-    <lastmod>2014-12-30T04:08:21-05:00</lastmod>
+    <lastmod>2015-06-12T04:26:08-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://iamaziz.github.io/about/</loc>
-    <lastmod>2014-12-30T04:08:21-05:00</lastmod>
+    <lastmod>2015-06-12T04:26:08-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://iamaziz.github.io/quotes/</loc>
-    <lastmod>2014-12-30T04:08:21-05:00</lastmod>
+    <lastmod>2015-06-12T04:26:08-04:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
