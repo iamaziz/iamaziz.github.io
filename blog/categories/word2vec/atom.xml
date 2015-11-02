@@ -4,7 +4,7 @@
   <title><![CDATA[Category: word2vec | Blogy]]></title>
   <link href="http://iamaziz.github.io/blog/categories/word2vec/atom.xml" rel="self"/>
   <link href="http://iamaziz.github.io/"/>
-  <updated>2015-11-02T12:14:59-05:00</updated>
+  <updated>2015-11-02T15:16:06-05:00</updated>
   <id>http://iamaziz.github.io/</id>
   <author>
     <name><![CDATA[Aziz Alto]]></name>
@@ -20,11 +20,12 @@
     <id>http://iamaziz.github.io/blog/2015/11/02/word2vec-with-nltk-retrain-and-evaluate</id>
     <content type="html"><![CDATA[<!-- [Word2vec](word2vec.googlecode.com) is a word-embedding algorithm, where words are represented as numerical vectors.
 It attempts to understand meaning and semantics relationships among words. -->
-<p>I came across the nice post <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">Using Word2vec with NLTK</a>.</p>
+<p>I came across the interesting post <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">Using Word2vec with NLTK</a>. It demonstrates that <a href="https://code.google.com/p/word2vec/">word2vec</a> may represent the semantic of the same word differently depending on the text context of your dataset.
+ <!-- different semantic similarity of words can vary depending on the text context of your dataset. --></p>
 
-<p>Please go read it then come back here.</p>
+<p>The post is not too long, go <a href="http://streamhacker.com/2014/12/29/word2vec-nltk/">read it</a> then come back here.</p>
 
-<p>I wonder how the <code>semantic similarities</code> and <code>accuracy</code> (of word2vec model) would change with re-training the model. Here are the results.</p>
+<p>I wonder how the <strong>semantic similarities</strong> and <strong>accuracy</strong> (of word2vec model) would change after re-training the same model on both datasets, <code>brown</code> and <code>movie_reviews</code>. After experimenting on that, here is what I got.</p>
 
 <p>Train and test:</p>
 
@@ -109,7 +110,7 @@ Total: 5613 out of 19544, Correct: 5.18%, Incorrect: 94.82%
   </blockquote>
 </blockquote>
 
-<p>Intuitively the accuracy of both models increased after re-training (notic: training again on the same dataset will decrease accuracy).</p>
+<p>As expected, the accuracy of both models increased after re-training (notic: training again on the same dataset will decrease accuracy).</p>
 
 <p>Interesting thing is that, after the re-trainging, the results are still different although both models are technically trained on the same datasets. This may suggest that the order in which you feed your model more data does matter.</p>
 
