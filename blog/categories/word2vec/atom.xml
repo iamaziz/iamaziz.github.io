@@ -4,7 +4,7 @@
   <title><![CDATA[Category: word2vec | Blogy]]></title>
   <link href="http://iamaziz.github.io/blog/categories/word2vec/atom.xml" rel="self"/>
   <link href="http://iamaziz.github.io/"/>
-  <updated>2015-11-02T11:51:32-05:00</updated>
+  <updated>2015-11-02T12:14:59-05:00</updated>
   <id>http://iamaziz.github.io/</id>
   <author>
     <name><![CDATA[Aziz Alto]]></name>
@@ -26,33 +26,7 @@ It attempts to understand meaning and semantics relationships among words. -->
 
 <p>I wonder how the <code>semantic similarities</code> and <code>accuracy</code> (of word2vec model) would change with re-training the model. Here are the results.</p>
 
-<p>First the evaluation function</p>
-
-<p>```python
-### compute accuracy
-from <strong>future</strong> import division</p>
-
-<p>def w2v_model_accuracy(model):</p>
-
-<pre><code># https://word2vec.googlecode.com/svn/trunk/questions-words.txt
-
-questions = 'questions-words.txt'
-evals = open(questions, 'r').readlines()
-num_sections = len([l for l in evals if l.startswith(':')])
-num_sents = len(evals) - num_sections
-
-accuracy = model.accuracy(questions)
-
-sum_corr = len(accuracy[-1]['correct'])
-sum_incorr = len(accuracy[-1]['incorrect'])
-total = sum_corr + sum_incorr
-percent = lambda a: a / total * 100
-print('Total: {} out of {}, Correct: {:.2f}%, Incorrect: {:.2f}%'.format(total, num_sents, percent(sum_corr), percent(sum_incorr)))
-</code></pre>
-
-<p>```</p>
-
-<p>The tests:</p>
+<p>Train and test:</p>
 
 <p>```python
 »&gt; from gensim.models import Word2Vec
@@ -96,7 +70,7 @@ Total: 5613 out of 19544, Correct: 2.73%, Incorrect: 97.27%</p>
 
 <p>```</p>
 
-<p>Now, lets see the results after re-training both models on the other’s dataset:</p>
+<p>Now, lets look at the results after re-training both models on each other’s dataset:</p>
 
 <p>```python</p>
 
@@ -138,6 +112,29 @@ Total: 5613 out of 19544, Correct: 5.18%, Incorrect: 94.82%
 <p>Intuitively the accuracy of both models increased after re-training (notic: training again on the same dataset will decrease accuracy).</p>
 
 <p>Interesting thing is that, after the re-trainging, the results are still different although both models are technically trained on the same datasets. This may suggest that the order in which you feed your model more data does matter.</p>
+
+<p>Here is the evaluation function, I used:</p>
+
+<p>```python
+### compute accuracy
+from <strong>future</strong> import division</p>
+
+<p>def w2v_model_accuracy(model):</p>
+
+<pre><code># https://word2vec.googlecode.com/svn/trunk/questions-words.txt
+questions = 'questions-words.txt'
+evals = open(questions, 'r').readlines()
+num_sections = len([l for l in evals if l.startswith(':')])
+num_sents = len(evals) - num_sections
+
+accuracy = model.accuracy(questions)
+
+sum_corr = len(accuracy[-1]['correct'])
+sum_incorr = len(accuracy[-1]['incorrect'])
+total = sum_corr + sum_incorr
+percent = lambda a: a / total * 100
+print('Total: {} out of {}, Correct: {:.2f}%, Incorrect: {:.2f}%'.format(total, num_sents, percent(sum_corr), percent(sum_incorr))) ```
+</code></pre>
 ]]></content>
   </entry>
   

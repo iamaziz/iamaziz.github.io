@@ -85,49 +85,7 @@ It attempts to understand meaning and semantics relationships among words. -->
 
 <p>I wonder how the <code>semantic similarities</code> and <code>accuracy</code> (of word2vec model) would change with re-training the model. Here are the results.</p>
 
-<p>First the evaluation function</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">### compute accuracy</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">w2v_model_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-</span><span class="line">
-</span><span class="line">    <span class="c"># https://word2vec.googlecode.com/svn/trunk/questions-words.txt</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">questions</span> <span class="o">=</span> <span class="s">&#39;questions-words.txt&#39;</span>
-</span><span class="line">    <span class="n">evals</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">questions</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-</span><span class="line">    <span class="n">num_sections</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">evals</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)])</span>
-</span><span class="line">    <span class="n">num_sents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">evals</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_sections</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">questions</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">sum_corr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accuracy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;correct&#39;</span><span class="p">])</span>
-</span><span class="line">    <span class="n">sum_incorr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accuracy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;incorrect&#39;</span><span class="p">])</span>
-</span><span class="line">    <span class="n">total</span> <span class="o">=</span> <span class="n">sum_corr</span> <span class="o">+</span> <span class="n">sum_incorr</span>
-</span><span class="line">    <span class="n">percent</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="o">/</span> <span class="n">total</span> <span class="o">*</span> <span class="mi">100</span>
-</span><span class="line">    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Total: {} out of {}, Correct: {:.2f}%, Incorrect: {:.2f}%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">num_sents</span><span class="p">,</span> <span class="n">percent</span><span class="p">(</span><span class="n">sum_corr</span><span class="p">),</span> <span class="n">percent</span><span class="p">(</span><span class="n">sum_incorr</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>The tests:</p>
+<p>Train and test:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -183,7 +141,7 @@ It attempts to understand meaning and semantics relationships among words. -->
 </span><span class="line"><span class="n">Total</span><span class="p">:</span> <span class="mi">5613</span> <span class="n">out</span> <span class="n">of</span> <span class="mi">19544</span><span class="p">,</span> <span class="n">Correct</span><span class="p">:</span> <span class="mf">2.73</span><span class="o">%</span><span class="p">,</span> <span class="n">Incorrect</span><span class="p">:</span> <span class="mf">97.27</span><span class="o">%</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>Now, lets see the results after re-training both models on the other’s dataset:</p>
+<p>Now, lets look at the results after re-training both models on each other’s dataset:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -232,6 +190,46 @@ It attempts to understand meaning and semantics relationships among words. -->
 <p>Intuitively the accuracy of both models increased after re-training (notic: training again on the same dataset will decrease accuracy).</p>
 
 <p>Interesting thing is that, after the re-trainging, the results are still different although both models are technically trained on the same datasets. This may suggest that the order in which you feed your model more data does matter.</p>
+
+<p>Here is the evaluation function, I used:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="c">### compute accuracy</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">w2v_model_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># https://word2vec.googlecode.com/svn/trunk/questions-words.txt</span>
+</span><span class="line">    <span class="n">questions</span> <span class="o">=</span> <span class="s">&#39;questions-words.txt&#39;</span>
+</span><span class="line">    <span class="n">evals</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">questions</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span><span class="line">    <span class="n">num_sections</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">evals</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)])</span>
+</span><span class="line">    <span class="n">num_sents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">evals</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_sections</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">accuracy</span><span class="p">(</span><span class="n">questions</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">sum_corr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accuracy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;correct&#39;</span><span class="p">])</span>
+</span><span class="line">    <span class="n">sum_incorr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accuracy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;incorrect&#39;</span><span class="p">])</span>
+</span><span class="line">    <span class="n">total</span> <span class="o">=</span> <span class="n">sum_corr</span> <span class="o">+</span> <span class="n">sum_incorr</span>
+</span><span class="line">    <span class="n">percent</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span> <span class="o">/</span> <span class="n">total</span> <span class="o">*</span> <span class="mi">100</span>
+</span><span class="line">    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Total: {} out of {}, Correct: {:.2f}%, Incorrect: {:.2f}%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">num_sents</span><span class="p">,</span> <span class="n">percent</span><span class="p">(</span><span class="n">sum_corr</span><span class="p">),</span> <span class="n">percent</span><span class="p">(</span><span class="n">sum_incorr</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
 
 </article>
