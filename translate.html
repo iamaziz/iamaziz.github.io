@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echosphere</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f7f7f7;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #10a37f;
+            color: white;
+            cursor: pointer;
+        }
+        button:disabled {
+            background: #ccc;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .messages {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            height: 200px;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+        
+        .message-header {
+            padding: 10px;
+            background: #e0e0e0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .message-timestamp {
+            margin-left: auto;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .message-header:hover {
+            background: #d0d0d0;
+        }
+        
+        .message-content {
+            padding: 10px;
+            display: none;
+            word-wrap: break-word;
+            border-top: 1px solid #ddd;
+        }
+        
+        .message.expanded .message-content {
+            display: block;
+        }
+        
+        .message-toggle {
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        .message.expanded .message-toggle {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Echosphere</h1>
+        
+        <div class="voice-selection">
+            <select id="voiceSelect" class="voice-select"></select>
+        </div>
+
+        <div class="language-selection">
+            <div class="selected-languages">
+                <span id="selectedSource">Select first language</span>
+                <span>↔</span>
+                <span id="selectedTarget">Select second language</span>
+            </div>
+            <div class="language-tiles" id="languageTiles"></div>
+        </div>
+        
+        <div class="translation-section">
+            <h2 class="section-title">Translation Session</h2>
+            <div class="controls">
+                <button class="startBtn">Start Session</button>
+                <button class="stopBtn" disabled>Stop Session</button>
+            </div>
+            <div class="status">Status: Not Connected</div>
+            <div class="messages"></div>
+        </div>
+        
+        <div class="api-key-section">
+            <h2 class="section-title">API Key</h2>
+            <input type="password" id="apiKeyInput" placeholder="Enter OpenAI API Key" class="api-key-input">
+        </div>
+
+        <footer class="footer">
+            Built by <a href="https://twitter.com/AzizAlto" target="_blank">Aziz Alto</a> ⚡ 2025
+        </footer>
+    </div>
+
+    <style>
+        .language-selection {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .language-tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 6px;
+        }
+
+        .language-tile {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #ccc;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+
+        .language-tile:hover {
+            border-color: #10a37f;
+            background: #b8b8b8;
+        }
+
+        .language-tile.selected-source {
+            background: #10a37f;
+            color: white;
+            border-color: #10a37f;
+        }
+
+        .language-tile.selected-target {
+            background: #0d8a6c;
+            color: white;
+            border-color: #0d8a6c;
+        }
+
+        .selected-languages {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 16px;
+            color: #666;
+        }
+        .language-select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .voice-selection {
+            margin: 15px 0;
+        }
+
+        .voice-select {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 10px;
+            padding-right: 30px;
+        }
+
+        .voice-select:hover {
+            border-color: #10a37f;
+        }
+
+        .voice-select:focus {
+            outline: none;
+            border-color: #10a37f;
+            box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.1);
+        }
+
+        .voice-select option {
+            padding: 8px;
+            font-size: 14px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #10a37f;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <script>
+        // Define available voices
+        const voices = [
+            'alloy',
+            'ash',
+            'ballad',
+            'coral',
+            'echo',
+            'sage',
+            'shimmer',
+            'verse'
+        ];
+
+        // Populate voice dropdown
+        function populateVoiceDropdown() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            voices.forEach(voice => {
+                const option = new Option(voice.charAt(0).toUpperCase() + voice.slice(1), voice);
+                voiceSelect.add(option);
+            });
+        }
+
+        // Define available languages
+        const languages = [
+            'English',
+            'Arabic',
+            'Japanese',
+            'Thai',
+            'Portuguese',
+            'Spanish',
+            'Korean',
+            'Chinese',
+            'Italian',
+            'French',
+            'German',
+            'Russian',
+            'Turkish',
+            'Vietnamese',
+            'Indonesian',
+            'Polish',
+            'Hindi',
+            'Dutch',
+            'Swedish',
+            'Norwegian',
+            'Finnish',
+            'Danish',
+            'Greek',
+            'Czech',
+            'Romanian',
+            'Ukrainian'
+        ];
+
+        // Single DOMContentLoaded event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            setupLanguageSelection();
+            populateVoiceDropdown();
+        });
+
+        // Replace populateLanguageDropdowns with new tile-based selection
+        function setupLanguageSelection() {
+            const tilesContainer = document.getElementById('languageTiles');
+            const selectedSource = document.getElementById('selectedSource');
+            const selectedTarget = document.getElementById('selectedTarget');
+            let sourceLanguage = ''; //English';
+            let targetLanguage = ''; //Japanese';
+
+            languages.forEach(lang => {
+                const tile = document.createElement('div');
+                tile.className = 'language-tile';
+                tile.textContent = lang;
+
+                tile.addEventListener('click', () => {
+                    if (tile.classList.contains('selected-source')) {
+                        tile.classList.remove('selected-source');
+                        sourceLanguage = null;
+                        selectedSource.textContent = 'Select source language';
+                    } else if (tile.classList.contains('selected-target')) {
+                        tile.classList.remove('selected-target');
+                        targetLanguage = null;
+                        selectedTarget.textContent = 'Select target language';
+                    } else if (!sourceLanguage) {
+                        sourceLanguage = lang;
+                        selectedSource.textContent = lang;
+                        tile.classList.add('selected-source');
+                    } else if (!targetLanguage) {
+                        targetLanguage = lang;
+                        selectedTarget.textContent = lang;
+                        tile.classList.add('selected-target');
+                    }
+                });
+
+                if (lang === sourceLanguage) {
+                    tile.classList.add('selected-source');
+                    selectedSource.textContent = lang;
+                } else if (lang === targetLanguage) {
+                    tile.classList.add('selected-target');
+                    selectedTarget.textContent = lang;
+                }
+
+                tilesContainer.appendChild(tile);
+            });
+        }
+
+        // Update getConfig to use the new selection method
+        const getConfig = () => {
+            const sourceLanguage = document.getElementById('selectedSource').textContent;
+            const targetLanguage = document.getElementById('selectedTarget').textContent;
+ 
+            if (sourceLanguage === 'Select first language' || targetLanguage === 'Select second language') {
+                throw new Error('Please select both first and second languages');
+            }
+            
+            return {
+                OPENAI_API_KEY: document.getElementById('apiKeyInput').value,
+                VOICE: document.getElementById('voiceSelect').value,
+                TRANSLATOR_INSTRUCTIONS: `You are a bi-directional translator between ${sourceLanguage} and ${targetLanguage}. When you hear ${sourceLanguage}, immediately respond with the ${targetLanguage} translation. When you hear ${targetLanguage}, immediately respond with the ${sourceLanguage} translation. Do not provide explanations or engage in conversation – only output the direct translation. If you hear anything that is not clearly either ${sourceLanguage} or ${targetLanguage}, remain silent and do not respond. Remember, you only speak if you hear ${sourceLanguage} or ${targetLanguage}, otherwise, remain silent. This is very important, you MUST remain scilent and not respond to anything that is not ${sourceLanguage} or ${targetLanguage}.`,
+            };
+        };
+
+        async function getToken() {
+            const config = getConfig();
+            const apiKey = config.OPENAI_API_KEY;
+            
+            if (!apiKey) {
+                alert('Please enter your OpenAI API key in the configuration section');
+                throw new Error('Please enter an OpenAI API key');
+            }
+
+            const response = await fetch(
+                "https://api.openai.com/v1/realtime/sessions",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-realtime-preview-2024-12-17",
+                        voice: config.VOICE,
+                        instructions: config.TRANSLATOR_INSTRUCTIONS,
+                    }),
+                }
+            );
+
+            return await response.json();
+        }
+
+        class TranslationSession {
+            constructor() {
+                this.peerConnection = null;
+                this.dataChannel = null;
+                this.audioElement = null;
+                this.startBtn = document.querySelector('.startBtn');
+                this.stopBtn = document.querySelector('.stopBtn');
+                
+                this.startBtn.addEventListener('click', () => this.startSession());
+                this.stopBtn.addEventListener('click', () => this.stopSession());
+            }
+
+            async startSession() {
+                try {
+                    const data = await getToken();
+                    
+                    this.peerConnection = new RTCPeerConnection();
+                    
+                    this.audioElement = document.createElement('audio');
+                    this.audioElement.autoplay = true;
+                    this.peerConnection.ontrack = (e) => {
+                        this.audioElement.srcObject = e.streams[0];
+                    };
+
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    this.peerConnection.addTrack(stream.getTracks()[0]);
+
+                    this.dataChannel = this.peerConnection.createDataChannel('translation-events');
+                    this.setupDataChannelHandlers();
+
+                    const offer = await this.peerConnection.createOffer();
+                    await this.peerConnection.setLocalDescription(offer);
+
+                    const baseUrl = 'https://api.openai.com/v1/realtime';
+                    const model = 'gpt-4o-realtime-preview-2024-12-17';
+                    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+                        method: 'POST',
+                        body: offer.sdp,
+                        headers: {
+                            'Authorization': `Bearer ${data.client_secret.value}`,
+                            'Content-Type': 'application/sdp'
+                        }
+                    });
+
+                    const answer = {
+                        type: 'answer',
+                        sdp: await sdpResponse.text()
+                    };
+                    await this.peerConnection.setRemoteDescription(answer);
+
+                    this.startBtn.disabled = true;
+                    this.stopBtn.disabled = false;
+                    this.updateStatus('Connected');
+                } catch (error) {
+                    console.error('Error starting session:', error);
+                    this.updateStatus('Error: ' + error.message);
+                }
+            }
+
+            setupDataChannelHandlers() {
+                this.dataChannel.onopen = () => {
+                    this.updateStatus('Data Channel Open');
+                };
+
+                this.dataChannel.onmessage = (e) => {
+                    const message = JSON.parse(e.data);
+                    this.displayMessage('Received', message);
+                };
+
+                this.dataChannel.onclose = () => {
+                    this.updateStatus('Data Channel Closed');
+                };
+            }
+
+            stopSession() {
+                if (this.dataChannel) {
+                    this.dataChannel.close();
+                }
+
+                if (this.peerConnection) {
+                    this.peerConnection.getSenders().forEach(sender => {
+                        if (sender.track) sender.track.stop();
+                    });
+                    this.peerConnection.close();
+                }
+
+                this.peerConnection = null;
+                this.dataChannel = null;
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+                this.updateStatus('Disconnected');
+            }
+
+            updateStatus(status) {
+                document.querySelector('.status').textContent = `Status: ${status}`;
+            }
+
+            displayMessage(type, message) {
+                const messagesDiv = document.querySelector('.messages');
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message';
+                
+                const header = document.createElement('div');
+                header.className = 'message-header';
+                
+                const timestamp = type === 'Received' ? 
+                    `<span class="message-timestamp">${new Date().toLocaleTimeString()}</span>` : '';
+                
+                header.innerHTML = `
+                    <span class="message-toggle">▶</span>
+                    <span>${type}</span>
+                    ${timestamp}
+                `;
+                
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                content.textContent = JSON.stringify(message, null, 2);
+                
+                header.addEventListener('click', () => {
+                    messageElement.classList.toggle('expanded');
+                });
+                
+                messageElement.appendChild(header);
+                messageElement.appendChild(content);
+                messagesDiv.insertBefore(messageElement, messagesDiv.firstChild);
+            }
+        }
+
+        // Initialize single translation session
+        new TranslationSession();
+    </script>
+</body>
+</html>
