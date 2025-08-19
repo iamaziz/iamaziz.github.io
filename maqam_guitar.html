@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            Arabic Maqam Guitar Fretboard - المقامات العربية على الجيتار
+        </title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;600;700&family=Segoe+UI:wght@300;400;600;700&display=swap");
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: #333;
+                min-height: 100vh;
+                padding: 20px;
+                transition: all 0.3s ease;
+            }
+
+            body.arabic {
+                font-family: "Noto Sans Arabic", Arial, sans-serif;
+                direction: rtl;
+            }
+
+            body.arabic .controls,
+            body.arabic .legend {
+                direction: rtl;
+            }
+
+            body.arabic .string-names {
+                right: -40px;
+                left: auto;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                padding: 30px;
+                backdrop-filter: blur(10px);
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            h1 {
+                color: #2c3e50;
+                font-size: 2.5rem;
+                font-weight: 300;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                flex: 1;
+            }
+
+            .language-toggle {
+                background: linear-gradient(135deg, #e74c3c, #c0392b);
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 25px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+                min-width: 120px;
+            }
+
+            .language-toggle:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+            }
+
+            .controls {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+
+            select {
+                padding: 15px 25px;
+                font-size: 18px;
+                border: none;
+                border-radius: 50px;
+                background: linear-gradient(135deg, #3498db, #2980b9);
+                color: white;
+                cursor: pointer;
+                box-shadow: 0 8px 16px rgba(52, 152, 219, 0.3);
+                transition: all 0.3s ease;
+                outline: none;
+                min-width: 300px;
+            }
+
+            body.arabic select {
+                font-family: "Noto Sans Arabic", Arial, sans-serif;
+            }
+
+            select:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 24px rgba(52, 152, 219, 0.4);
+            }
+
+            select option {
+                background: #2980b9;
+                color: white;
+                font-family: inherit;
+            }
+
+            .maqam-info {
+                text-align: center;
+                margin-bottom: 30px;
+                padding: 20px;
+                background: rgba(52, 152, 219, 0.1);
+                border-radius: 15px;
+                border-left: 5px solid #3498db;
+                transition: all 0.3s ease;
+            }
+
+            body.arabic .maqam-info {
+                border-left: none;
+                border-right: 5px solid #3498db;
+            }
+
+            .maqam-name {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+
+            .maqam-notes {
+                font-size: 1.1rem;
+                color: #34495e;
+                font-weight: 500;
+            }
+
+            .fretboard-container {
+                overflow-x: auto;
+                padding: 20px 0;
+                border-radius: 15px;
+                background: linear-gradient(to right, #8b4513, #a0522d);
+                box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+
+            .fretboard {
+                position: relative;
+                width: 1000px;
+                height: 300px;
+                margin: 0 auto;
+                background: linear-gradient(
+                    to bottom,
+                    #d2b48c 0%,
+                    #deb887 100%
+                );
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .string {
+                position: absolute;
+                background: linear-gradient(to right, #c0c0c0, #808080);
+                height: 2px;
+                width: 100%;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            }
+
+            .string:nth-child(2) {
+                top: 40px;
+                height: 1px;
+            }
+            .string:nth-child(3) {
+                top: 80px;
+                height: 1px;
+            }
+            .string:nth-child(4) {
+                top: 120px;
+                height: 2px;
+            }
+            .string:nth-child(5) {
+                top: 160px;
+                height: 2px;
+            }
+            .string:nth-child(6) {
+                top: 200px;
+                height: 3px;
+            }
+            .string:nth-child(7) {
+                top: 240px;
+                height: 3px;
+            }
+
+            .fret {
+                position: absolute;
+                background: linear-gradient(to bottom, #696969, #2f2f2f);
+                width: 3px;
+                height: 100%;
+                box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3);
+            }
+
+            .fret-marker {
+                position: absolute;
+                width: 12px;
+                height: 12px;
+                background: radial-gradient(circle, #ffd700, #daa520);
+                border-radius: 50%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+
+            .fret-number {
+                position: absolute;
+                bottom: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 14px;
+                color: #555;
+                font-weight: 600;
+            }
+
+            .note-dot {
+                position: absolute;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                font-weight: bold;
+                color: white;
+                cursor: pointer;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                transition: all 0.3s ease;
+                animation: noteAppear 0.5s ease-out;
+            }
+
+            @keyframes noteAppear {
+                from {
+                    transform: translate(-50%, -50%) scale(0);
+                    opacity: 0;
+                }
+                to {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 1;
+                }
+            }
+
+            .note-dot:hover {
+                transform: translate(-50%, -50%) scale(1.2);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            }
+
+            .tonic {
+                background: linear-gradient(135deg, #e74c3c, #c0392b);
+            }
+            .second {
+                background: linear-gradient(135deg, #f39c12, #d68910);
+            }
+            .third {
+                background: linear-gradient(135deg, #f1c40f, #f4d03f);
+            }
+            .fourth {
+                background: linear-gradient(135deg, #2ecc71, #27ae60);
+            }
+            .fifth {
+                background: linear-gradient(135deg, #3498db, #2980b9);
+            }
+            .sixth {
+                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            }
+            .seventh {
+                background: linear-gradient(135deg, #e67e22, #d35400);
+            }
+
+            .string-names {
+                position: absolute;
+                left: -40px;
+                top: 0;
+                height: 100%;
+                width: 30px;
+            }
+
+            .string-name {
+                position: absolute;
+                font-size: 14px;
+                font-weight: bold;
+                color: #2c3e50;
+                transform: translateY(-50%);
+            }
+
+            .legend {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 30px;
+                padding: 20px;
+                background: rgba(236, 240, 241, 0.8);
+                border-radius: 15px;
+            }
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 15px;
+                background: white;
+                border-radius: 25px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            body.arabic .legend-item {
+                flex-direction: row-reverse;
+            }
+
+            .legend-dot {
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 20px;
+                    margin: 10px;
+                }
+
+                h1 {
+                    font-size: 2rem;
+                }
+
+                .header {
+                    flex-direction: column;
+                    text-align: center;
+                }
+
+                .fretboard {
+                    width: 800px;
+                }
+
+                select {
+                    width: 100%;
+                    max-width: 300px;
+                    min-width: auto;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .fretboard {
+                    width: 600px;
+                }
+
+                h1 {
+                    font-size: 1.5rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1 id="mainTitle">🎸 Arabic Maqam Guitar Fretboard</h1>
+                <button class="language-toggle" id="langToggle">العربية</button>
+            </div>
+
+            <div class="controls">
+                <select id="maqamSelect">
+                    <option
+                        value=""
+                        data-en="Select a Maqam"
+                        data-ar="اختر مقاماً"
+                    >
+                        Select a Maqam
+                    </option>
+                    <option value="rast" data-en="Rast" data-ar="راست">
+                        Rast
+                    </option>
+                    <option value="bayati" data-en="Bayati" data-ar="بياتي">
+                        Bayati
+                    </option>
+                    <option value="sikah" data-en="Sikah" data-ar="سيكاه">
+                        Sikah
+                    </option>
+                    <option value="hijaz" data-en="Hijaz" data-ar="حجاز">
+                        Hijaz
+                    </option>
+                    <option value="saba" data-en="Saba" data-ar="صبا">
+                        Saba
+                    </option>
+                    <option value="kurd" data-en="Kurd" data-ar="كرد">
+                        Kurd
+                    </option>
+                    <option
+                        value="nahawand"
+                        data-en="Nahawand"
+                        data-ar="نهاوند"
+                    >
+                        Nahawand
+                    </option>
+                    <option value="ajam" data-en="Ajam" data-ar="عجم">
+                        Ajam
+                    </option>
+                    <option
+                        value="nawa_athar"
+                        data-en="Nawa Athar"
+                        data-ar="نوا أثر"
+                    >
+                        Nawa Athar
+                    </option>
+                    <option value="suznak" data-en="Suznak" data-ar="سوزناك">
+                        Suznak
+                    </option>
+                </select>
+            </div>
+
+            <div class="maqam-info" id="maqamInfo" style="display: none">
+                <div class="maqam-name" id="maqamName"></div>
+                <div class="maqam-notes" id="maqamNotes"></div>
+            </div>
+
+            <div class="fretboard-container">
+                <div class="fretboard" id="fretboard">
+                    <div class="string-names">
+                        <div class="string-name" style="top: 40px">E</div>
+                        <div class="string-name" style="top: 80px">B</div>
+                        <div class="string-name" style="top: 120px">G</div>
+                        <div class="string-name" style="top: 160px">D</div>
+                        <div class="string-name" style="top: 200px">A</div>
+                        <div class="string-name" style="top: 240px">E</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot tonic"></div>
+                    <span data-en="1st (Tonic)" data-ar="الأساس (الدرجة الأولى)"
+                        >1st (Tonic)</span
+                    >
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot second"></div>
+                    <span data-en="2nd" data-ar="الدرجة الثانية">2nd</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot third"></div>
+                    <span data-en="3rd" data-ar="الدرجة الثالثة">3rd</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot fourth"></div>
+                    <span data-en="4th" data-ar="الدرجة الرابعة">4th</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot fifth"></div>
+                    <span data-en="5th" data-ar="الدرجة الخامسة">5th</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot sixth"></div>
+                    <span data-en="6th" data-ar="الدرجة السادسة">6th</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot seventh"></div>
+                    <span data-en="7th" data-ar="الدرجة السابعة">7th</span>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Language system
+            let currentLanguage = "en";
+
+            const translations = {
+                en: {
+                    title: "🎸 Arabic Maqam Guitar Fretboard",
+                    langButton: "العربية",
+                    notesLabel: "Notes: ",
+                    degrees: ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th"],
+                    degreeNames: [
+                        "1st (Tonic)",
+                        "2nd",
+                        "3rd",
+                        "4th",
+                        "5th",
+                        "6th",
+                        "7th",
+                    ],
+                },
+                ar: {
+                    title: "🎸 المقامات العربية على الجيتار",
+                    langButton: "English",
+                    notesLabel: "النغمات: ",
+                    degrees: [
+                        "الأولى",
+                        "الثانية",
+                        "الثالثة",
+                        "الرابعة",
+                        "الخامسة",
+                        "السادسة",
+                        "السابعة",
+                    ],
+                    degreeNames: [
+                        "الأساس (الدرجة الأولى)",
+                        "الدرجة الثانية",
+                        "الدرجة الثالثة",
+                        "الدرجة الرابعة",
+                        "الدرجة الخامسة",
+                        "الدرجة السادسة",
+                        "الدرجة السابعة",
+                    ],
+                },
+            };
+
+            // Guitar tuning (standard tuning)
+            const strings = ["E", "B", "G", "D", "A", "E"];
+            const stringMidiNotes = [64, 59, 55, 50, 45, 40]; // MIDI note numbers for open strings
+
+            // Note names
+            const noteNames = [
+                "C",
+                "C#",
+                "D",
+                "D#",
+                "E",
+                "F",
+                "F#",
+                "G",
+                "G#",
+                "A",
+                "A#",
+                "B",
+            ];
+
+            // Arabic Maqam definitions (intervals from tonic)
+            const maqams = {
+                rast: {
+                    name: { en: "Rast", ar: "راست" },
+                    intervals: [0, 2, 4, 5, 7, 9, 11],
+                    notes: ["C", "D", "E♭+", "F", "G", "A", "B♭+"],
+                },
+                bayati: {
+                    name: { en: "Bayati", ar: "بياتي" },
+                    intervals: [0, 1.5, 3, 5, 7, 8, 10],
+                    notes: ["D", "E♭-", "F", "G", "A", "B♭", "C"],
+                },
+                sikah: {
+                    name: { en: "Sikah", ar: "سيكاه" },
+                    intervals: [0, 1.5, 3.5, 5, 7, 8.5, 10.5],
+                    notes: ["E♭-", "F-", "G♭+", "A♭", "B♭", "C-", "D♭+"],
+                },
+                hijaz: {
+                    name: { en: "Hijaz", ar: "حجاز" },
+                    intervals: [0, 1, 4, 5, 7, 8, 11],
+                    notes: ["D", "E♭", "F#", "G", "A", "B♭", "C#"],
+                },
+                saba: {
+                    name: { en: "Saba", ar: "صبا" },
+                    intervals: [0, 1.5, 3, 4, 7, 8, 10],
+                    notes: ["D", "E♭-", "F", "G♭", "A", "B♭", "C"],
+                },
+                kurd: {
+                    name: { en: "Kurd", ar: "كرد" },
+                    intervals: [0, 2, 3, 5, 7, 8, 10],
+                    notes: ["D", "E", "F", "G", "A", "B♭", "C"],
+                },
+                nahawand: {
+                    name: { en: "Nahawand", ar: "نهاوند" },
+                    intervals: [0, 2, 3, 5, 7, 8, 11],
+                    notes: ["C", "D", "E♭", "F", "G", "A♭", "B"],
+                },
+                ajam: {
+                    name: { en: "Ajam", ar: "عجم" },
+                    intervals: [0, 2, 4, 5, 7, 9, 11],
+                    notes: ["B♭", "C", "D", "E♭", "F", "G", "A"],
+                },
+                nawa_athar: {
+                    name: { en: "Nawa Athar", ar: "نوا أثر" },
+                    intervals: [0, 1, 4, 5, 6, 9, 10],
+                    notes: ["G", "A♭", "B", "C", "D♭", "E", "F"],
+                },
+                suznak: {
+                    name: { en: "Suznak", ar: "سوزناك" },
+                    intervals: [0, 2, 3, 6, 7, 9, 10],
+                    notes: ["G", "A", "B♭", "C#", "D", "E", "F"],
+                },
+            };
+
+            function toggleLanguage() {
+                currentLanguage = currentLanguage === "en" ? "ar" : "en";
+                document.body.className =
+                    currentLanguage === "ar" ? "arabic" : "";
+                updateLanguage();
+            }
+
+            function updateLanguage() {
+                const t = translations[currentLanguage];
+
+                // Update main elements
+                document.getElementById("mainTitle").textContent = t.title;
+                document.getElementById("langToggle").textContent =
+                    t.langButton;
+
+                // Update select options
+                const select = document.getElementById("maqamSelect");
+                const options = select.querySelectorAll("option");
+                options.forEach((option) => {
+                    const key =
+                        currentLanguage === "en" ? "data-en" : "data-ar";
+                    if (option.hasAttribute(key)) {
+                        option.textContent = option.getAttribute(key);
+                    }
+                });
+
+                // Update legend
+                const legendSpans = document.querySelectorAll(".legend span");
+                legendSpans.forEach((span, index) => {
+                    if (index < t.degreeNames.length) {
+                        span.textContent = t.degreeNames[index];
+                    }
+                });
+
+                // Update current maqam info if displayed
+                const currentMaqam = select.value;
+                if (currentMaqam && maqams[currentMaqam]) {
+                    const maqam = maqams[currentMaqam];
+                    document.getElementById("maqamName").textContent =
+                        maqam.name[currentLanguage];
+                    document.getElementById("maqamNotes").textContent =
+                        t.notesLabel + maqam.notes.join(" - ");
+                }
+            }
+
+            function getMidiNoteFromName(noteName) {
+                const noteMap = {
+                    C: 0,
+                    "C#": 1,
+                    D: 2,
+                    "D#": 3,
+                    E: 4,
+                    F: 5,
+                    "F#": 6,
+                    G: 7,
+                    "G#": 8,
+                    A: 9,
+                    "A#": 10,
+                    B: 11,
+                };
+                const cleanNote = noteName
+                    .replace(/[♭♯+-]/g, "")
+                    .replace("♭", "b")
+                    .replace("♯", "#");
+                return noteMap[cleanNote] || 0;
+            }
+
+            function getMidiNoteAtFret(stringIndex, fret) {
+                return stringMidiNotes[stringIndex] + fret;
+            }
+
+            function getNoteNameFromMidi(midiNote) {
+                return noteNames[midiNote % 12];
+            }
+
+            function initializeFretboard() {
+                const fretboard = document.getElementById("fretboard");
+
+                // Clear existing content except string names
+                const stringNames = fretboard.querySelector(".string-names");
+                fretboard.innerHTML = "";
+                fretboard.appendChild(stringNames);
+
+                // Create strings
+                for (let i = 0; i < 6; i++) {
+                    const string = document.createElement("div");
+                    string.className = "string";
+                    fretboard.appendChild(string);
+                }
+
+                // Create frets
+                const fretPositions = [
+                    0, 83, 158, 225, 285, 339, 388, 432, 472, 508, 541, 571,
+                    598,
+                ];
+
+                for (let fret = 0; fret <= 12; fret++) {
+                    const fretDiv = document.createElement("div");
+                    fretDiv.className = "fret";
+                    fretDiv.style.left = fretPositions[fret] + "px";
+
+                    // Add fret markers for specific frets
+                    if ([3, 5, 7, 9, 12].includes(fret) && fret > 0) {
+                        const marker = document.createElement("div");
+                        marker.className = "fret-marker";
+                        fretDiv.appendChild(marker);
+                    }
+
+                    // Add fret numbers
+                    if (fret > 0) {
+                        const fretNumber = document.createElement("div");
+                        fretNumber.className = "fret-number";
+                        fretNumber.textContent = fret;
+                        fretDiv.appendChild(fretNumber);
+                    }
+
+                    fretboard.appendChild(fretDiv);
+                }
+            }
+
+            function displayMaqam(maqamKey) {
+                if (!maqamKey) {
+                    document.getElementById("maqamInfo").style.display = "none";
+                    clearNotes();
+                    return;
+                }
+
+                const maqam = maqams[maqamKey];
+                const t = translations[currentLanguage];
+
+                document.getElementById("maqamName").textContent =
+                    maqam.name[currentLanguage];
+                document.getElementById("maqamNotes").textContent =
+                    t.notesLabel + maqam.notes.join(" - ");
+                document.getElementById("maqamInfo").style.display = "block";
+
+                clearNotes();
+                displayMaqamNotes(maqam);
+            }
+
+            function clearNotes() {
+                const existingNotes = document.querySelectorAll(".note-dot");
+                existingNotes.forEach((note) => note.remove());
+            }
+
+            function displayMaqamNotes(maqam) {
+                const fretboard = document.getElementById("fretboard");
+                const fretPositions = [
+                    0, 83, 158, 225, 285, 339, 388, 432, 472, 508, 541, 571,
+                    598,
+                ];
+                const stringYPositions = [40, 80, 120, 160, 200, 240];
+
+                // Create a map of intervals to class names
+                const intervalClasses = [
+                    "tonic",
+                    "second",
+                    "third",
+                    "fourth",
+                    "fifth",
+                    "sixth",
+                    "seventh",
+                ];
+                const t = translations[currentLanguage];
+
+                // For each string and each fret, check if the note matches any in the maqam
+                for (let stringIndex = 0; stringIndex < 6; stringIndex++) {
+                    for (let fret = 0; fret <= 12; fret++) {
+                        const midiNote = getMidiNoteAtFret(stringIndex, fret);
+                        const noteName = getNoteNameFromMidi(midiNote);
+
+                        // Check if this note is in the current maqam
+                        for (let i = 0; i < maqam.intervals.length; i++) {
+                            const targetMidi =
+                                Math.round(maqam.intervals[i]) % 12;
+                            const tonicMidi = getMidiNoteFromName(
+                                maqam.notes[0],
+                            );
+                            const expectedNoteMidi =
+                                (tonicMidi + targetMidi) % 12;
+
+                            if (midiNote % 12 === expectedNoteMidi) {
+                                const noteDot = document.createElement("div");
+                                noteDot.className = `note-dot ${intervalClasses[i]}`;
+                                noteDot.style.left =
+                                    fretPositions[fret] +
+                                    (fret === 0 ? 25 : -25) +
+                                    "px";
+                                noteDot.style.top =
+                                    stringYPositions[stringIndex] + "px";
+                                noteDot.textContent = maqam.notes[i].replace(
+                                    /[+-]/g,
+                                    "",
+                                );
+
+                                const tooltipText =
+                                    currentLanguage === "en"
+                                        ? `${maqam.notes[i]} - ${t.degrees[i]} degree`
+                                        : `${maqam.notes[i]} - ${t.degrees[i]}`;
+                                noteDot.title = tooltipText;
+
+                                fretboard.appendChild(noteDot);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Event listeners
+            document
+                .getElementById("langToggle")
+                .addEventListener("click", toggleLanguage);
+
+            document
+                .getElementById("maqamSelect")
+                .addEventListener("change", function () {
+                    displayMaqam(this.value);
+                });
+
+            // Initialize the fretboard on page load
+            document.addEventListener("DOMContentLoaded", function () {
+                initializeFretboard();
+                updateLanguage();
+            });
+        </script>
+    </body>
+</html>
