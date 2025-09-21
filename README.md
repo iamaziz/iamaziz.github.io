@@ -1,4 +1,3 @@
-# Simple Tools
 
 A collection of simple HTML/CSS/JS tools.
 
