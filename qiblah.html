@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qibla Direction Finder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+            direction: ltr;
+        }
+
+        body.rtl {
+            direction: rtl;
+        }
+
+        body.rtl * {
+            font-family: 'Arial', 'Tahoma', sans-serif;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .compass-section, .map-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .target-info {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .compass-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 20px;
+        }
+
+        .compass-outer {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .compass-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 85%;
+            height: 85%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+
+        .cardinal-marks {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cardinal-mark {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cardinal-mark.n { top: 10px; left: 50%; transform: translateX(-50%); }
+        .cardinal-mark.e { right: 10px; top: 50%; transform: translateY(-50%); }
+        .cardinal-mark.s { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .cardinal-mark.w { left: 10px; top: 50%; transform: translateY(-50%); }
+
+        .arrow-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s ease-out;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 100px solid #ff4757;
+            transform: translate(-50%, -80%) rotate(0deg);
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .arrow::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid #ff6b7a;
+            transform: translateX(-50%);
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            opacity: 0.8;
+        }
+
+        .info-value {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .bearing-display {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .map-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+        }
+
+        .map-title {
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .error {
+            background: rgba(255, 71, 87, 0.3);
+        }
+
+        .success {
+            background: rgba(46, 213, 115, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .language-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            color: #fff;
+            padding: 6px 16px;
+            min-width: unset;
+            min-height: 32px;
+            width: auto;
+            height: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        body.rtl .language-toggle {
+            right: auto;
+            left: 20px;
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .compass-container {
+                width: 240px;
+                height: 240px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .bearing-display {
+                font-size: 1.8em;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="language-toggle" id="langToggle" onclick="toggleLanguage()">عربي</button>
+    
+    <div class="container">
+        <h1 id="pageTitle">🕋 Qibla Direction Finder</h1>
+        <div class="target-info" id="targetInfo">Target: Kaaba, Makkah<br>(21.4225°N, 39.8262°E)</div>
+
+        <div class="content-grid">
+            <div class="compass-section">
+                <div class="compass-container">
+                    <div class="compass-outer">
+                        <div class="compass-inner"></div>
+                        <div class="cardinal-marks">
+                            <div class="cardinal-mark n">N</div>
+                            <div class="cardinal-mark e">E</div>
+                            <div class="cardinal-mark s">S</div>
+                            <div class="cardinal-mark w">W</div>
+                        </div>
+                        <div class="arrow-container" id="arrowContainer">
+                            <div class="arrow"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bearing-display" id="bearingDisplay">--°</div>
+
+                <div class="info-panel">
+                    <div class="info-row">
+                        <span class="info-label" id="directionLabel">Direction:</span>
+                        <span class="info-value" id="directionText">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label" id="distanceLabel">Distance:</span>
+                        <span class="info-value" id="distanceText">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label" id="locationLabel">Your Location:</span>
+                        <span class="info-value" id="locationText">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-section">
+                <div class="map-title" id="mapTitle">📍 Route to Makkah</div>
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+                <div class="info-panel">
+                    <div class="info-row">
+                        <span class="info-label" id="greatCircleLabel">Great Circle Route</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="updateBtn" onclick="updateLocation()">Update Location</button>
+
+        <div class="status" id="status">Click "Update Location" to begin</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        // Target location: Kaaba in Makkah
+        const TARGET = {
+            lat: 21.4225,
+            lon: 39.8262,
+            name: 'Kaaba, Makkah'
+        };
+
+        let currentPosition = null;
+        let deviceOrientationSupported = false;
+        let currentBearing = 0;
+        let deviceHeading = 0;
+        let map = null;
+        let userMarker = null;
+        let kaabaMarker = null;
+        let routeLine = null;
+        let currentLanguage = 'en'; // 'en' or 'ar'
+
+        // Translations
+        const translations = {
+            en: {
+                title: '🕋 Qibla Direction Finder',
+                target: 'Target: Kaaba, Makkah',
+                routeTitle: '📍 Route to Makkah',
+                direction: 'Direction:',
+                distance: 'Distance:',
+                yourLocation: 'Your Location:',
+                updateButton: 'Update Location',
+                clickToBegin: 'Click "Update Location" to begin',
+                gettingLocation: 'Getting your location...',
+                locationUpdated: 'Location updated! Arrow pointing towards the Kaaba in Makkah.',
+                locationUpdatedOrientation: 'Location updated! Rotate your device to find Qibla direction.',
+                permissionDenied: 'Location permission denied. Please enable location access.',
+                positionUnavailable: 'Location information unavailable.',
+                timeout: 'Location request timed out. Trying with lower accuracy...',
+                retrying: 'Retrying with approximate location...',
+                unableToGet: 'Unable to get location. Please check your browser settings and try again.',
+                approximateLocation: ' (Using approximate location)',
+                geolocationNotSupported: 'Geolocation is not supported by your browser',
+                greatCircle: 'Great Circle Route',
+                kaabaPopup: '<b>🕋 Kaaba, Makkah</b><br>21.4225°N, 39.8262°E',
+                yourLocationPopup: '<b>📍 Your Location</b>',
+                languageToggle: 'عربي'
+            },
+            ar: {
+                title: '🕋 مُحدد اتجاه القبلة',
+                target: 'الهدف: الكعبة، مكة المكرمة',
+                routeTitle: '📍 الطريق إلى مكة',
+                direction: 'الاتجاه:',
+                distance: 'المسافة:',
+                yourLocation: 'موقعك:',
+                updateButton: 'تحديث الموقع',
+                clickToBegin: 'انقر على "تحديث الموقع" للبدء',
+                gettingLocation: 'جارٍ الحصول على موقعك...',
+                locationUpdated: 'تم تحديث الموقع! السهم يشير نحو الكعبة في مكة.',
+                locationUpdatedOrientation: 'تم تحديث الموقع! قم بتدوير جهازك للعثور على اتجاه القبلة.',
+                permissionDenied: 'تم رفض إذن الموقع. يرجى تمكين الوصول إلى الموقع.',
+                positionUnavailable: 'معلومات الموقع غير متوفرة.',
+                timeout: 'انتهت مهلة طلب الموقع. جارٍ المحاولة بدقة أقل...',
+                retrying: 'إعادة المحاولة بموقع تقريبي...',
+                unableToGet: 'تعذر الحصول على الموقع. يرجى التحقق من إعدادات المتصفح والمحاولة مرة أخرى.',
+                approximateLocation: ' (استخدام موقع تقريبي)',
+                geolocationNotSupported: 'المتصفح لا يدعم تحديد الموقع الجغرافي',
+                greatCircle: 'المسار الدائري الكبير',
+                kaabaPopup: '<b>🕋 الكعبة، مكة المكرمة</b><br>21.4225° شمالاً، 39.8262° شرقاً',
+                yourLocationPopup: '<b>📍 موقعك</b>',
+                languageToggle: 'English'
+            }
+        };
+
+        // Convert degrees to radians
+        function toRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
+
+        // Convert radians to degrees
+        function toDegrees(radians) {
+            return radians * 180 / Math.PI;
+        }
+
+        // Calculate initial bearing using great-circle formula
+        function calculateBearing(lat1, lon1, lat2, lon2) {
+            const φ1 = toRadians(lat1);
+            const φ2 = toRadians(lat2);
+            const Δλ = toRadians(lon2 - lon1);
+
+            const y = Math.sin(Δλ) * Math.cos(φ2);
+            const x = Math.cos(φ1) * Math.sin(φ2) -
+                      Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+            const θ = Math.atan2(y, x);
+            const bearing = (toDegrees(θ) + 360) % 360;
+
+            return bearing;
+        }
+
+        // Calculate distance using Haversine formula
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const φ1 = toRadians(lat1);
+            const φ2 = toRadians(lat2);
+            const Δφ = toRadians(lat2 - lat1);
+            const Δλ = toRadians(lon2 - lon1);
+
+            const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                      Math.cos(φ1) * Math.cos(φ2) *
+                      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+            
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c;
+
+            return distance;
+        }
+
+        // Convert bearing to cardinal direction
+        function bearingToCardinal(bearing) {
+            const directions = {
+                en: ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 
+                     'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'],
+                ar: ['ش', 'ش ش ق', 'ش ق', 'ش ق ق', 'ق', 'ج ق ق', 'ج ق', 'ج ج ق',
+                     'ج', 'ج ج غ', 'ج غ', 'ج غ غ', 'غ', 'ش غ غ', 'ش غ', 'ش ش غ']
+            };
+            const index = Math.round(bearing / 22.5) % 16;
+            return directions[currentLanguage][index];
+        }
+
+        // Format distance for display
+        function formatDistance(km) {
+            if (km < 1) {
+                return Math.round(km * 1000) + (currentLanguage === 'ar' ? ' م' : ' m');
+            } else if (km < 10) {
+                return km.toFixed(2) + (currentLanguage === 'ar' ? ' كم' : ' km');
+            } else {
+                return Math.round(km) + (currentLanguage === 'ar' ? ' كم' : ' km');
+            }
+        }
+
+        // Update the compass display
+        function updateCompass() {
+            const arrowContainer = document.getElementById('arrowContainer');
+            const rotation = currentBearing - deviceHeading;
+            arrowContainer.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+        }
+
+        // Initialize the map
+        function initMap() {
+            if (!map) {
+                map = L.map('map').setView([20, 40], 2);
+                
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                // Add Kaaba marker
+                const kaabaIcon = L.divIcon({
+                    className: 'kaaba-marker',
+                    html: '<div style="background: #2ecc71; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">🕋</div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                });
+
+                kaabaMarker = L.marker([TARGET.lat, TARGET.lon], { icon: kaabaIcon })
+                    .addTo(map)
+                    .bindPopup(translations[currentLanguage].kaabaPopup);
+            }
+        }
+
+        // Update language
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ar' : 'en';
+            document.body.classList.toggle('rtl', currentLanguage === 'ar');
+            updateUILanguage();
+            
+            // Update map popups if they exist
+            if (kaabaMarker) {
+                kaabaMarker.setPopupContent(translations[currentLanguage].kaabaPopup);
+            }
+            if (userMarker && currentPosition) {
+                const lat = currentPosition.coords.latitude;
+                const lon = currentPosition.coords.longitude;
+                userMarker.setPopupContent(`${translations[currentLanguage].yourLocationPopup}<br>${lat.toFixed(4)}°, ${lon.toFixed(4)}°`);
+            }
+        }
+
+        // Update all UI text
+        function updateUILanguage() {
+            const t = translations[currentLanguage];
+            document.getElementById('langToggle').textContent = t.languageToggle;
+            document.getElementById('pageTitle').textContent = t.title;
+            document.getElementById('targetInfo').innerHTML = t.target + '<br>(21.4225°N, 39.8262°E)';
+            document.getElementById('mapTitle').textContent = t.routeTitle;
+            document.getElementById('directionLabel').textContent = t.direction;
+            document.getElementById('distanceLabel').textContent = t.distance;
+            document.getElementById('locationLabel').textContent = t.yourLocation;
+            document.getElementById('greatCircleLabel').textContent = t.greatCircle;
+            document.getElementById('updateBtn').textContent = t.updateButton;
+            
+            // Update status if it hasn't been changed from initial
+            const status = document.getElementById('status');
+            if (status.textContent === translations[currentLanguage === 'en' ? 'ar' : 'en'].clickToBegin) {
+                status.textContent = t.clickToBegin;
+            }
+        }
+
+        // Update map with user location and route
+        function updateMap(userLat, userLon) {
+            if (!map) return;
+
+            // Remove existing user marker and lines
+            if (userMarker) map.removeLayer(userMarker);
+            if (routeLine) map.removeLayer(routeLine);
+
+            // Add user marker
+            const userIcon = L.divIcon({
+                className: 'user-marker',
+                html: '<div style="background: #e74c3c; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">📍</div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+
+            userMarker = L.marker([userLat, userLon], { icon: userIcon })
+                .addTo(map)
+                .bindPopup(`${translations[currentLanguage].yourLocationPopup}<br>${userLat.toFixed(4)}°, ${userLon.toFixed(4)}°`);
+
+            // Draw great circle route (dashed line only)
+            routeLine = L.polyline(
+                [[userLat, userLon], [TARGET.lat, TARGET.lon]],
+                {
+                    color: '#ff4757',
+                    weight: 3,
+                    opacity: 0.7,
+                    dashArray: '10, 10'
+                }
+            ).addTo(map);
+
+            // Fit map to show both markers
+            const bounds = L.latLngBounds([
+                [userLat, userLon],
+                [TARGET.lat, TARGET.lon]
+            ]);
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+
+        // Update all UI elements
+        function updateUI(position) {
+            currentPosition = position;
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // Calculate bearing and distance
+            currentBearing = calculateBearing(lat, lon, TARGET.lat, TARGET.lon);
+            const distance = calculateDistance(lat, lon, TARGET.lat, TARGET.lon);
+
+            // Update displays
+            document.getElementById('bearingDisplay').textContent = Math.round(currentBearing) + '°';
+            document.getElementById('directionText').textContent = bearingToCardinal(currentBearing);
+            document.getElementById('distanceText').textContent = formatDistance(distance);
+            document.getElementById('locationText').textContent = 
+                `${lat.toFixed(4)}°, ${lon.toFixed(4)}°`;
+
+            updateCompass();
+            updateMap(lat, lon);
+
+            // Update status
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.textContent = deviceOrientationSupported ? 
+                translations[currentLanguage].locationUpdatedOrientation : 
+                translations[currentLanguage].locationUpdated;
+        }
+
+        // Handle location update
+        function updateLocation() {
+            const status = document.getElementById('status');
+            const btn = document.getElementById('updateBtn');
+            const t = translations[currentLanguage];
+
+            if (!navigator.geolocation) {
+                status.className = 'status error';
+                status.textContent = t.geolocationNotSupported;
+                return;
+            }
+
+            status.className = 'status';
+            status.textContent = t.gettingLocation;
+            btn.disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    updateUI(position);
+                    btn.disabled = false;
+                },
+                (error) => {
+                    status.className = 'status error';
+                    btn.disabled = false;
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            status.textContent = t.permissionDenied;
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            status.textContent = t.positionUnavailable;
+                            break;
+                        case error.TIMEOUT:
+                            status.textContent = t.timeout;
+                            // Retry with lower accuracy settings
+                            setTimeout(() => {
+                                retryWithLowerAccuracy();
+                            }, 1000);
+                            break;
+                        default:
+                            status.textContent = t.unableToGet;
+                    }
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 30000,
+                    maximumAge: 6
+                }
+            );
+        }
+
+        // Retry with less strict settings
+        function retryWithLowerAccuracy() {
+            const status = document.getElementById('status');
+            const btn = document.getElementById('updateBtn');
+            const t = translations[currentLanguage];
+
+            status.textContent = t.retrying;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    updateUI(position);
+                    btn.disabled = false;
+                    const currentStatus = document.getElementById('status');
+                    if (currentStatus.className.includes('success')) {
+                        currentStatus.textContent += t.approximateLocation;
+                    }
+                },
+                (error) => {
+                    status.className = 'status error';
+                    btn.disabled = false;
+                    status.textContent = t.unableToGet;
+                },
+                {
+                    enableHighAccuracy: false,
+                    timeout: 15000,
+                    maximumAge: 3
+                }
+            );
+        }
+
+        // Handle device orientation (for mobile devices)
+        function handleOrientation(event) {
+            if (event.alpha !== null) {
+                // alpha gives rotation around z-axis (compass heading)
+                // We need to adjust for the difference between magnetic north and true north
+                // For simplicity, we're using alpha directly
+                deviceHeading = event.alpha || 0;
+                
+                // On iOS, webkitCompassHeading provides true heading
+                if (event.webkitCompassHeading) {
+                    deviceHeading = event.webkitCompassHeading;
+                }
+                
+                updateCompass();
+            }
+        }
+
+        // Request device orientation permission (required on iOS 13+)
+        function requestOrientationPermission() {
+            if (typeof DeviceOrientationEvent !== 'undefined' && 
+                typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation, true);
+                            deviceOrientationSupported = true;
+                        }
+                    })
+                    .catch(console.error);
+            } else if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', handleOrientation, true);
+                deviceOrientationSupported = true;
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            requestOrientationPermission();
+            initMap();
+        });
+
+        // Auto-update location on first load
+        setTimeout(() => {
+            updateLocation();
+        }, 500);
+    </script>
+</body>
+</html>
