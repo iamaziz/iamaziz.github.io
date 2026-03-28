@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maqam Oud | مقام العود</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0d0a06;
+    --bg-mid: #150f07;
+    --bg-card: #1c1409;
+    --gold: #c9a227;
+    --gold-light: #e8c84a;
+    --gold-pale: #f5dfa0;
+    --amber: #d4820a;
+    --wood-dark: #3d1f08;
+    --wood-mid: #6b3a14;
+    --wood-light: #a05c2a;
+    --string-color: #d4c5a9;
+    --text-primary: #f0dca0;
+    --text-secondary: #a08040;
+    --text-dim: #604820;
+    --border-gold: rgba(201,162,39,0.3);
+    --shadow-gold: 0 0 20px rgba(201,162,39,0.15);
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Cairo', 'Amiri', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-conic-gradient(from 0deg at 50% 50%,
+        transparent 0deg, transparent 45deg,
+        rgba(201,162,39,0.015) 45deg, rgba(201,162,39,0.015) 90deg),
+      radial-gradient(ellipse at 20% 20%, rgba(201,162,39,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(180,80,20,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0 18px;
+    border-bottom: 1px solid var(--border-gold);
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 0 20px;
+    border-bottom: 1px solid var(--border-gold);
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 14px;
+    position: relative;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Oud icon badge */
+  .header-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-gold);
+    background: radial-gradient(circle at 38% 38%, rgba(201,162,39,0.18), rgba(201,162,39,0.04));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 18px rgba(201,162,39,0.12), inset 0 0 12px rgba(201,162,39,0.06);
+  }
+
+  .header-badge svg {
+    width: 30px;
+    height: 30px;
+    opacity: 0.85;
+  }
+
+  .header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  /* English view title/subtitle */
+  .title-main {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.45rem, 3.2vw, 2.1rem);
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .title-sub {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.6rem, 1.4vw, 0.78rem);
+    font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  /* Arabic view title/subtitle — hidden by default */
+  .title-main-ar {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.3rem, 3vw, 1.9rem);
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.1;
+    display: none;
+  }
+
+  .title-sub-ar {
+    font-family: 'Cairo', serif;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+    display: none;
+  }
+
+  /* Language-aware visibility */
+  [dir="rtl"] .title-main    { display: none; }
+  [dir="rtl"] .title-sub     { display: none; }
+  [dir="rtl"] .title-main-ar { display: block; }
+  [dir="rtl"] .title-sub-ar  { display: block; }
+
+  /* Decorative separator between badge+title and lang toggle */
+  .header-sep {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(201,162,39,0.25), transparent);
+    min-width: 20px;
+    align-self: center;
+    margin: 0 4px;
+  }
+
+  [dir="rtl"] .header-sep {
+    background: linear-gradient(to left, rgba(201,162,39,0.25), transparent);
+  }
+
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 30px;
+    padding: 3px;
+    cursor: pointer;
+    position: relative;
+  }
+  .lang-btn {
+    padding: 7px 18px;
+    border-radius: 24px;
+    font-size: 0.82rem;
+    font-family: 'Cairo', serif;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    transition: color 0.3s;
+    position: relative;
+    z-index: 1;
+  }
+  .lang-btn.active { color: var(--bg-deep); }
+  .lang-slider {
+    position: absolute;
+    top: 3px; left: 3px;
+    height: calc(100% - 6px);
+    width: calc(50% - 3px);
+    background: var(--gold);
+    border-radius: 24px;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .lang-slider.ar { transform: translateX(100%); }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media(max-width:580px){ .controls{grid-template-columns:1fr;} }
+
+  .control-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-family: 'Cinzel', serif;
+    margin-bottom: 7px;
+  }
+
+  .styled-select {
+    appearance: none;
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+    font-family: 'Cairo', serif;
+    font-size: 0.95rem;
+    padding: 11px 36px 11px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a227' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  .styled-select:hover,.styled-select:focus { border-color: var(--gold); box-shadow: var(--shadow-gold); }
+  .styled-select option { background: #1c1409; color: var(--text-primary); }
+
+  /* Maqam info bar */
+  .maqam-info {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .maqam-name-en {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .maqam-name-ar {
+    font-family: 'Amiri', serif;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+  }
+  .info-divider { width:1px; height:36px; background:var(--border-gold); flex-shrink:0; }
+  .maqam-notes-display { display:flex; flex-wrap:wrap; gap:6px; }
+  .note-chip {
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 0.76rem;
+    font-family: 'Cairo', serif;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .note-chip.root { background:rgba(232,67,42,0.15); border-color:rgba(232,67,42,0.5); color:#f07060; }
+  .note-chip.scale { background:rgba(201,162,39,0.1); border-color:rgba(201,162,39,0.4); color:var(--gold-pale); }
+  .note-chip.half { background:rgba(139,105,20,0.15); border-color:rgba(139,105,20,0.5); color:#c8a840; font-size:0.68rem; }
+
+  /* OUD SECTION */
+  .oud-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5), var(--shadow-gold);
+  }
+  .oud-container { position:relative; min-width:680px; }
+  .oud-neck { position:relative; width:100%; height:300px; }
+
+  .neck-body {
+    position: absolute;
+    top: 18px; left: 62px; right: 18px; bottom: 18px;
+    background: linear-gradient(to bottom,
+      #3d1f08 0%, #6b3a14 12%, #8b4e22 22%, #7a4018 35%,
+      #6b3a14 48%, #5c3010 55%, #6b3a14 62%,
+      #7a4018 72%, #8b4e22 82%, #6b3a14 92%, #3d1f08 100%);
+    border-radius: 3px 8px 8px 3px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .neck-body::before {
+    content:''; position:absolute; inset:0; border-radius:inherit;
+    background: repeating-linear-gradient(to bottom,
+      transparent 0px, transparent 20px,
+      rgba(0,0,0,0.05) 20px, rgba(0,0,0,0.05) 22px);
+  }
+
+  .neck-nut {
+    position:absolute; top:18px; left:60px; width:8px; bottom:18px;
+    background: linear-gradient(to right, #c8b580, #ecdcac, #c8b580);
+    border-radius: 2px 0 0 2px;
+    z-index:5;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.4);
+  }
+
+  .peg-area {
+    position:absolute; top:18px; left:0; width:60px; bottom:18px;
+    background: linear-gradient(to right, #1e0d04, #3d1f08);
+    border-radius: 4px 0 0 4px;
+    display:flex; flex-direction:column; justify-content:space-around;
+    padding: 6px 0;
+    box-shadow: inset -2px 0 8px rgba(0,0,0,0.5);
+  }
+  .peg {
+    display:flex; align-items:center; justify-content:flex-end;
+    padding-right:8px; gap:5px;
+  }
+  .peg-label { font-size:0.6rem; font-family:'Cinzel',serif; color:var(--text-secondary); }
+  .peg-knob {
+    width:13px; height:13px; border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #e8d5a0, #8b6914);
+    border:1px solid rgba(201,162,39,0.5);
+    flex-shrink:0;
+  }
+
+  .neck-svg {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events: none;
+  }
+
+  .note-dot { cursor:pointer; pointer-events:all; }
+  .note-dot:hover circle { filter: brightness(1.2); }
+
+  /* ── Note illumination when played ── */
+  @keyframes noteFlash {
+    0%   { opacity: 1; }
+    15%  { opacity: 0.15; }
+    35%  { opacity: 1; }
+    60%  { opacity: 0.4; }
+    100% { opacity: 1; }
+  }
+  @keyframes pulseRing {
+    0%   { r: 12; opacity: 0.95; stroke-width: 3; }
+    100% { r: 32; opacity: 0;    stroke-width: 0.5; }
+  }
+  @keyframes innerGlow {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .note-dot.lit .note-circle {
+    animation: noteFlash 0.55s ease-out forwards;
+    filter: brightness(2.2) saturate(1.4);
+  }
+  .note-dot.lit .pulse-ring {
+    animation: pulseRing 0.7s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+  }
+  .note-dot.lit .inner-glow {
+    animation: innerGlow 0.5s ease-out forwards;
+  }
+
+  /* LEGEND */
+  .legend {
+    display:flex; gap:18px; flex-wrap:wrap;
+    padding:12px 16px;
+    background:rgba(255,255,255,0.02);
+    border-radius:var(--radius);
+    border:1px solid rgba(201,162,39,0.1);
+    margin-bottom:20px;
+  }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:0.78rem; color:var(--text-secondary); }
+  .legend-dot { width:15px; height:15px; border-radius:50%; flex-shrink:0; }
+  .legend-dot.root { background:#e8432a; box-shadow:0 0 8px rgba(232,67,42,0.4); }
+  .legend-dot.scale { background:var(--gold); box-shadow:0 0 8px rgba(201,162,39,0.4); }
+  .legend-dot.half { background:linear-gradient(135deg, var(--gold) 50%, #4a3000 50%); border:1px solid var(--gold); }
+
+  /* MAQAM GRID */
+  .section-title {
+    font-family:'Cinzel',serif; font-size:0.72rem;
+    letter-spacing:0.14em; color:var(--text-secondary);
+    text-transform:uppercase; margin-bottom:12px;
+  }
+  .maqam-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(135px, 1fr));
+    gap:8px; margin-bottom:24px;
+  }
+  .maqam-card {
+    background:var(--bg-card);
+    border:1px solid rgba(201,162,39,0.12);
+    border-radius:var(--radius);
+    padding:10px 12px;
+    cursor:pointer;
+    transition:all 0.2s;
+    position:relative; overflow:hidden;
+  }
+  .maqam-card::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(201,162,39,0.06) 0%, transparent 60%);
+    opacity:0; transition:opacity 0.2s;
+  }
+  .maqam-card:hover { border-color:rgba(201,162,39,0.4); transform:translateY(-1px); box-shadow:0 2px 14px rgba(201,162,39,0.1); }
+  .maqam-card:hover::before { opacity:1; }
+  .maqam-card.active { border-color:var(--gold); background:rgba(201,162,39,0.08); box-shadow:0 0 18px rgba(201,162,39,0.2); }
+  .maqam-card.active::before { opacity:1; }
+  .mc-en { font-family:'Cinzel',serif; font-size:0.8rem; font-weight:600; color:var(--text-primary); margin-bottom:2px; }
+  .mc-ar { font-family:'Amiri',serif; font-size:0.8rem; color:var(--text-secondary); }
+  .mc-root { font-size:0.62rem; color:var(--text-dim); margin-top:4px; font-family:'Cairo',serif; }
+
+  .maqam-desc {
+    background:rgba(201,162,39,0.04);
+    border:1px solid rgba(201,162,39,0.1);
+    border-radius:var(--radius);
+    padding:14px 18px;
+    font-size:0.88rem;
+    color:var(--text-secondary);
+    line-height:1.75;
+    font-family:'Cairo',serif;
+    margin-bottom:20px;
+  }
+  .maqam-desc strong { color:var(--gold-pale); }
+
+  /* Tooltip */
+  .tooltip {
+    position:fixed;
+    background:var(--bg-card);
+    border:1px solid var(--gold);
+    border-radius:6px;
+    padding:7px 12px;
+    font-size:0.8rem;
+    font-family:'Cairo',serif;
+    color:var(--text-primary);
+    pointer-events:none;
+    z-index:200;
+    transform:translate(-50%, -130%);
+    white-space:nowrap;
+    box-shadow:0 4px 20px rgba(0,0,0,0.7);
+    opacity:0;
+    transition:opacity 0.12s;
+  }
+  .tooltip.visible { opacity:1; }
+
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background:var(--text-dim); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+
+  [dir="rtl"] .peg { flex-direction:row-reverse; justify-content:flex-start; padding-right:0; padding-left:8px; }
+  [dir="rtl"] .neck-body { left:18px; right:62px; border-radius:8px 3px 3px 8px; }
+  [dir="rtl"] .neck-nut { left:auto; right:60px; border-radius:0 2px 2px 0; }
+  [dir="rtl"] .peg-area { left:auto; right:0; border-radius:0 4px 4px 0; }
+  [dir="rtl"] .styled-select { background-position:left 12px center; padding:11px 14px 11px 36px; }
+
+  footer {
+    text-align:center;
+    padding:18px 0 8px;
+    font-size:0.68rem;
+    color:var(--text-dim);
+    font-family:'Cinzel',serif;
+    letter-spacing:0.1em;
+    border-top:1px solid rgba(201,162,39,0.07);
+  }
+
+  /* ── SOUND PLAYER ── */
+  .sound-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4), var(--shadow-gold);
+  }
+
+  .sound-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .sound-icon {
+    width: 32px; height: 32px;
+    background: rgba(201,162,39,0.12);
+    border: 1px solid var(--border-gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .sound-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .sound-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .play-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, rgba(201,162,39,0.2), rgba(201,162,39,0.08));
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .play-btn:hover {
+    background: linear-gradient(135deg, rgba(201,162,39,0.35), rgba(201,162,39,0.15));
+    box-shadow: 0 0 16px rgba(201,162,39,0.3);
+    transform: translateY(-1px);
+  }
+  .play-btn:active { transform: translateY(0); }
+  .play-btn.playing {
+    background: linear-gradient(135deg, rgba(232,67,42,0.25), rgba(232,67,42,0.1));
+    border-color: #e8432a;
+    color: #f07060;
+    box-shadow: 0 0 16px rgba(232,67,42,0.25);
+  }
+  .play-btn svg { width:14px; height:14px; flex-shrink:0; }
+
+  .stop-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    color: var(--text-secondary);
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .stop-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text-primary); }
+  .stop-btn svg { width:12px; height:12px; }
+
+  .speed-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+  .speed-label {
+    font-size: 0.68rem;
+    font-family: 'Cinzel', serif;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .speed-slider {
+    -webkit-appearance: none;
+    width: 90px;
+    height: 3px;
+    background: linear-gradient(to right, var(--gold) 0%, var(--gold) 50%, rgba(201,162,39,0.2) 50%, rgba(201,162,39,0.2) 100%);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  .speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--bg-deep);
+    box-shadow: 0 0 6px rgba(201,162,39,0.5);
+    cursor: pointer;
+  }
+
+  /* Note sequence display */
+  .note-sequence {
+    display: flex;
+    gap: 6px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .seq-note {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    border: 1.5px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .seq-note.root-note {
+    background: rgba(232,67,42,0.15);
+    border-color: rgba(232,67,42,0.5);
+    color: #f07060;
+  }
+  .seq-note.scale-note {
+    background: rgba(201,162,39,0.1);
+    border-color: rgba(201,162,39,0.3);
+    color: var(--gold-pale);
+  }
+  .seq-note.half-note {
+    background: rgba(139,105,20,0.15);
+    border-color: rgba(139,105,20,0.5);
+    color: #c8a840;
+    font-size: 0.58rem;
+  }
+  .seq-note:hover { transform: scale(1.12); box-shadow: 0 0 10px rgba(201,162,39,0.3); }
+  .seq-note.active-note {
+    transform: scale(1.2);
+    box-shadow: 0 0 18px rgba(201,162,39,0.6);
+    border-color: var(--gold-light) !important;
+    background: rgba(201,162,39,0.3) !important;
+    color: #fff !important;
+  }
+  .seq-arrow {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    line-height: 34px;
+  }
+
+  .playback-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: 'Cairo', serif;
+  }
+  .playback-progress {
+    flex: 1;
+    height: 3px;
+    background: rgba(201,162,39,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .playback-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width 0.1s linear;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <header>
+    <div class="header-left">
+      <!-- Oud silhouette badge -->
+      <div class="header-badge">
+        <svg viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Oud body (pear shape) -->
+          <ellipse cx="30" cy="54" rx="20" ry="22" fill="rgba(201,162,39,0.22)" stroke="#c9a227" stroke-width="1.4"/>
+          <!-- Sound hole -->
+          <circle cx="30" cy="56" r="6.5" fill="none" stroke="#c9a227" stroke-width="1" opacity="0.7"/>
+          <!-- Neck -->
+          <rect x="26.5" y="22" width="7" height="26" rx="2" fill="rgba(201,162,39,0.18)" stroke="#c9a227" stroke-width="1.2"/>
+          <!-- Peg box -->
+          <rect x="24" y="8" width="12" height="15" rx="3" fill="rgba(201,162,39,0.14)" stroke="#c9a227" stroke-width="1.1"/>
+          <!-- Strings (3 visible) -->
+          <line x1="27.5" y1="22" x2="27.5" y2="47" stroke="#c9a227" stroke-width="0.6" opacity="0.5"/>
+          <line x1="30"   y1="22" x2="30"   y2="47" stroke="#c9a227" stroke-width="0.6" opacity="0.5"/>
+          <line x1="32.5" y1="22" x2="32.5" y2="47" stroke="#c9a227" stroke-width="0.6" opacity="0.5"/>
+          <!-- Pegs -->
+          <circle cx="25.5" cy="11" r="2" fill="#c9a227" opacity="0.7"/>
+          <circle cx="34.5" cy="11" r="2" fill="#c9a227" opacity="0.7"/>
+          <circle cx="25.5" cy="17" r="2" fill="#c9a227" opacity="0.7"/>
+          <circle cx="34.5" cy="17" r="2" fill="#c9a227" opacity="0.7"/>
+          <!-- Nut line -->
+          <line x1="26" y1="23" x2="34" y2="23" stroke="#e8d5a0" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <div class="header-title">
+        <!-- English titles -->
+        <div class="title-main">Maqam Oud</div>
+        <div class="title-sub">Arabic Musical Modes on the Oud Neck</div>
+        <!-- Arabic titles (shown only in RTL/AR mode) -->
+        <div class="title-main-ar">مقام العود</div>
+        <div class="title-sub-ar">المقامات الموسيقية العربية على رقبة العود</div>
+      </div>
+    </div>
+
+    <div class="header-sep"></div>
+
+    <div class="lang-toggle" onclick="toggleLang()">
+      <button class="lang-btn active" id="btnEn">EN</button>
+      <button class="lang-btn" id="btnAr">عربي</button>
+      <div class="lang-slider" id="langSlider"></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div>
+      <div class="control-label" data-i18n="select_maqam">Select Maqam</div>
+      <select class="styled-select" id="maqamSelect" onchange="selectMaqam(this.value)"></select>
+    </div>
+    <div>
+      <div class="control-label" data-i18n="select_tuning">Oud Tuning</div>
+      <select class="styled-select" id="tuningSelect" onchange="changeTuning(this.value)">
+        <option value="dodo">Do-Do — دو دو (C F A d g c′)</option>
+        <option value="fafa">Fa-Fa — فا فا (F A D g c f′)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="maqam-info">
+    <div>
+      <div class="maqam-name-en" id="infoNameEn">—</div>
+      <div class="maqam-name-ar" id="infoNameAr">—</div>
+    </div>
+    <div class="info-divider"></div>
+    <div class="maqam-notes-display" id="infoNotes"></div>
+  </div>
+
+  <!-- SOUND PLAYER -->
+  <div class="sound-panel" id="soundPanel">
+    <div class="sound-panel-header">
+      <div class="sound-icon">♪</div>
+      <div class="sound-title" data-i18n="sound_title">Listen to Maqam</div>
+    </div>
+    <div class="sound-controls">
+      <button class="play-btn" id="playSeqBtn" onclick="togglePlaySequence()">
+        <svg viewBox="0 0 16 16" fill="currentColor"><polygon points="3,2 13,8 3,14"/></svg>
+        <span id="playBtnLabel" data-i18n="play_maqam">Play Maqam</span>
+      </button>
+      <button class="stop-btn" onclick="stopPlayback()">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="3" width="10" height="10" rx="1"/></svg>
+        <span data-i18n="stop">Stop</span>
+      </button>
+      <div class="speed-group">
+        <span class="speed-label" data-i18n="tempo">Tempo</span>
+        <input type="range" class="speed-slider" id="tempoSlider" min="0.3" max="2" step="0.1" value="0.9"
+               oninput="updateTempo(this.value)">
+      </div>
+    </div>
+    <div class="note-sequence" id="noteSequence"></div>
+    <div class="playback-bar">
+      <span id="playStatus" data-i18n="click_note">Click any note to hear it</span>
+      <div class="playback-progress"><div class="playback-fill" id="playFill"></div></div>
+    </div>
+  </div>
+
+  <div class="oud-section">
+    <div class="oud-container">
+      <div class="oud-neck" id="oudNeck">
+        <div class="peg-area" id="pegArea"></div>
+        <div class="neck-nut"></div>
+        <div class="neck-body"></div>
+        <svg class="neck-svg" id="neckSvg" viewBox="0 0 900 300" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot root"></div>
+      <span data-i18n="legend_root">Root (Qarar)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot scale"></div>
+      <span data-i18n="legend_note">Scale Note</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot half"></div>
+      <span data-i18n="legend_half">Half-Flat (♭½)</span>
+    </div>
+  </div>
+
+  <div class="section-title" data-i18n="all_maqamat">All Maqamat</div>
+  <div class="maqam-grid" id="maqamGrid"></div>
+  <div class="maqam-desc" id="maqamDesc"></div>
+
+  <footer>Arabic Music Maqam Visualizer &nbsp;·&nbsp; موشّح المقامات الموسيقية العربية</footer>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ── NOTE NAMES
+const NOTE_NAMES = {
+  0:    { en:'C',    ar:'دو' },
+  0.5:  { en:'C½♭',  ar:'دو½♭' },
+  1:    { en:'C#',   ar:'دو#' },
+  1.5:  { en:'D½♭',  ar:'ري½♭' },
+  2:    { en:'D',    ar:'ري' },
+  2.5:  { en:'D½♭',  ar:'ري½♭' },
+  3:    { en:'Eb',   ar:'مي♭' },
+  3.5:  { en:'E½♭',  ar:'مي½♭' },
+  4:    { en:'E',    ar:'مي' },
+  4.5:  { en:'F½♭',  ar:'فا½♭' },
+  5:    { en:'F',    ar:'فا' },
+  5.5:  { en:'F½#',  ar:'فا½#' },
+  6:    { en:'F#',   ar:'فا#' },
+  6.5:  { en:'G½♭',  ar:'صول½♭' },
+  7:    { en:'G',    ar:'صول' },
+  7.5:  { en:'G½♭',  ar:'صول½♭' },
+  8:    { en:'Ab',   ar:'لا♭' },
+  8.5:  { en:'A½♭',  ar:'لا½♭' },
+  9:    { en:'A',    ar:'لا' },
+  9.5:  { en:'Bb½♭', ar:'سي½♭' },
+  10:   { en:'Bb',   ar:'سي♭' },
+  10.5: { en:'B½♭',  ar:'سي½♭' },
+  11:   { en:'B',    ar:'سي' },
+};
+
+function noteName(abs, lang) {
+  let k = ((abs % 12) + 12) % 12;
+  // round to nearest 0.5
+  k = Math.round(k * 2) / 2;
+  if (k >= 12) k = 0;
+  return (NOTE_NAMES[k] || { en:'?', ar:'?' })[lang];
+}
+
+// ── MAQAMAT
+// intervals: cumulative semitones from root for each scale degree
+const MAQAMAT = [
+  { id:'rast',       en:'Rast',       ar:'راست',
+    root:0,  intervals:[0,2,3.5,5,7,9,10.5,12],
+    desc:{ en:'<strong>Maqam Rast</strong> is the most fundamental maqam in Arabic music. Its half-flat 3rd and 7th degrees give it a warm, serene, and balanced character, widely used across the Arab world.',
+           ar:'<strong>مقام الراست</strong> هو من أشهر وأعم المقامات العربية. يتميز بنصف بيمول على الدرجتين الثالثة والسابعة، مما يمنحه طابعاً دافئاً وهادئاً ومتوازناً.' }
+  },
+  { id:'bayati',     en:'Bayati',     ar:'بياتي',
+    root:2,  intervals:[0,1.5,3,5,7,8,10,12],
+    desc:{ en:'<strong>Maqam Bayati</strong> is one of the most beloved maqamat. The half-flat 2nd degree creates a deeply emotional, nostalgic, and melancholic character. It begins on D.',
+           ar:'<strong>مقام البياتي</strong> من أحب المقامات وأوسعها انتشاراً. نصف بيمول الدرجة الثانية يمنحه طابعاً عاطفياً عميقاً وحنيناً.' }
+  },
+  { id:'hijaz',      en:'Hijaz',      ar:'حجاز',
+    root:2,  intervals:[0,1,4,5,7,8,11,12],
+    desc:{ en:'<strong>Maqam Hijaz</strong> features an augmented second between its 2nd and 3rd degrees. Dramatic, exotic, and desert-like — it evokes the Hijaz region of Arabia.',
+           ar:'<strong>مقام الحجاز</strong> يتميز بالثانية الزائدة بين الدرجتين الثانية والثالثة. درامي وغريب يستحضر طابع منطقة الحجاز.' }
+  },
+  { id:'saba',       en:'Saba',       ar:'صبا',
+    root:2,  intervals:[0,1.5,3,4,6.5,8,10,12],
+    desc:{ en:'<strong>Maqam Saba</strong> is one of the most sorrowful maqamat, uniquely lowering the 4th degree. It conveys deep sadness, longing, and a weeping quality.',
+           ar:'<strong>مقام الصبا</strong> من أشد المقامات حزناً وشجناً. ينفرد بخفض الدرجة الرابعة مما يمنحه طابعاً باكياً يعبر عن الحزن العميق.' }
+  },
+  { id:'kurd',       en:'Kurd',       ar:'كرد',
+    root:2,  intervals:[0,1,3,5,7,8,10,12],
+    desc:{ en:'<strong>Maqam Kurd</strong> resembles the Phrygian mode with its lowered 2nd degree. It has a solemn, introspective, and deeply expressive character.',
+           ar:'<strong>مقام الكرد</strong> يشبه النمط الفريجي مع خفض الدرجة الثانية. له طابع رزين وتأملي وعميق التعبير.' }
+  },
+  { id:'nahawand',   en:'Nahawand',   ar:'نهاوند',
+    root:0,  intervals:[0,2,3,5,7,8,11,12],
+    desc:{ en:'<strong>Maqam Nahawand</strong> corresponds to the Western harmonic minor scale. Versatile, it can express both sadness and joy. Widely used in Arabic, Turkish and Greek music.',
+           ar:'<strong>مقام النهاوند</strong> يشبه السلم الهارموني المينور الأوروبي. متعدد الاستخدامات قادر على التعبير عن الحزن والفرح، مستخدم واسعاً في الموسيقى العربية والتركية واليونانية.' }
+  },
+  { id:'ajam',       en:'Ajam',       ar:'عجم',
+    root:7,  intervals:[0,2,4,5,7,9,11,12],
+    desc:{ en:'<strong>Maqam Ajam</strong> corresponds exactly to the Western major scale. It conveys cheerfulness, brightness, and optimism, widely used in upbeat Arabic music.',
+           ar:'<strong>مقام العجم</strong> يطابق السلم الكبير (الماجور) الأوروبي. يوحي بالبهجة والإشراق والتفاؤل.' }
+  },
+  { id:'hijaz_kar',  en:'Hijaz Kar',  ar:'حجاز كار',
+    root:0,  intervals:[0,1,4,5,7,8,11,12],
+    desc:{ en:'<strong>Maqam Hijaz Kar</strong> combines two Hijaz tetrachords into a symmetrical, highly dramatic scale. It has a Spanish/Flamenco-like flavor with deep exotic character.',
+           ar:'<strong>مقام حجاز كار</strong> يجمع رباعيَي حجاز في سلم متماثل ودرامي جداً. له نكهة إسبانية (فلامنكو) مع طابع شرقي عميق.' }
+  },
+  { id:'suznak',     en:'Suznak',     ar:'سوزناك',
+    root:0,  intervals:[0,2,3.5,5,7,8,11,12],
+    desc:{ en:'<strong>Maqam Suznak</strong> is Rast with a raised 7th degree. The half-flat 3rd combined with the leading tone creates a unique tension and release.',
+           ar:'<strong>مقام السوزناك</strong> مشتق من الراست مع رفع الدرجة السابعة. يخلق توتراً وانفراجاً فريداً.' }
+  },
+  { id:'farahfaza',  en:'Farahfaza',  ar:'فرحفزا',
+    root:9,  intervals:[0,2,3,5,7,8,10,12],
+    desc:{ en:'<strong>Maqam Farahfaza</strong> built on A, shares its lower tetrachord with Nahawand. It transitions dramatically between joy and melancholy.',
+           ar:'<strong>مقام فرحفزا</strong> مبني على اللا ويشترك رباعيه الأسفل مع النهاوند. يتأرجح بشكل درامي بين الفرح والحزن.' }
+  },
+  { id:'nawa_athar', en:'Nawa Athar', ar:'نوى أثر',
+    root:0,  intervals:[0,2,3,6,7,8,11,12],
+    desc:{ en:'<strong>Maqam Nawa Athar</strong> is exotic and dramatic, featuring augmented seconds in both tetrachords. It evokes mystery, contemplation, and the mystical sufi tradition.',
+           ar:'<strong>مقام نوى أثر</strong> مقام غريب ودرامي بثانية زائدة في كلا الرباعيين. يوحي بالغموض والتأمل والروحانية الصوفية.' }
+  },
+  { id:'sikah',      en:'Sikah',      ar:'سيكا',
+    root:3.5,intervals:[0,1.5,3.5,5.5,7,8.5,10.5,12],
+    desc:{ en:'<strong>Maqam Sikah</strong> uniquely begins on a half-flat E (E♭½). This floating starting point gives it an ethereal, spiritual quality — considered one of the most sacred maqamat.',
+           ar:'<strong>مقام السيكا</strong> ينفرد ببدايته على مي نصف بيمول. تمنحه هذه النقطة الفريدة طابعاً روحانياً يجعله من أشد المقامات قدسية.' }
+  },
+  { id:'jiharka',    en:'Jiharka',    ar:'جهاركا',
+    root:5,  intervals:[0,2,3.5,5,7,9,10.5,12],
+    desc:{ en:'<strong>Maqam Jiharka</strong> is Rast transposed to F. It retains the warm, balanced Rast character but with a brighter quality from the higher root position.',
+           ar:'<strong>مقام الجهاركا</strong> هو مقام الراست منقولاً إلى فا. يحتفظ بطابع الراست الدافئ لكن بإشراق أكبر.' }
+  },
+  { id:'huzam',      en:'Huzam',      ar:'هزام',
+    root:3.5,intervals:[0,1.5,3.5,4.5,7,8.5,10.5,12],
+    desc:{ en:'<strong>Maqam Huzam</strong> is complex with many half-flat notes, creating a distinctly oriental, contemplative mood. Common in Egyptian classical music.',
+           ar:'<strong>مقام الهزام</strong> مقام معقد بنصوف بيمولات متعددة يخلق مزاجاً شرقياً تأملياً. شائع في الموسيقى الكلاسيكية المصرية.' }
+  },
+  { id:'shahnaz',    en:'Shahnaz',    ar:'شهناز',
+    root:2,  intervals:[0,1,4,5.5,7,8,11,12],
+    desc:{ en:'<strong>Maqam Shahnaz</strong> combines the Hijaz lower tetrachord with a raised 4th degree, creating a particularly bold and dramatic character.',
+           ar:'<strong>مقام الشهناز</strong> يجمع رباعي الحجاز الأسفل مع رفع الدرجة الرابعة، مما يخلق طابعاً جريئاً ودرامياً بشكل خاص.' }
+  },
+  { id:'bayati_shuri',en:'Bayati Shuri',ar:'بياتي شوري',
+    root:2,  intervals:[0,1.5,3,5,6.5,8,10,12],
+    desc:{ en:'<strong>Maqam Bayati Shuri</strong> is a variant of Bayati with a half-flat 5th degree. It has an even more melancholic, lamenting quality than standard Bayati.',
+           ar:'<strong>مقام البياتي شوري</strong> متحور من البياتي مع نصف بيمول على الدرجة الخامسة. طابعه أشد حزناً وتأوهاً من البياتي العادي.' }
+  },
+  { id:'husseini',   en:'Husseini',   ar:'حسيني',
+    root:9,  intervals:[0,1.5,3,5,7,9,10,12],
+    desc:{ en:'<strong>Maqam Husseini</strong> built on A with a half-flat 2nd degree. It has a noble, contemplative character often used in religious and spiritual music.',
+           ar:'<strong>مقام الحسيني</strong> مبني على اللا بنصف بيمول في الدرجة الثانية. طابعه نبيل وتأملي يستخدم كثيراً في الموسيقى الدينية والروحية.' }
+  },
+];
+
+// ── OUD TUNINGS
+// Do-Do: C G A d g c′  → semitones from C: 0,7,9,2,7,0
+// Fa-Fa: F C D g c f′  → semitones from C: 5,0,2,7,0,5
+const TUNINGS = {
+  // Do-Do: C2 F2 A2 d3 g3 c′4  → semitones from C: 0,5,9,2,7,0
+  dodo: { notes:[0,5,9,2,7,0],  labels:['C','F','A','d','g','c′'] },
+  // Fa-Fa: F2 A2 D3 g3 c4 f′4  → semitones from C: 5,9,2,7,0,5
+  fafa: { notes:[5,9,2,7,0,5],  labels:['F','A','D','g','c','f′'] },
+};
+
+// ── STATE
+let currentMaqam = MAQAMAT[1]; // Bayati default
+let currentTuning = 'dodo';
+let currentLang = 'en';
+const FRET_COUNT = 13;
+
+// ── I18N
+const I18N = {
+  en:{ app_title_en:'Maqam Oud', app_title_ar:'مقام العود',
+       select_maqam:'Select Maqam', select_tuning:'Oud Tuning',
+       legend_root:'Root (Qarar)', legend_note:'Scale Note', legend_half:'Half-Flat (♭½)',
+       all_maqamat:'All Maqamat', open:'Open', string:'String', fret:'Fret',
+       sound_title:'Listen to Maqam', play_maqam:'Play Maqam', stop:'Stop',
+       tempo:'Tempo', click_note:'Click any note circle to hear it',
+       playing_text:'Playing…', stopped_text:'Click any note circle to hear it' },
+  ar:{ app_title_en:'Maqam Oud', app_title_ar:'مقام العود',
+       select_maqam:'اختر المقام', select_tuning:'ضبط العود',
+       legend_root:'القرار', legend_note:'نغمة السلم', legend_half:'نصف بيمول (♭½)',
+       all_maqamat:'جميع المقامات', open:'مفتوح', string:'وتر', fret:'دستان',
+       sound_title:'استمع إلى المقام', play_maqam:'شغّل المقام', stop:'إيقاف',
+       tempo:'السرعة', click_note:'انقر على أي نغمة لسماعها',
+       playing_text:'يعزف…', stopped_text:'انقر على أي نغمة لسماعها' },
+};
+
+function t(k) { return I18N[currentLang][k] || k; }
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (I18N[currentLang][k]) el.innerHTML = I18N[currentLang][k];
+  });
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langSlider').classList.toggle('ar', currentLang === 'ar');
+  document.getElementById('btnEn').classList.toggle('active', currentLang === 'en');
+  document.getElementById('btnAr').classList.toggle('active', currentLang === 'ar');
+  applyI18n();
+  populateMaqamSelect();
+  populateMaqamGrid();
+  updateMaqamInfo();
+  renderNeck();
+  buildNoteSequence();
+}
+
+// ── INIT
+function init() {
+  populateMaqamSelect();
+  populateMaqamGrid();
+  updateMaqamInfo();
+  renderNeck();
+  updateDescription();
+  buildNoteSequence();
+  applyI18n();
+}
+
+function populateMaqamSelect() {
+  const sel = document.getElementById('maqamSelect');
+  const prev = sel.value || currentMaqam.id;
+  sel.innerHTML = '';
+  MAQAMAT.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = currentLang === 'ar' ? `${m.ar} — ${m.en}` : `${m.en} — ${m.ar}`;
+    if (m.id === currentMaqam.id) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function populateMaqamGrid() {
+  const grid = document.getElementById('maqamGrid');
+  grid.innerHTML = '';
+  MAQAMAT.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'maqam-card' + (m.id === currentMaqam.id ? ' active' : '');
+    card.id = 'card-' + m.id;
+    card.onclick = () => selectMaqam(m.id);
+    const rootNm = noteName(m.root, currentLang);
+    card.innerHTML = `<div class="mc-en">${m.en}</div><div class="mc-ar">${m.ar}</div>
+      <div class="mc-root">${currentLang === 'ar' ? 'أساس: ' : 'Root: '}${rootNm}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function selectMaqam(id) {
+  currentMaqam = MAQAMAT.find(m => m.id === id) || MAQAMAT[0];
+  document.getElementById('maqamSelect').value = id;
+  document.querySelectorAll('.maqam-card').forEach(c =>
+    c.classList.toggle('active', c.id === 'card-' + id));
+  stopPlayback();
+  updateMaqamInfo();
+  renderNeck();
+  updateDescription();
+  buildNoteSequence();
+}
+
+function changeTuning(val) {
+  currentTuning = val;
+  renderNeck();
+}
+
+function updateMaqamInfo() {
+  document.getElementById('infoNameEn').textContent = currentMaqam.en;
+  document.getElementById('infoNameAr').textContent = currentMaqam.ar;
+  const notesDiv = document.getElementById('infoNotes');
+  notesDiv.innerHTML = '';
+  currentMaqam.intervals.forEach((iv, i) => {
+    const chip = document.createElement('div');
+    const isHalf = iv % 1 !== 0;
+    chip.className = 'note-chip ' + (i === 0 ? 'root' : isHalf ? 'half' : 'scale');
+    chip.textContent = noteName(currentMaqam.root + iv, currentLang);
+    notesDiv.appendChild(chip);
+  });
+}
+
+function updateDescription() {
+  document.getElementById('maqamDesc').innerHTML = currentMaqam.desc[currentLang];
+}
+
+// ── NECK RENDERING
+function renderNeck() {
+  const svg = document.getElementById('neckSvg');
+  const pegArea = document.getElementById('pegArea');
+
+  const W = 900, H = 300;
+  const NUT = 66;     // x position of nut
+  const RIGHT = W - 14;
+  const TOP = 18;
+  const BOT = H - 18;
+  const NW = RIGHT - NUT; // neck width in pixels
+  const NH = BOT - TOP;   // neck height in pixels
+
+  const tuning = TUNINGS[currentTuning];
+  const openNotes = tuning.notes;   // mod-12 values
+  const labels = tuning.labels;
+  const nStrings = openNotes.length;
+
+  svg.innerHTML = '';
+  pegArea.innerHTML = '';
+
+  // Peg labels
+  for (let s = 0; s < nStrings; s++) {
+    const peg = document.createElement('div');
+    peg.className = 'peg';
+    peg.innerHTML = `<span class="peg-label">${labels[s]}</span><div class="peg-knob"></div>`;
+    pegArea.appendChild(peg);
+  }
+
+  // Fret x positions (equal temperament)
+  // fret 0 = nut, fret n at: NUT + NW*(1 - (0.5)^(n/12))
+  function fretX(n) {
+    if (n === 0) return NUT;
+    return NUT + NW * (1 - Math.pow(0.5, n / 12));
+  }
+
+  // Draw frets 1..FRET_COUNT
+  for (let f = 1; f <= FRET_COUNT; f++) {
+    const x = fretX(f);
+    const ln = makeSvg('line');
+    setAttr(ln, { x1:x, y1:TOP, x2:x, y2:BOT,
+      stroke:'#c8a850', 'stroke-width': f===1?'2.5':'1.2', 'stroke-opacity':'0.4' });
+    svg.appendChild(ln);
+
+    // fret number
+    const tx = (fretX(f-1) + x) / 2;
+    const ftxt = makeSvg('text');
+    setAttr(ftxt, { x:tx, y:BOT+12, 'text-anchor':'middle', fill:'rgba(180,140,60,0.3)',
+      'font-size':'8', 'font-family':'Cinzel,serif' });
+    ftxt.textContent = f;
+    svg.appendChild(ftxt);
+  }
+
+  // Position markers at frets 3,5,7,9,12
+  [3,5,7,9,12].forEach(f => {
+    if (f > FRET_COUNT) return;
+    const mx = (fretX(f-1) + fretX(f)) / 2;
+    const my = TOP + NH / 2;
+    const dot = makeSvg('circle');
+    setAttr(dot, { cx:mx, cy:my, r: f===12?5:4,
+      fill:'rgba(201,162,39,0.13)', stroke:'rgba(201,162,39,0.22)', 'stroke-width':'1' });
+    svg.appendChild(dot);
+    if (f === 12) {
+      // double dot
+      const d2 = makeSvg('circle');
+      setAttr(d2, { cx:mx, cy:my - NH*0.22, r:3.5,
+        fill:'rgba(201,162,39,0.09)', stroke:'rgba(201,162,39,0.15)', 'stroke-width':'1' });
+      svg.appendChild(d2);
+    }
+  });
+
+  // Strings
+  for (let s = 0; s < nStrings; s++) {
+    const sy = TOP + (s + 0.5) * (NH / nStrings);
+    const thick = [2.2,1.8,1.5,1.1,0.9,0.7][s];
+
+    const glow = makeSvg('line');
+    setAttr(glow, { x1:NUT, y1:sy, x2:RIGHT, y2:sy,
+      stroke:'rgba(240,220,170,0.06)', 'stroke-width': thick+3 });
+    svg.appendChild(glow);
+
+    const ln = makeSvg('line');
+    setAttr(ln, { x1:NUT, y1:sy, x2:RIGHT, y2:sy,
+      stroke:`rgba(212,197,169,${0.45 + s*0.025})`, 'stroke-width':thick });
+    svg.appendChild(ln);
+  }
+
+  // ── COMPUTE MAQAM NOTE SET (mod 12, with half-tone precision)
+  const maqamSet = buildMaqamSet();
+
+  // ── PLACE NOTES
+  for (let s = 0; s < nStrings; s++) {
+    const openPitch = openNotes[s]; // mod-12
+    const sy = TOP + (s + 0.5) * (NH / nStrings);
+
+    // Open string
+    const openMatch = findMatch(openPitch, maqamSet);
+    if (openMatch) {
+      drawNote(svg, NUT - 28, sy, openPitch, openMatch, s, -1, true);
+    }
+
+    // Frets 1..FRET_COUNT + half-flat positions
+    for (let f = 1; f <= FRET_COUNT; f++) {
+      // Full fret pitch
+      const pitch = (openPitch + f) % 12;
+      const cx = (fretX(f-1) + fretX(f)) / 2;
+
+      const m = findMatch(pitch, maqamSet);
+      if (m) drawNote(svg, cx, sy, pitch, m, s, f, false);
+
+      // Quarter-tone (half-flat): position at ~62% between fret f-1 and f
+      // only check non-integer pitches in maqam
+      const halfPitch = (openPitch + f - 0.5 + 12) % 12; // 0.5 semitone before fret f
+      const hx = fretX(f-1) + (fretX(f) - fretX(f-1)) * 0.58;
+      const hm = findMatch(halfPitch, maqamSet, true);
+      if (hm) drawNote(svg, hx, sy, halfPitch, hm, s, f - 0.5, false);
+    }
+  }
+}
+
+function buildMaqamSet() {
+  // Returns array of { pitch (mod12), isRoot, isHalf }
+  const set = [];
+  const root = currentMaqam.root;
+  currentMaqam.intervals.forEach((iv, i) => {
+    const pitch = ((root + iv) % 12 + 12) % 12;
+    // Round to nearest 0.5
+    const p = Math.round(pitch * 2) / 2;
+    if (!set.find(x => Math.abs(x.pitch - p) < 0.1)) {
+      set.push({ pitch: p, isRoot: i === 0, isHalf: iv % 1 !== 0 });
+    }
+  });
+  return set;
+}
+
+function findMatch(pitch, maqamSet, onlyHalf) {
+  // pitch may be x.5 for quarter tones
+  const p = Math.round(((pitch % 12) + 12) % 12 * 2) / 2;
+  for (const m of maqamSet) {
+    if (onlyHalf && !m.isHalf) continue;
+    if (Math.abs(m.pitch - p) < 0.15) return m;
+  }
+  return null;
+}
+
+function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
+  const { isRoot, isHalf } = matchInfo;
+  const R = isOpen ? 10 : 9;
+  const lang = currentLang;
+  const nn = noteName(pitch, lang);
+
+  // Normalised pitch key used for illumination lookups
+  const pitchKey = Math.round(((pitch % 12) + 12) % 12 * 2) / 2;
+
+  const g = makeSvg('g');
+  g.setAttribute('class', 'note-dot');
+  g.setAttribute('data-pitch', pitchKey);
+
+  // ── Pulse ring (hidden until .lit is added) ──
+  const pulseRing = makeSvg('circle');
+  setAttr(pulseRing, { cx:x, cy:y, r:R+4, fill:'none',
+    stroke: isRoot ? '#ff6050' : '#ffe060',
+    'stroke-width':'2.5', opacity:'0', 'pointer-events':'none' });
+  pulseRing.setAttribute('class', 'pulse-ring');
+  g.appendChild(pulseRing);
+
+  // ── Inner glow blob (hidden until .lit) ──
+  const innerGlow = makeSvg('circle');
+  setAttr(innerGlow, { cx:x, cy:y, r:R+1, fill:'rgba(255,240,140,0.55)',
+    opacity:'0', 'pointer-events':'none' });
+  innerGlow.setAttribute('class', 'inner-glow');
+  g.appendChild(innerGlow);
+
+  // ── Ambient glow (always visible) ──
+  const glow = makeSvg('circle');
+  setAttr(glow, { cx:x, cy:y, r:R+6,
+    fill: isRoot ? 'rgba(232,67,42,0.22)' : isHalf ? 'rgba(139,105,20,0.2)' : 'rgba(201,162,39,0.18)',
+    'pointer-events':'none' });
+  g.appendChild(glow);
+
+  // ── Main circle ──
+  const circ = makeSvg('circle');
+  const fillColor = isRoot ? '#d43a24' : isHalf ? '#7a5c10' : '#c9a227';
+  const strokeColor = isRoot ? '#ff8070' : isHalf ? '#d4a828' : '#ffe080';
+  setAttr(circ, { cx:x, cy:y, r:R, fill:fillColor, stroke:strokeColor, 'stroke-width':'1.5' });
+  circ.setAttribute('class', 'note-circle');
+  g.appendChild(circ);
+
+  // ── Quarter-tone stripe ──
+  if (isHalf) {
+    const stripe = makeSvg('circle');
+    setAttr(stripe, { cx:x, cy:y, r:R, fill:'url(#halfPattern)',
+      stroke:'none', 'clip-path':`circle(${R}px at ${x}px ${y}px)` });
+    g.appendChild(stripe);
+  }
+
+  // ── Label text ──
+  const txt = makeSvg('text');
+  const fs = nn.length > 3 ? '6.5' : nn.length > 2 ? '7.5' : '8.5';
+  setAttr(txt, { x:x, y:y+0.5, 'text-anchor':'middle', 'dominant-baseline':'middle',
+    fill: isRoot ? '#fff' : isHalf ? '#ffe5a0' : '#1a0d00',
+    'font-size':fs, 'font-family': lang==='ar' ? 'Amiri,serif' : 'Cinzel,serif',
+    'font-weight':'700', 'pointer-events':'none' });
+  txt.textContent = nn;
+  g.appendChild(txt);
+
+  // ── Open string indicator ──
+  if (isOpen) {
+    const ring = makeSvg('circle');
+    setAttr(ring, { cx:x, cy:y, r:R+3, fill:'none',
+      stroke: isRoot ? 'rgba(232,67,42,0.6)' : 'rgba(201,162,39,0.5)', 'stroke-width':'1' });
+    g.appendChild(ring);
+  }
+
+  // Tooltip events + click to play
+  g.addEventListener('mouseenter', e => {
+    const fretLabel = fret === -1 ? t('open') : `${t('fret')} ${fret}`;
+    showTip(e, `${nn}  ·  ${t('string')} ${stringIdx+1}  ·  ${fretLabel}${isRoot ? '  ★' : ''}`);
+  });
+  g.addEventListener('mousemove', moveTip);
+  g.addEventListener('mouseleave', hideTip);
+  g.addEventListener('click', () => {
+    const baseOctave = ((currentMaqam.root <= 4) ? 0 : -1);
+    const pitchSemitone = ((pitch % 12) + 12) % 12;
+    const matchInterval = currentMaqam.intervals.find(iv => {
+      const p = Math.round(((currentMaqam.root + iv) % 12 + 12) % 12 * 2) / 2;
+      return Math.abs(p - Math.round(pitchSemitone * 2) / 2) < 0.15;
+    });
+    const totalSt = matchInterval !== undefined
+      ? currentMaqam.root + matchInterval + baseOctave * 12
+      : pitchSemitone;
+    const hz = semitoneToHz(totalSt);
+    playOudNote(hz, 2.2);
+    illuminateNeckNotes(pitchSemitone);
+  });
+  g.style.cursor = 'pointer';
+
+  svg.appendChild(g);
+}
+
+// ── SVG HELPERS
+function makeSvg(tag) {
+  return document.createElementNS('http://www.w3.org/2000/svg', tag);
+}
+function setAttr(el, attrs) {
+  for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
+}
+
+// ── TOOLTIP
+function showTip(e, text) {
+  const tip = document.getElementById('tooltip');
+  tip.textContent = text;
+  tip.classList.add('visible');
+  moveTip(e);
+}
+function moveTip(e) {
+  const tip = document.getElementById('tooltip');
+  tip.style.left = e.clientX + 'px';
+  tip.style.top  = e.clientY + 'px';
+}
+function hideTip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+// ── Illuminate all neck dots matching a given pitch class
+function illuminateNeckNotes(pitchKey) {
+  const key = Math.round(((pitchKey % 12) + 12) % 12 * 2) / 2;
+  const dots = document.querySelectorAll(`.note-dot[data-pitch="${key}"]`);
+  dots.forEach(dot => {
+    // Remove and re-add .lit to restart the animation cleanly
+    dot.classList.remove('lit');
+    // Force reflow so animation restarts
+    void dot.getBoundingClientRect();
+    dot.classList.add('lit');
+    // Auto-remove after animation completes
+    setTimeout(() => dot.classList.remove('lit'), 750);
+  });
+}
+
+// ──────────────────────────────────────────────
+// AUDIO ENGINE — Additive synthesis oud model
+// ──────────────────────────────────────────────
+//
+// The oud has a distinctive timbre shaped by:
+//  • A very fast, bright percussive attack (pick transient)
+//  • Strong fundamental + 2nd harmonic, prominent 3rd/4th
+//  • High harmonics (5–12) that die away almost instantly
+//  • Warm mid-body resonance from the bowl (~200–400 Hz peak)
+//  • A fast overall exponential decay (~1.5–2.5s total)
+//  • Slight inharmonicity (partials stretch slightly sharp)
+//  • Subtle random pitch micro-fluctuation (natural string imperfection)
+//
+// We model this with:
+//  1. A bank of sine oscillators (additive synthesis), each with
+//     its own per-partial amplitude envelope
+//  2. A brief white-noise burst through a very narrow bandpass
+//     to simulate the pick click/attack transient
+//  3. Body resonance via a peaking EQ filter on the summed signal
+//  4. A gentle vibrato LFO for natural string warmth
+//  5. A compressor to avoid clipping and smooth dynamics
+// ──────────────────────────────────────────────
+
+let audioCtx = null;
+let playbackTimer = null;
+let isPlaying = false;
+let playTempo = 0.9; // seconds per note
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+// C3 = 130.81 Hz (comfortable oud range)
+function semitoneToHz(semitones) {
+  return 130.81 * Math.pow(2, semitones / 12);
+}
+
+// ── Oud harmonic fingerprint ──
+// Each entry: [partial_number, relative_amplitude, decay_time_seconds]
+// Based on spectral analysis of real oud recordings:
+//  • Partials 1-4 are strongest (1.0, 0.72, 0.55, 0.38)
+//  • Partials 5-8 are mid-level (0.22, 0.16, 0.12, 0.09)
+//  • Partials 9-13 are very faint attack color (0.06–0.02)
+//  • Higher partials decay much faster (oud wood dampens highs quickly)
+//  • Slight inharmonicity: partial n sounds at n * f * (1 + n*0.0003)
+const OUD_PARTIALS = [
+  // [partial, amp, decayTime]
+  [1,  1.00, 2.8],   // fundamental — long, warm sustain
+  [2,  0.72, 2.2],   // strong 2nd (octave) — oud hallmark
+  [3,  0.52, 1.7],   // 3rd partial — adds nasal warmth
+  [4,  0.36, 1.3],   // 4th — present on attack
+  [5,  0.20, 0.9],   // 5th — starting to fade fast
+  [6,  0.14, 0.65],  // 6th — brief color
+  [7,  0.10, 0.45],  // 7th — very brief
+  [8,  0.07, 0.32],  // 8th
+  [9,  0.05, 0.22],  // 9th — attack sparkle only
+  [10, 0.035,0.15],  // 10th
+  [11, 0.025,0.10],  // 11th — almost instant
+  [12, 0.018,0.07],  // 12th — pick transient shimmer
+  [13, 0.012,0.05],  // 13th
+];
+
+// Inharmonicity coefficient (oud strings are thicker → slightly inharmonic)
+const INHARM = 0.00035;
+
+function playOudNote(freqHz, noteDuration) {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  // ── Shared output chain ──
+  // Compressor → body EQ → master gain → destination
+  const compressor = ctx.createDynamicsCompressor();
+  compressor.threshold.value = -18;
+  compressor.knee.value = 8;
+  compressor.ratio.value = 4;
+  compressor.attack.value = 0.002;
+  compressor.release.value = 0.15;
+
+  // Body resonance: oud bowl peaks around 200-350 Hz (warm low-mid)
+  const bodyPeak = ctx.createBiquadFilter();
+  bodyPeak.type = 'peaking';
+  bodyPeak.frequency.value = 260;
+  bodyPeak.Q.value = 1.8;
+  bodyPeak.gain.value = 5.5;
+
+  // Presence cut at very high freq (oud loses air above 3kHz fast)
+  const hiCut = ctx.createBiquadFilter();
+  hiCut.type = 'lowpass';
+  hiCut.frequency.value = 4200;
+  hiCut.Q.value = 0.55;
+
+  // Master gain with overall envelope
+  const masterGain = ctx.createGain();
+  masterGain.gain.setValueAtTime(0.0001, now);
+  masterGain.gain.linearRampToValueAtTime(0.52, now + 0.004); // lightning-fast attack
+  masterGain.gain.exponentialRampToValueAtTime(0.001, now + noteDuration);
+
+  // Wire shared output chain
+  compressor.connect(bodyPeak);
+  bodyPeak.connect(hiCut);
+  hiCut.connect(masterGain);
+  masterGain.connect(ctx.destination);
+
+  // ── Per-partial oscillators (additive synthesis) ──
+  OUD_PARTIALS.forEach(([n, amp, decayT]) => {
+    // Inharmonic frequency: f_n = n * f0 * sqrt(1 + B*n^2)
+    // approx: f_n ≈ n * f0 * (1 + 0.5*B*n^2) for small B
+    const partialFreq = n * freqHz * (1 + INHARM * n * n);
+    if (partialFreq > 18000) return; // skip inaudible partials
+
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = partialFreq;
+
+    // Very subtle per-partial vibrato (5 Hz, tiny depth — natural string)
+    const vibLFO = ctx.createOscillator();
+    vibLFO.type = 'sine';
+    vibLFO.frequency.value = 4.8 + Math.random() * 0.4; // 4.8–5.2 Hz
+    const vibGain = ctx.createGain();
+    // Vibrato depth scales with partial (higher = more unstable)
+    vibGain.gain.value = partialFreq * 0.0008 * (1 + n * 0.05);
+    vibLFO.connect(vibGain);
+    vibGain.connect(osc.frequency);
+
+    // Per-partial gain envelope
+    const partialGain = ctx.createGain();
+    const effectiveDecay = Math.min(decayT, noteDuration * 0.95);
+
+    // Attack: instant (oud pick is very sharp)
+    partialGain.gain.setValueAtTime(0.0001, now);
+    partialGain.gain.linearRampToValueAtTime(amp, now + 0.003);
+    // Decay: exponential falloff — higher partials die much faster
+    partialGain.gain.exponentialRampToValueAtTime(0.0001, now + effectiveDecay);
+
+    osc.connect(partialGain);
+    partialGain.connect(compressor);
+
+    osc.start(now);
+    vibLFO.start(now);
+    osc.stop(now + effectiveDecay + 0.05);
+    vibLFO.stop(now + effectiveDecay + 0.05);
+  });
+
+  // ── Pick attack transient ──
+  // Brief burst of filtered noise simulating the pick hitting the string
+  const attackDur = 0.018; // 18ms noise burst
+  const noiseLen = Math.ceil(ctx.sampleRate * attackDur);
+  const noiseBuf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+  const nd = noiseBuf.getChannelData(0);
+  for (let i = 0; i < noiseLen; i++) nd[i] = (Math.random() * 2 - 1);
+
+  const noiseSrc = ctx.createBufferSource();
+  noiseSrc.buffer = noiseBuf;
+
+  // Narrow bandpass centered near the string frequency (pick click character)
+  const pickBP = ctx.createBiquadFilter();
+  pickBP.type = 'bandpass';
+  pickBP.frequency.value = Math.min(freqHz * 3.5, 3500);
+  pickBP.Q.value = 1.2;
+
+  const pickGain = ctx.createGain();
+  pickGain.gain.setValueAtTime(0.28, now);
+  pickGain.gain.exponentialRampToValueAtTime(0.0001, now + attackDur);
+
+  noiseSrc.connect(pickBP);
+  pickBP.connect(pickGain);
+  pickGain.connect(compressor);
+
+  noiseSrc.start(now);
+  noiseSrc.stop(now + attackDur);
+
+  // ── Cleanup ──
+  const cleanupMs = (noteDuration + 0.3) * 1000;
+  setTimeout(() => {
+    try { masterGain.disconnect(); compressor.disconnect(); } catch(e) {}
+  }, cleanupMs);
+}
+
+// Build frequency list for current maqam
+// Roots map: we want audible oud range, roughly D3–D5
+// Base MIDI for C = 48 (C3)
+function getMaqamFrequencies() {
+  const root = currentMaqam.root;
+  const intervals = currentMaqam.intervals;
+  // C3 = 130.81 Hz base. Roots ≤ 4 → octave 3 offset (0), higher roots drop an octave
+  const baseOctave = root <= 4 ? 0 : -1;
+  return intervals.map(iv => {
+    const totalSemitones = root + iv + baseOctave * 12;
+    return semitoneToHz(totalSemitones);
+  });
+}
+
+// ── Sequence playback state
+let seqStep = -1;
+let seqFreqs = [];
+
+function buildNoteSequence() {
+  const container = document.getElementById('noteSequence');
+  container.innerHTML = '';
+  const intervals = currentMaqam.intervals;
+  const root = currentMaqam.root;
+
+  intervals.forEach((iv, i) => {
+    if (i > 0) {
+      const arrow = document.createElement('span');
+      arrow.className = 'seq-arrow';
+      arrow.textContent = '›';
+      container.appendChild(arrow);
+    }
+
+    const btn = document.createElement('div');
+    const isHalf = iv % 1 !== 0;
+    btn.className = 'seq-note ' + (i === 0 ? 'root-note' : isHalf ? 'half-note' : 'scale-note');
+    btn.id = 'seqNote-' + i;
+    btn.title = noteName(root + iv, currentLang);
+    btn.textContent = noteName(root + iv, currentLang);
+    btn.onclick = () => playNoteByIndex(i);
+    container.appendChild(btn);
+  });
+}
+
+function playNoteByIndex(idx) {
+  const freqs = getMaqamFrequencies();
+  if (idx < 0 || idx >= freqs.length) return;
+  playOudNote(freqs[idx], 2.2);
+  highlightSeqNote(idx);
+  // Illuminate matching neck dots
+  const iv = currentMaqam.intervals[idx];
+  const pitchKey = ((currentMaqam.root + iv) % 12 + 12) % 12;
+  illuminateNeckNotes(pitchKey);
+}
+
+function highlightSeqNote(idx) {
+  document.querySelectorAll('.seq-note').forEach((el, i) => {
+    el.classList.toggle('active-note', i === idx);
+  });
+  // Update progress
+  const total = currentMaqam.intervals.length - 1;
+  const pct = total > 0 ? (idx / total) * 100 : 0;
+  document.getElementById('playFill').style.width = pct + '%';
+}
+
+function togglePlaySequence() {
+  if (isPlaying) {
+    stopPlayback();
+  } else {
+    startPlayback();
+  }
+}
+
+function startPlayback() {
+  stopPlayback();
+  isPlaying = true;
+  seqFreqs = getMaqamFrequencies();
+  seqStep = 0;
+
+  const btn = document.getElementById('playSeqBtn');
+  const label = document.getElementById('playBtnLabel');
+  btn.classList.add('playing');
+  label.textContent = t('playing_text');
+  document.getElementById('playStatus').textContent = t('playing_text');
+
+  function playNext() {
+    if (!isPlaying || seqStep >= seqFreqs.length) {
+      if (seqStep >= seqFreqs.length) {
+        // Finished — reset after last note fades
+        setTimeout(() => { stopPlayback(true); }, playTempo * 1000 * 0.5);
+      }
+      return;
+    }
+    playOudNote(seqFreqs[seqStep], playTempo * 1.6);
+    highlightSeqNote(seqStep);
+    // Illuminate matching neck dots
+    const iv = currentMaqam.intervals[seqStep];
+    const pitchKey = ((currentMaqam.root + iv) % 12 + 12) % 12;
+    illuminateNeckNotes(pitchKey);
+    seqStep++;
+    playbackTimer = setTimeout(playNext, playTempo * 1000);
+  }
+  playNext();
+}
+
+function stopPlayback(finished) {
+  isPlaying = false;
+  if (playbackTimer) { clearTimeout(playbackTimer); playbackTimer = null; }
+  seqStep = -1;
+  document.querySelectorAll('.seq-note').forEach(el => el.classList.remove('active-note'));
+  document.getElementById('playFill').style.width = finished ? '100%' : '0%';
+  setTimeout(() => { document.getElementById('playFill').style.width = '0%'; }, 400);
+
+  const btn = document.getElementById('playSeqBtn');
+  const label = document.getElementById('playBtnLabel');
+  btn.classList.remove('playing');
+  label.setAttribute('data-i18n', 'play_maqam');
+  label.textContent = t('play_maqam');
+  document.getElementById('playStatus').textContent = t('click_note');
+}
+
+function updateTempo(val) {
+  playTempo = 2.1 - parseFloat(val); // invert: slider right = faster
+}
+
+// ── BOOT
+init();
+</script>
+</body>
+</html>
