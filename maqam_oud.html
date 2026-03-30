@@ -679,6 +679,340 @@
     transition: width 0.1s linear;
     border-radius: 2px;
   }
+
+  /* ══════════════════════════════════════════
+     SEQUENCE BUILDER
+     ══════════════════════════════════════════ */
+  .seq-builder {
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4), var(--shadow-gold);
+  }
+
+  .seq-builder-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .seq-builder-header .sound-icon { font-size: 1.1rem; }
+  .seq-builder-header .sound-title { flex: 1; }
+  .seq-builder-toggle {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    transition: transform 0.3s;
+  }
+  .seq-builder.collapsed .seq-builder-toggle { transform: rotate(-90deg); }
+  .seq-builder.collapsed .seq-builder-body { display: none; }
+
+  /* Sequence Tabs */
+  .seq-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(201,162,39,0.1);
+    scrollbar-width: thin;
+  }
+  .seq-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,162,39,0.12);
+    border-radius: 20px;
+    font-family: 'Cairo', serif;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .seq-tab:hover { border-color: rgba(201,162,39,0.35); color: var(--text-primary); }
+  .seq-tab.active {
+    background: rgba(201,162,39,0.1);
+    border-color: var(--gold);
+    color: var(--gold-pale);
+    box-shadow: 0 0 10px rgba(201,162,39,0.15);
+  }
+  .seq-tab-name {
+    outline: none;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    min-width: 40px;
+    max-width: 120px;
+    cursor: pointer;
+  }
+  .seq-tab-name:focus {
+    cursor: text;
+    border-bottom: 1px dashed var(--gold);
+  }
+  .seq-tab-count {
+    font-size: 0.62rem;
+    opacity: 0.5;
+  }
+  .seq-tab-new {
+    padding: 7px 14px;
+    background: rgba(201,162,39,0.06);
+    border: 1px dashed rgba(201,162,39,0.25);
+    border-radius: 20px;
+    font-family: 'Cairo', serif;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .seq-tab-new:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,162,39,0.12); }
+
+  /* Toolbar */
+  .seq-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .seq-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: 22px;
+    font-family: 'Cairo', serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .seq-btn-play {
+    background: linear-gradient(135deg, rgba(201,162,39,0.2), rgba(201,162,39,0.08));
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .seq-btn-play:hover { background: linear-gradient(135deg, rgba(201,162,39,0.35), rgba(201,162,39,0.15)); box-shadow: 0 0 12px rgba(201,162,39,0.25); }
+  .seq-btn-play.playing {
+    background: linear-gradient(135deg, rgba(232,67,42,0.25), rgba(232,67,42,0.1));
+    border-color: #e8432a;
+    color: #f07060;
+  }
+  .seq-btn-loop {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--text-secondary);
+  }
+  .seq-btn-loop:hover { border-color: rgba(255,255,255,0.25); }
+  .seq-btn-loop.active {
+    background: rgba(100,180,255,0.1);
+    border-color: rgba(100,180,255,0.4);
+    color: #80c0ff;
+  }
+  .seq-btn-record {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--text-secondary);
+  }
+  .seq-btn-record:hover { border-color: rgba(232,67,42,0.4); }
+  .seq-btn-record.active {
+    background: rgba(232,67,42,0.15);
+    border-color: #e8432a;
+    color: #f07060;
+    animation: recordPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes recordPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,67,42,0); }
+    50% { box-shadow: 0 0 12px 2px rgba(232,67,42,0.3); }
+  }
+  .seq-btn-danger {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.08);
+    color: var(--text-dim);
+  }
+  .seq-btn-danger:hover { border-color: rgba(232,67,42,0.5); color: #f07060; }
+  .seq-btn-icon { font-size: 0.9rem; line-height: 1; }
+  .seq-toolbar-spacer { flex: 1; }
+
+  /* Note Timeline */
+  .seq-timeline {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 52px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(201,162,39,0.08);
+    border-radius: 8px;
+    position: relative;
+  }
+  .seq-timeline-empty {
+    width: 100%;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: 'Cairo', serif;
+    padding: 10px 0;
+  }
+  .seq-timeline-note {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    position: relative;
+    cursor: grab;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .seq-timeline-note:active { cursor: grabbing; }
+  .seq-timeline-note.dragging { opacity: 0.4; transform: scale(0.9); }
+  .seq-timeline-note.drag-over-left { margin-left: 18px; }
+  .seq-timeline-note.drag-over-right { margin-right: 18px; }
+  .seq-timeline-note.seq-playing {
+    transform: scale(1.15);
+  }
+
+  .seq-tn-pill {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.66rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    border: 1.5px solid;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .seq-tn-pill.root { background: rgba(232,67,42,0.15); border-color: rgba(232,67,42,0.5); color: #f07060; }
+  .seq-tn-pill.scale { background: rgba(201,162,39,0.1); border-color: rgba(201,162,39,0.3); color: var(--gold-pale); }
+  .seq-tn-pill.half { background: rgba(139,105,20,0.15); border-color: rgba(139,105,20,0.5); color: #c8a840; font-size: 0.58rem; }
+  .seq-tn-pill.rest { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); color: var(--text-dim); font-size: 0.85rem; }
+  .seq-tn-pill.seq-active-pill {
+    box-shadow: 0 0 16px rgba(201,162,39,0.6);
+    border-color: var(--gold-light) !important;
+    background: rgba(201,162,39,0.3) !important;
+    color: #fff !important;
+    transform: scale(1.1);
+  }
+
+  .seq-tn-remove {
+    position: absolute;
+    top: -5px; right: -5px;
+    width: 15px; height: 15px;
+    border-radius: 50%;
+    background: rgba(232,67,42,0.8);
+    color: #fff;
+    font-size: 0.55rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    border: none;
+    line-height: 1;
+  }
+  .seq-timeline-note:hover .seq-tn-remove { opacity: 1; }
+
+  .seq-tn-dur {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    font-family: 'Cairo', serif;
+    cursor: pointer;
+    padding: 1px 4px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .seq-tn-dur:hover { background: rgba(201,162,39,0.1); color: var(--text-secondary); }
+
+  .seq-timeline-arrow {
+    color: var(--text-dim);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    line-height: 36px;
+    user-select: none;
+  }
+
+  /* Note Picker */
+  .seq-picker {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(201,162,39,0.08);
+  }
+  .seq-picker-label {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .seq-picker-grid {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .seq-pick-note {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.68rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    border: 1.5px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .seq-pick-note:hover { transform: scale(1.12); box-shadow: 0 0 10px rgba(201,162,39,0.3); }
+  .seq-pick-note.root { background: rgba(232,67,42,0.15); border-color: rgba(232,67,42,0.5); color: #f07060; }
+  .seq-pick-note.scale { background: rgba(201,162,39,0.1); border-color: rgba(201,162,39,0.3); color: var(--gold-pale); }
+  .seq-pick-note.half { background: rgba(139,105,20,0.15); border-color: rgba(139,105,20,0.5); color: #c8a840; font-size: 0.58rem; }
+  .seq-pick-rest {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    border: 1.5px dashed rgba(255,255,255,0.15);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .seq-pick-rest:hover { border-color: rgba(255,255,255,0.35); color: var(--text-secondary); transform: scale(1.12); }
+
+  /* Sequence playback progress */
+  .seq-playback-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-family: 'Cairo', serif;
+  }
+  .seq-playback-progress {
+    flex: 1;
+    height: 3px;
+    background: rgba(201,162,39,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .seq-playback-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width 0.1s linear;
+    border-radius: 2px;
+  }
 </style>
 </head>
 <body>
@@ -778,6 +1112,54 @@
     <div class="playback-bar">
       <span id="playStatus" data-i18n="click_note">Click any note to hear it</span>
       <div class="playback-progress"><div class="playback-fill" id="playFill"></div></div>
+    </div>
+  </div>
+
+  <!-- SEQUENCE BUILDER -->
+  <div class="seq-builder" id="seqBuilder">
+    <div class="seq-builder-header" onclick="toggleSeqBuilder()">
+      <div class="sound-icon">🎼</div>
+      <div class="sound-title" data-i18n="seq_builder_title">Sequence Builder</div>
+      <div class="seq-builder-toggle">▼</div>
+    </div>
+    <div class="seq-builder-body">
+      <div class="seq-tabs" id="seqTabs"></div>
+      <div class="seq-toolbar" id="seqToolbar">
+        <button class="seq-btn seq-btn-play" id="seqPlayBtn" onclick="toggleSeqPlay()">
+          <span class="seq-btn-icon">▶</span>
+          <span id="seqPlayLabel" data-i18n="play_seq">Play</span>
+        </button>
+        <button class="seq-btn seq-btn-loop" id="seqLoopBtn" onclick="toggleSeqLoop()">
+          <span class="seq-btn-icon">🔁</span>
+          <span data-i18n="loop">Loop</span>
+        </button>
+        <button class="seq-btn seq-btn-record" id="seqRecordBtn" onclick="toggleSeqRecord()">
+          <span class="seq-btn-icon">⏺</span>
+          <span id="seqRecordLabel" data-i18n="record">Record</span>
+        </button>
+        <div class="seq-toolbar-spacer"></div>
+        <button class="seq-btn seq-btn-danger" onclick="clearActiveSequence()">
+          <span class="seq-btn-icon">🗑</span>
+          <span data-i18n="clear_seq">Clear</span>
+        </button>
+        <button class="seq-btn seq-btn-danger" onclick="duplicateActiveSequence()">
+          <span class="seq-btn-icon">📋</span>
+          <span data-i18n="duplicate">Copy</span>
+        </button>
+        <button class="seq-btn seq-btn-danger" onclick="deleteActiveSequence()">
+          <span class="seq-btn-icon">✕</span>
+          <span data-i18n="delete_seq">Delete</span>
+        </button>
+      </div>
+      <div class="seq-timeline" id="seqTimeline"></div>
+      <div class="seq-playback-bar">
+        <span id="seqStatus" data-i18n="seq_empty">Click notes on the oud or picker below to build your sequence</span>
+        <div class="seq-playback-progress"><div class="seq-playback-fill" id="seqPlayFill"></div></div>
+      </div>
+      <div class="seq-picker">
+        <div class="seq-picker-label" data-i18n="add_note">Add Note</div>
+        <div class="seq-picker-grid" id="seqPickerGrid"></div>
+      </div>
     </div>
   </div>
 
@@ -966,14 +1348,28 @@ const I18N = {
        all_maqamat:'All Maqamat', open:'Open', string:'String', fret:'Fret',
        sound_title:'Listen to Maqam', play_maqam:'Play Maqam', stop:'Stop',
        tempo:'Tempo', click_note:'Click any note circle to hear it',
-       playing_text:'Playing…', stopped_text:'Click any note circle to hear it' },
+       playing_text:'Playing…', stopped_text:'Click any note circle to hear it',
+       // Sequence Builder
+       seq_builder_title:'Sequence Builder', new_sequence:'+ New',
+       play_seq:'Play', stop_seq:'Stop', loop:'Loop', record:'Record',
+       recording_text:'Recording…', clear_seq:'Clear', delete_seq:'Delete', duplicate:'Copy',
+       add_note:'Add Note', add_rest:'Rest',
+       seq_empty:'Click notes on the oud or picker below to build your sequence',
+       seq_playing:'Playing sequence…', seq_default_name:'Sequence' },
   ar:{ app_title_en:'Maqam Oud', app_title_ar:'مقام العود',
        select_maqam:'اختر المقام', select_tuning:'ضبط العود',
        legend_root:'القرار', legend_note:'نغمة السلم', legend_half:'نصف بيمول (♭½)',
        all_maqamat:'جميع المقامات', open:'مفتوح', string:'وتر', fret:'دستان',
        sound_title:'استمع إلى المقام', play_maqam:'شغّل المقام', stop:'إيقاف',
        tempo:'السرعة', click_note:'انقر على أي نغمة لسماعها',
-       playing_text:'يعزف…', stopped_text:'انقر على أي نغمة لسماعها' },
+       playing_text:'يعزف…', stopped_text:'انقر على أي نغمة لسماعها',
+       // Sequence Builder
+       seq_builder_title:'بناء المقطوعة', new_sequence:'+ جديدة',
+       play_seq:'تشغيل', stop_seq:'إيقاف', loop:'تكرار', record:'تسجيل',
+       recording_text:'يسجّل…', clear_seq:'مسح', delete_seq:'حذف', duplicate:'نسخ',
+       add_note:'أضف نغمة', add_rest:'سكتة',
+       seq_empty:'انقر على نغمات العود أو اختر من الأسفل لبناء مقطوعة',
+       seq_playing:'يعزف المقطوعة…', seq_default_name:'مقطوعة' },
 };
 
 function t(k) { return I18N[currentLang][k] || k; }
@@ -998,6 +1394,7 @@ function toggleLang() {
   updateMaqamInfo();
   renderNeck();
   buildNoteSequence();
+  renderSequenceBuilder();
 }
 
 // ── INIT
@@ -1008,6 +1405,7 @@ function init() {
   renderNeck();
   updateDescription();
   buildNoteSequence();
+  initSequenceBuilder();
   applyI18n();
 }
 
@@ -1049,6 +1447,7 @@ function selectMaqam(id) {
   renderNeck();
   updateDescription();
   buildNoteSequence();
+  renderNotePicker();
 }
 
 function changeTuning(val) {
@@ -1308,6 +1707,16 @@ function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
     const hz = semitoneToHz(totalSt);
     playOudNote(hz, 2.2);
     illuminateNeckNotes(pitchSemitone);
+    // Sequence Builder: record mode
+    if (seqRecordMode && activeSeqId) {
+      const rootPitch = currentMaqam.root;
+      const matchIv = currentMaqam.intervals.find(iv => {
+        const p = Math.round(((rootPitch + iv) % 12 + 12) % 12 * 2) / 2;
+        return Math.abs(p - Math.round(pitchSemitone * 2) / 2) < 0.15;
+      });
+      const octOff = matchIv !== undefined ? 0 : 0;
+      addNoteToActiveSequence(pitchSemitone, octOff, 1);
+    }
   });
   g.style.cursor = 'pointer';
 
@@ -1655,6 +2064,445 @@ function stopPlayback(finished) {
 
 function updateTempo(val) {
   playTempo = 2.1 - parseFloat(val); // invert: slider right = faster
+}
+
+// ══════════════════════════════════════════
+// SEQUENCE BUILDER ENGINE
+// ══════════════════════════════════════════
+
+let sequences = [];
+let activeSeqId = null;
+let seqRecordMode = false;
+let seqLoopMode = false;
+let seqIsPlaying = false;
+let seqPlayTimer = null;
+let seqPlayStep = -1;
+let seqIdCounter = 1;
+
+const SEQ_STORAGE_KEY = 'oud_sequences';
+const SEQ_ACTIVE_KEY = 'oud_active_seq';
+
+function initSequenceBuilder() {
+  loadSequencesFromStorage();
+  if (sequences.length === 0) {
+    createNewSequence(false);
+  }
+  if (!activeSeqId && sequences.length > 0) activeSeqId = sequences[0].id;
+  renderSequenceBuilder();
+}
+
+function loadSequencesFromStorage() {
+  try {
+    const raw = localStorage.getItem(SEQ_STORAGE_KEY);
+    if (raw) {
+      sequences = JSON.parse(raw);
+      // restore counter
+      sequences.forEach(s => {
+        const num = parseInt(s.id.replace('seq-', ''));
+        if (num >= seqIdCounter) seqIdCounter = num + 1;
+      });
+    }
+    activeSeqId = localStorage.getItem(SEQ_ACTIVE_KEY) || null;
+  } catch(e) { sequences = []; }
+}
+
+function saveSequencesToStorage() {
+  try {
+    localStorage.setItem(SEQ_STORAGE_KEY, JSON.stringify(sequences));
+    if (activeSeqId) localStorage.setItem(SEQ_ACTIVE_KEY, activeSeqId);
+  } catch(e) {}
+}
+
+function getActiveSeq() {
+  return sequences.find(s => s.id === activeSeqId) || null;
+}
+
+function createNewSequence(render = true) {
+  const id = 'seq-' + seqIdCounter++;
+  const name = t('seq_default_name') + ' ' + (sequences.length + 1);
+  sequences.push({
+    id,
+    name: name,
+    maqamId: currentMaqam.id,
+    notes: []
+  });
+  activeSeqId = id;
+  saveSequencesToStorage();
+  if (render) renderSequenceBuilder();
+}
+
+function deleteActiveSequence() {
+  if (!activeSeqId) return;
+  sequences = sequences.filter(s => s.id !== activeSeqId);
+  activeSeqId = sequences.length > 0 ? sequences[0].id : null;
+  if (sequences.length === 0) createNewSequence(false);
+  saveSequencesToStorage();
+  renderSequenceBuilder();
+}
+
+function duplicateActiveSequence() {
+  const src = getActiveSeq();
+  if (!src) return;
+  const id = 'seq-' + seqIdCounter++;
+  sequences.push({
+    id,
+    name: src.name + ' ⧉',
+    maqamId: src.maqamId,
+    notes: JSON.parse(JSON.stringify(src.notes))
+  });
+  activeSeqId = id;
+  saveSequencesToStorage();
+  renderSequenceBuilder();
+}
+
+function clearActiveSequence() {
+  const seq = getActiveSeq();
+  if (!seq) return;
+  seq.notes = [];
+  saveSequencesToStorage();
+  renderSequenceTimeline();
+}
+
+function addNoteToActiveSequence(pitch, octave, duration) {
+  const seq = getActiveSeq();
+  if (!seq) return;
+  seq.notes.push({ pitch: Math.round(((pitch % 12) + 12) % 12 * 2) / 2, octave: octave || 0, duration: duration || 1 });
+  saveSequencesToStorage();
+  renderSequenceTimeline();
+}
+
+function addRestToActiveSequence() {
+  const seq = getActiveSeq();
+  if (!seq) return;
+  seq.notes.push({ pitch: -1, octave: 0, duration: 1 });
+  saveSequencesToStorage();
+  renderSequenceTimeline();
+}
+
+function removeNoteFromActiveSequence(idx) {
+  const seq = getActiveSeq();
+  if (!seq || idx < 0 || idx >= seq.notes.length) return;
+  seq.notes.splice(idx, 1);
+  saveSequencesToStorage();
+  renderSequenceTimeline();
+}
+
+function setNoteDuration(idx, dur) {
+  const seq = getActiveSeq();
+  if (!seq || idx < 0 || idx >= seq.notes.length) return;
+  // Cycle: 0.5 → 1 → 1.5 → 2 → 0.5
+  const durations = [0.5, 1, 1.5, 2];
+  const ci = durations.indexOf(seq.notes[idx].duration);
+  seq.notes[idx].duration = durations[(ci + 1) % durations.length];
+  saveSequencesToStorage();
+  renderSequenceTimeline();
+}
+
+function moveNote(fromIdx, toIdx) {
+  const seq = getActiveSeq();
+  if (!seq) return;
+  const [note] = seq.notes.splice(fromIdx, 1);
+  seq.notes.splice(toIdx, 0, note);
+  saveSequencesToStorage();
+  renderSequenceTimeline();
+}
+
+function toggleSeqBuilder() {
+  document.getElementById('seqBuilder').classList.toggle('collapsed');
+}
+
+function renderSequenceBuilder() {
+  renderSequenceTabs();
+  renderSequenceTimeline();
+  renderNotePicker();
+}
+
+function renderSequenceTabs() {
+  const container = document.getElementById('seqTabs');
+  container.innerHTML = '';
+  sequences.forEach(seq => {
+    const tab = document.createElement('div');
+    tab.className = 'seq-tab' + (seq.id === activeSeqId ? ' active' : '');
+    tab.onclick = (e) => {
+      if (e.target.classList.contains('seq-tab-name')) return;
+      activeSeqId = seq.id;
+      saveSequencesToStorage();
+      renderSequenceBuilder();
+    };
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'seq-tab-name';
+    nameSpan.contentEditable = true;
+    nameSpan.spellcheck = false;
+    nameSpan.textContent = seq.name;
+    nameSpan.addEventListener('blur', () => {
+      seq.name = nameSpan.textContent.trim() || t('seq_default_name');
+      saveSequencesToStorage();
+    });
+    nameSpan.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); nameSpan.blur(); }
+    });
+    tab.appendChild(nameSpan);
+
+    const count = document.createElement('span');
+    count.className = 'seq-tab-count';
+    count.textContent = seq.notes.length ? `(${seq.notes.length})` : '';
+    tab.appendChild(count);
+
+    container.appendChild(tab);
+  });
+
+  // New button
+  const newBtn = document.createElement('div');
+  newBtn.className = 'seq-tab-new';
+  newBtn.textContent = t('new_sequence');
+  newBtn.onclick = () => createNewSequence();
+  container.appendChild(newBtn);
+}
+
+function renderSequenceTimeline() {
+  const container = document.getElementById('seqTimeline');
+  container.innerHTML = '';
+  const seq = getActiveSeq();
+  if (!seq || seq.notes.length === 0) {
+    container.innerHTML = `<div class="seq-timeline-empty">${t('seq_empty')}</div>`;
+    return;
+  }
+
+  seq.notes.forEach((note, idx) => {
+    if (idx > 0) {
+      const arrow = document.createElement('span');
+      arrow.className = 'seq-timeline-arrow';
+      arrow.textContent = '›';
+      container.appendChild(arrow);
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'seq-timeline-note';
+    wrapper.draggable = true;
+    wrapper.dataset.idx = idx;
+
+    // Drag and drop
+    wrapper.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', idx);
+      e.dataTransfer.effectAllowed = 'move';
+      wrapper.classList.add('dragging');
+    });
+    wrapper.addEventListener('dragend', () => wrapper.classList.remove('dragging'));
+    wrapper.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const rect = wrapper.getBoundingClientRect();
+      const mid = rect.left + rect.width / 2;
+      wrapper.classList.toggle('drag-over-left', e.clientX < mid);
+      wrapper.classList.toggle('drag-over-right', e.clientX >= mid);
+    });
+    wrapper.addEventListener('dragleave', () => {
+      wrapper.classList.remove('drag-over-left', 'drag-over-right');
+    });
+    wrapper.addEventListener('drop', e => {
+      e.preventDefault();
+      wrapper.classList.remove('drag-over-left', 'drag-over-right');
+      const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+      const toIdx = parseInt(wrapper.dataset.idx);
+      if (fromIdx !== toIdx) moveNote(fromIdx, toIdx);
+    });
+
+    // Pill
+    const pill = document.createElement('div');
+    const isRest = note.pitch === -1;
+    if (isRest) {
+      pill.className = 'seq-tn-pill rest';
+      pill.textContent = '𝄽';
+    } else {
+      const isRoot = isNoteRoot(note.pitch);
+      const isHalf = note.pitch % 1 !== 0;
+      pill.className = 'seq-tn-pill ' + (isRoot ? 'root' : isHalf ? 'half' : 'scale');
+      pill.textContent = noteName(note.pitch, currentLang);
+    }
+    pill.id = 'seqPill-' + idx;
+
+    // Click to play the note
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!isRest) {
+        const hz = noteToHz(note);
+        playOudNote(hz, 2.0);
+        illuminateNeckNotes(note.pitch);
+      }
+    });
+    wrapper.appendChild(pill);
+
+    // Remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'seq-tn-remove';
+    removeBtn.textContent = '×';
+    removeBtn.onclick = (e) => { e.stopPropagation(); removeNoteFromActiveSequence(idx); };
+    pill.appendChild(removeBtn);
+
+    // Duration label
+    const durLabel = document.createElement('div');
+    durLabel.className = 'seq-tn-dur';
+    const durSymbols = { 0.5: '♬', 1: '♩', 1.5: '♩·', 2: '𝅗𝅥' };
+    durLabel.textContent = durSymbols[note.duration] || '♩';
+    durLabel.title = note.duration + 'x';
+    durLabel.onclick = (e) => { e.stopPropagation(); setNoteDuration(idx); };
+    wrapper.appendChild(durLabel);
+
+    container.appendChild(wrapper);
+  });
+
+  // Update tab count
+  renderSequenceTabs();
+}
+
+function renderNotePicker() {
+  const grid = document.getElementById('seqPickerGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const root = currentMaqam.root;
+  const intervals = currentMaqam.intervals;
+
+  intervals.forEach((iv, i) => {
+    const pitch = ((root + iv) % 12 + 12) % 12;
+    const roundedPitch = Math.round(pitch * 2) / 2;
+    const isHalf = iv % 1 !== 0;
+    const btn = document.createElement('div');
+    btn.className = 'seq-pick-note ' + (i === 0 ? 'root' : isHalf ? 'half' : 'scale');
+    btn.textContent = noteName(root + iv, currentLang);
+    btn.title = noteName(root + iv, currentLang);
+    btn.onclick = () => {
+      addNoteToActiveSequence(roundedPitch, 0, 1);
+      // Preview the note
+      const hz = noteToHz({ pitch: roundedPitch, octave: 0, duration: 1 });
+      playOudNote(hz, 1.5);
+      illuminateNeckNotes(roundedPitch);
+    };
+    grid.appendChild(btn);
+  });
+
+  // Rest button
+  const restBtn = document.createElement('div');
+  restBtn.className = 'seq-pick-rest';
+  restBtn.textContent = '𝄽';
+  restBtn.title = t('add_rest');
+  restBtn.onclick = () => addRestToActiveSequence();
+  grid.appendChild(restBtn);
+}
+
+function isNoteRoot(pitch) {
+  const rootPitch = Math.round(((currentMaqam.root % 12) + 12) % 12 * 2) / 2;
+  return Math.abs(rootPitch - pitch) < 0.15;
+}
+
+function noteToHz(note) {
+  if (note.pitch === -1) return 0;
+  const root = currentMaqam.root;
+  const baseOctave = root <= 4 ? 0 : -1;
+  // Find closest interval match
+  let bestIv = note.pitch - root;
+  for (const iv of currentMaqam.intervals) {
+    const p = Math.round(((root + iv) % 12 + 12) % 12 * 2) / 2;
+    if (Math.abs(p - note.pitch) < 0.15) {
+      bestIv = iv;
+      break;
+    }
+  }
+  const totalSemitones = root + bestIv + (baseOctave + (note.octave || 0)) * 12;
+  return semitoneToHz(totalSemitones);
+}
+
+// ── Sequence playback
+function toggleSeqPlay() {
+  if (seqIsPlaying) {
+    stopSeqPlayback();
+  } else {
+    startSeqPlayback();
+  }
+}
+
+function toggleSeqLoop() {
+  seqLoopMode = !seqLoopMode;
+  document.getElementById('seqLoopBtn').classList.toggle('active', seqLoopMode);
+}
+
+function toggleSeqRecord() {
+  seqRecordMode = !seqRecordMode;
+  const btn = document.getElementById('seqRecordBtn');
+  const label = document.getElementById('seqRecordLabel');
+  btn.classList.toggle('active', seqRecordMode);
+  if (seqRecordMode) {
+    label.textContent = t('recording_text');
+    document.getElementById('seqStatus').textContent = t('recording_text');
+  } else {
+    label.textContent = t('record');
+    document.getElementById('seqStatus').textContent = t('seq_empty');
+  }
+}
+
+function startSeqPlayback() {
+  const seq = getActiveSeq();
+  if (!seq || seq.notes.length === 0) return;
+  stopSeqPlayback();
+  seqIsPlaying = true;
+  seqPlayStep = 0;
+
+  const btn = document.getElementById('seqPlayBtn');
+  const label = document.getElementById('seqPlayLabel');
+  btn.classList.add('playing');
+  label.textContent = t('stop_seq');
+  document.getElementById('seqStatus').textContent = t('seq_playing');
+
+  function playNextSeqNote() {
+    if (!seqIsPlaying) return;
+    const seq = getActiveSeq();
+    if (!seq || seqPlayStep >= seq.notes.length) {
+      if (seqLoopMode && seq && seq.notes.length > 0) {
+        seqPlayStep = 0;
+      } else {
+        setTimeout(() => stopSeqPlayback(true), playTempo * 500);
+        return;
+      }
+    }
+
+    const note = seq.notes[seqPlayStep];
+    const dur = (note.duration || 1) * playTempo;
+
+    // Highlight
+    document.querySelectorAll('.seq-tn-pill').forEach(p => p.classList.remove('seq-active-pill'));
+    const pill = document.getElementById('seqPill-' + seqPlayStep);
+    if (pill) pill.classList.add('seq-active-pill');
+
+    // Progress
+    const total = seq.notes.length - 1;
+    const pct = total > 0 ? (seqPlayStep / total) * 100 : 0;
+    document.getElementById('seqPlayFill').style.width = pct + '%';
+
+    if (note.pitch !== -1) {
+      const hz = noteToHz(note);
+      playOudNote(hz, dur * 1.6);
+      illuminateNeckNotes(note.pitch);
+    }
+
+    seqPlayStep++;
+    seqPlayTimer = setTimeout(playNextSeqNote, dur * 1000);
+  }
+  playNextSeqNote();
+}
+
+function stopSeqPlayback(finished) {
+  seqIsPlaying = false;
+  if (seqPlayTimer) { clearTimeout(seqPlayTimer); seqPlayTimer = null; }
+  seqPlayStep = -1;
+  document.querySelectorAll('.seq-tn-pill').forEach(p => p.classList.remove('seq-active-pill'));
+  document.getElementById('seqPlayFill').style.width = finished ? '100%' : '0%';
+  if (finished) setTimeout(() => { document.getElementById('seqPlayFill').style.width = '0%'; }, 400);
+
+  const btn = document.getElementById('seqPlayBtn');
+  const label = document.getElementById('seqPlayLabel');
+  btn.classList.remove('playing');
+  label.textContent = t('play_seq');
+  document.getElementById('seqStatus').textContent = seqRecordMode ? t('recording_text') : t('seq_empty');
 }
 
 // ── BOOT
