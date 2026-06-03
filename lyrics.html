@@ -1,0 +1,3239 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="موسوعة الكلمات - تصفح وقراءة كلمات الأغاني العربية المفضلة لديك بالكامل بدون إنترنت وبشكل مريح.">
+  <title>أثير الكلمات | كلمات الأغاني العربية دون اتصال</title>
+  
+  <!-- Preconnect and Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       CSS Variables & Theme Definitions
+       ========================================================================== */
+    :root[theme="dark"] {
+      --bg-primary: #0a0d16;
+      --bg-secondary: #111625;
+      --bg-card: rgba(17, 22, 37, 0.7);
+      --bg-card-hover: rgba(26, 33, 54, 0.8);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      
+      --accent: #d4af37; /* Royal Metallic Gold */
+      --accent-rgb: 212, 175, 55;
+      --accent-hover: #f3d060;
+      --accent-secondary: #06b6d4; /* Teal Accent */
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 15px rgba(212, 175, 55, 0.3);
+      
+      --glass-bg: rgba(10, 13, 22, 0.75);
+      --glass-blur: blur(16px);
+    }
+
+    :root[theme="light"] {
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.85);
+      --bg-card-hover: rgba(255, 255, 255, 0.95);
+      --border-color: rgba(15, 23, 42, 0.08);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      
+      --accent: #b8860b; /* Deep Goldenrod */
+      --accent-rgb: 184, 134, 11;
+      --accent-hover: #9b7109;
+      --accent-secondary: #0891b2;
+      
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.1);
+      --shadow-glow: 0 0 15px rgba(184, 134, 11, 0.15);
+      
+      --glass-bg: rgba(248, 250, 252, 0.8);
+      --glass-blur: blur(16px);
+    }
+
+    :root[theme="sepia"] {
+      --bg-primary: #f4ecd8;
+      --bg-secondary: #fdf6e3;
+      --bg-card: rgba(253, 246, 227, 0.9);
+      --bg-card-hover: #fffaef;
+      --border-color: rgba(93, 78, 54, 0.15);
+      --text-primary: #5c4738;
+      --text-secondary: #7c6857;
+      --text-muted: #a18e7e;
+      
+      --accent: #8b6508; /* Dark Goldenrod */
+      --accent-rgb: 139, 101, 8;
+      --accent-hover: #6d4f06;
+      --accent-secondary: #b45309;
+      
+      --shadow-sm: 0 2px 8px rgba(93, 78, 54, 0.04);
+      --shadow-md: 0 8px 24px rgba(93, 78, 54, 0.06);
+      --shadow-lg: 0 16px 40px rgba(93, 78, 54, 0.1);
+      --shadow-glow: 0 0 15px rgba(139, 101, 8, 0.15);
+      
+      --glass-bg: rgba(244, 236, 216, 0.85);
+      --glass-blur: blur(16px);
+    }
+
+    /* ==========================================================================
+       General & Layout Reset
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    html, body {
+      font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* Layout Containers */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      position: relative;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    /* ==========================================================================
+       Components: Typography & Branding
+       ========================================================================== */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0a0d16;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .logo-container:hover .logo-icon {
+      transform: rotate(-10deg) scale(1.05);
+    }
+
+    .logo-text {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    /* ==========================================================================
+       Components: Search bar
+       ========================================================================== */
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1.25rem 0.75rem 3rem;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow), 0 4px 20px rgba(0,0,0,0.1);
+      transform: translateY(-1px);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+      width: 20px;
+      height: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .search-input:focus ~ .search-icon {
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       Components: Controls & Buttons
+       ========================================================================== */
+    .controls-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-icon {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-icon:active {
+      transform: translateY(0);
+    }
+
+    .btn-icon .badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background-color: var(--accent);
+      color: var(--bg-primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border: 2px solid var(--bg-secondary);
+    }
+
+    /* Theme Selector Menu */
+    .theme-menu {
+      position: relative;
+    }
+
+    .theme-options {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.5rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 120px;
+      box-shadow: var(--shadow-lg);
+      z-index: 110;
+    }
+
+    .theme-options.show {
+      display: flex;
+      animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .theme-opt-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: right;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .theme-opt-btn:hover {
+      background: rgba(var(--accent-rgb), 0.1);
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       Sidebar Component
+       ========================================================================== */
+    .sidebar {
+      width: 320px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .widget-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .widget-title svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .favorite-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .favorite-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .favorite-item:hover {
+      border-color: var(--accent);
+      transform: translateX(-4px);
+    }
+
+    .fav-song-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .fav-song-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .fav-song-artist {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .fav-remove-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .fav-remove-btn:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .empty-state svg {
+      width: 32px;
+      height: 32px;
+      stroke-width: 1.5;
+    }
+
+    /* Statistics Widget */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    .stat-lbl {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       Main Display Panel
+       ========================================================================== */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      min-width: 0; /* Prevents flex overflow */
+    }
+
+    /* Welcome/Hero banner */
+    .hero-banner {
+      position: relative;
+      background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    [theme="light"] .hero-banner {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      border: none;
+    }
+    
+    [theme="sepia"] .hero-banner {
+      background: linear-gradient(135deg, #ecdcb9 0%, #dfcc9b 100%);
+      border: none;
+    }
+
+    .hero-bg-art {
+      position: absolute;
+      left: -20px;
+      bottom: -40px;
+      opacity: 0.08;
+      width: 300px;
+      height: 300px;
+      pointer-events: none;
+      transform: rotate(-15deg);
+    }
+
+    .hero-title {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 900;
+      font-size: 2.2rem;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    [theme="light"] .hero-title { color: #1e1b4b; }
+    [theme="sepia"] .hero-title { color: #4b3b1e; }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      max-width: 600px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.6;
+    }
+
+    [theme="light"] .hero-desc { color: #312e81; }
+    [theme="sepia"] .hero-desc { color: #5c4a2c; }
+
+    /* Cards Grid */
+    .section-title {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+
+    .grid-artists, .grid-songs {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Premium Artist Card */
+    .card-artist {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-artist:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    .artist-header-art {
+      height: 100px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      position: relative;
+      opacity: 0.85;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 1rem;
+    }
+
+    .artist-header-art::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      right: 0;
+      left: 0;
+      height: 40px;
+      background: linear-gradient(to top, var(--bg-secondary), transparent);
+    }
+
+    .artist-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 3px solid var(--bg-card);
+      position: absolute;
+      bottom: -25px;
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      box-shadow: var(--shadow-md);
+      font-size: 2rem;
+      overflow: hidden;
+    }
+
+    .artist-content {
+      padding: 2.5rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+      background: var(--bg-card);
+    }
+
+    .artist-name {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text-primary);
+    }
+
+    .artist-details {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .artist-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding: 0.75rem 1.5rem;
+      background: rgba(0,0,0,0.05);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .btn-text {
+      color: var(--accent);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Song Card */
+    .card-song {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-song:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md), 0 0 12px rgba(var(--accent-rgb), 0.1);
+    }
+
+    .song-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .song-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .song-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .song-card-artist {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .song-meta-badge {
+      background: rgba(var(--accent-rgb), 0.1);
+      color: var(--accent);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .song-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.5rem 0;
+    }
+
+    .song-card-body div span {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .song-snippet {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-style: italic;
+    }
+
+    /* ==========================================================================
+       Lyrics Reader Workspace (Full Screen Vibe)
+       ========================================================================== */
+    .lyrics-container {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .lyrics-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(0,0,0,0.08);
+    }
+
+    .back-btn-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .song-info-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .song-title-main {
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 900;
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+
+    .song-artist-main {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .lyrics-meta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 1rem 2rem;
+      background: rgba(0,0,0,0.03);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .lyrics-meta-item strong {
+      color: var(--text-primary);
+    }
+
+    /* Floating Reader Controls Panel */
+    .reader-toolbar {
+      padding: 0.75rem 2rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .control-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Segmented Control Buttons */
+    .segmented-control {
+      display: flex;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 2px;
+      border-radius: 8px;
+    }
+
+    .seg-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .seg-btn.active {
+      background: var(--bg-secondary);
+      color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Auto Scroll Speed Slider */
+    .speed-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .speed-slider {
+      width: 80px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* Lyrics Display Area */
+    .lyrics-content-wrapper {
+      padding: 3rem 2rem;
+      max-height: 600px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      position: relative;
+    }
+
+    .lyrics-viewport {
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 2.2;
+      font-size: 1.3rem;
+      transition: all 0.2s ease;
+      white-space: pre-wrap;
+    }
+
+    /* Highlight style */
+    .highlight {
+      background-color: rgba(212, 175, 55, 0.3);
+      color: #ffffff;
+      padding: 0 4px;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+    }
+
+    [theme="light"] .highlight {
+      background-color: rgba(184, 134, 11, 0.25);
+      color: #000;
+    }
+
+    .lyric-line {
+      margin-bottom: 1rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    .lyric-line:hover {
+      background-color: rgba(var(--accent-rgb), 0.05);
+    }
+
+    /* ==========================================================================
+       Interactive Audio Player Mock & Visualizer
+       ========================================================================== */
+    .player-dock {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 95;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--border-color);
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .player-dock.show {
+      transform: translateY(0);
+    }
+
+    .player-track-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 200px;
+    }
+
+    .player-disc {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bg-secondary), var(--accent));
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      box-shadow: var(--shadow-sm);
+      animation: rotateDisc 8s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .player-dock.playing .player-disc {
+      animation-play-state: running;
+    }
+
+    .player-metadata {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .player-song-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .player-artist-name {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Visualizer Canvas */
+    .visualizer-container {
+      flex: 1;
+      max-width: 400px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .visualizer-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Player Controls */
+    .player-controls-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .player-buttons {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-player {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-player:hover {
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .btn-player-main {
+      background: var(--accent);
+      color: var(--bg-primary) !important;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(var(--accent-rgb), 0.3);
+    }
+
+    .btn-player-main:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 15px rgba(var(--accent-rgb), 0.5);
+    }
+
+    .player-timeline-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .time-lbl {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: monospace;
+      min-width: 35px;
+      text-align: center;
+    }
+
+    .timeline-slider-container {
+      flex: 1;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .timeline-slider-fill {
+      height: 100%;
+      background: linear-gradient(to left, var(--accent), var(--accent-secondary));
+      border-radius: 2px;
+      width: 0%;
+      position: relative;
+    }
+
+    .timeline-slider-fill::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: var(--text-primary);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .timeline-slider-container:hover .timeline-slider-fill::after {
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       Utility classes, States & Animations
+       ========================================================================== */
+    .hidden {
+      display: none !important;
+    }
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+
+    @keyframes rotateDisc {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    /* Print styling */
+    @media print {
+      header, .sidebar, .reader-toolbar, .player-dock, .back-btn-wrapper .btn-icon {
+        display: none !important;
+      }
+      .app-container, .main-layout, .content-area, .lyrics-container {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .lyrics-content-wrapper {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      body {
+        background: white;
+        color: black;
+      }
+    }
+
+    /* ==========================================================================
+       Responsive Rules
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .main-layout {
+        flex-direction: column-reverse;
+        padding: 1rem;
+      }
+      .sidebar {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+      }
+      .search-box {
+        max-width: 100%;
+        width: 100%;
+      }
+      .logo-text {
+        font-size: 1.3rem;
+      }
+      .player-dock {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+      }
+      .visualizer-container {
+        display: none;
+      }
+      .player-track-info {
+        width: 100%;
+        justify-content: center;
+      }
+      .player-controls-panel {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- HEADER -->
+    <header>
+      <div class="logo-container" onclick="router.navigate('artists')">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        </div>
+        <span class="logo-text">أثير الكلمات</span>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="global-search" class="search-input" placeholder="ابحث عن أغنية، فنان، أو كلمات...">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+      </div>
+
+      <div class="controls-wrapper">
+        <!-- Theme Switcher -->
+        <div class="theme-menu">
+          <button class="btn-icon" id="theme-menu-btn" title="تغيير المظهر">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </button>
+          <div class="theme-options" id="theme-options">
+            <button class="theme-opt-btn" onclick="themeManager.setTheme('dark')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+              داكن
+            </button>
+            <button class="theme-opt-btn" onclick="themeManager.setTheme('light')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+              مضيء
+            </button>
+            <button class="theme-opt-btn" onclick="themeManager.setTheme('sepia')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              ورقي (Sepia)
+            </button>
+          </div>
+        </div>
+
+        <!-- Bookmarked Count -->
+        <button class="btn-icon" id="favorites-badge-btn" onclick="document.getElementById('favorites-widget').scrollIntoView({behavior: 'smooth'})" title="المفضلة">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <span class="badge" id="fav-count">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <main class="main-layout">
+      
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <!-- Stats Widget -->
+        <div class="sidebar-widget">
+          <h3 class="widget-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            إحصائيات المكتبة
+          </h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-val" id="stat-artists">0</div>
+              <div class="stat-lbl">الفنانون</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" id="stat-songs">0</div>
+              <div class="stat-lbl">الأغاني</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Favorites Widget -->
+        <div class="sidebar-widget" id="favorites-widget">
+          <h3 class="widget-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            المحفوظات
+          </h3>
+          <ul class="favorite-list" id="favorite-list">
+            <!-- Dynamic favorites list -->
+          </ul>
+        </div>
+      </aside>
+
+      <!-- CONTENT AREA -->
+      <section class="content-area">
+        
+        <!-- Welcome Hero -->
+        <div class="hero-banner" id="hero-banner">
+          <div class="hero-bg-art">
+            <svg viewBox="0 0 200 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: var(--accent);">
+              <path d="M100 15C108.3 15 115 21.7 115 30V104.9C123.8 98.8 134.5 95 146 95C170.8 95 191 115.2 191 140C191 164.8 170.8 185 146 185C121.2 185 101 164.8 101 140V70.6L169 59.3V45L101 56.3V30C101 21.7 107.7 15 116 15H100Z"/>
+            </svg>
+          </div>
+          <h1 class="hero-title">أوتار الكلمات العربيّة</h1>
+          <p class="hero-desc">موسوعة رقمية خفيفة وقابلة للتصفح بالكامل دون الحاجة للاتصال بالإنترنت. اقرأ كلمات أغانيك المفضلة، وتحكم بالخط والتمرير التلقائي بكل سهولة.</p>
+        </div>
+
+        <!-- Dynamic Content Router views -->
+        <div id="router-view" class="fade-in">
+          <!-- Views will be dynamically injected here:
+               1. Artists Grid (Home)
+               2. Songs List (Artist Selected)
+               3. Lyrics Screen (Song Selected)
+               4. Search Results Grid (Searching) -->
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- MOCK AUDIO PLAYER BAR -->
+    <div class="player-dock" id="player-dock">
+      <div class="player-track-info">
+        <div class="player-disc" id="player-disc">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+        </div>
+        <div class="player-metadata">
+          <div class="player-song-title" id="player-song-title">اسم الأغنية</div>
+          <div class="player-artist-name" id="player-artist-name">اسم الفنان</div>
+        </div>
+      </div>
+
+      <!-- Simulated Music visualizer canvas -->
+      <div class="visualizer-container">
+        <canvas class="visualizer-canvas" id="visualizer-canvas"></canvas>
+      </div>
+
+      <!-- Player Controls -->
+      <div class="player-controls-panel">
+        <div class="player-buttons">
+          <button class="btn-player" id="player-prev-btn" title="السابق">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+          </button>
+          
+          <button class="btn-player btn-player-main" id="player-play-btn" title="تشغيل / إيقاف مؤقت">
+            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <svg id="pause-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+          </button>
+
+          <button class="btn-player" id="player-next-btn" title="التالي">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="5" x2="5" y2="19"></line></svg>
+          </button>
+        </div>
+
+        <div class="player-timeline-wrapper">
+          <span class="time-lbl" id="player-time-curr">00:00</span>
+          <div class="timeline-slider-container" id="timeline-slider">
+            <div class="timeline-slider-fill" id="timeline-slider-fill"></div>
+          </div>
+          <span class="time-lbl" id="player-time-total">04:30</span>
+        </div>
+      </div>
+
+      <!-- Dock Close button -->
+      <button class="btn-icon" id="close-player-btn" title="إغلاق المشغل">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ==========================================================================
+       Javascript Database & Logic Script
+       ========================================================================== -->
+  <script>
+    // ==========================================================================
+    // 1. DATABASE (JSON Data Structure)
+    // ==========================================================================
+    const database = {
+      artists: [
+        {
+          id: "um_kalthoom",
+          name: "أم كلثوم",
+          imageName: "أم كلثوم",
+          era: "العصر الذهبي للموسيقى العربية",
+          bio: "فاطمة إبراهيم السيد البلتاجي، المشهورة فنياً باسم أم كلثوم (كوكب الشرق وسيدة الغناء العربي)، مغنية وممثلة مصرية تعتبر من أبرز مغني القرن العشرين ميلادياً، وبدأت مسيرتها الفنية في الطفولة.",
+          stats: { songsCount: 5 }
+        },
+        {
+          id: "abdel_halim",
+          name: "عبدالحليم حافظ",
+          imageName: "عبدالحليم حافظ",
+          era: "العصر الذهبي للموسيقى العربية",
+          bio: "عبد الحليم علي شبانة، الشهير بعبد الحليم حافظ والملقب بالعندليب الأسمر، مغني وممثل مصري يُعد من أهم المطربين العرب في القرن العشرين. تميّز بصوته العذب وأدائه العاطفي الفريد.",
+          stats: { songsCount: 3 }
+        },
+        {
+          id: "talal_maddah",
+          name: "طلال مداح",
+          imageName: "طلال مداح",
+          era: "العصر الذهبي للأغنية السعودية",
+          bio: "طلال بن مداح بن عثمان، ملقب بـ\"صوت الأرض\"، فنان سعودي يُعد من أبرز الفنانين العرب وأكثرهم تأثيراً في الموسيقى الخليجية والعربية. امتد عطاؤه الفني لأكثر من أربعة عقود.",
+          stats: { songsCount: 7 }
+        },
+        {
+          id: "abadi_al_johar",
+          name: "عبادي الجوهر",
+          imageName: "عبادي الجوهر",
+          era: "العصر الذهبي للأغنية السعودية",
+          bio: "عبادي عبدالله الجوهر، فنان سعودي يُلقب بـ\"أمير الطرب\" و\"فنان العرب\"، يُعتبر من أبرز الفنانين في الخليج العربي. تميز بصوته القوي وألحانه المبتكرة وأسلوبه الموسيقي الفريد.",
+          stats: { songsCount: 2 }
+        },
+        {
+          id: "fairuz",
+          name: "فيروز",
+          imageName: "فيروز",
+          era: "العصر الذهبي للموسيقى العربية",
+          bio: "نهاد رزق وديع حداد، الشهيرة بفيروز وملقبة بـ\"جارة القمر\" و\"سفيرة النجوم\"، مغنية لبنانية تُعد من أعظم المطربات العربيات على الإطلاق. تعاونت مع الأخوين رحباني في إنتاج أعمال خالدة.",
+          stats: { songsCount: 2 }
+        },
+        {
+          id: "marcel_khalife",
+          name: "مرسيل خليفة",
+          imageName: "مرسيل خليفة",
+          era: "الموسيقى العربية المعاصرة",
+          bio: "مارسيل خليفة، موسيقار وعازف عود ومغنٍّ لبناني، يُعتبر من أبرز الموسيقيين العرب المعاصرين. اشتهر بتلحين وغناء قصائد محمود درويش وشعراء عرب كبار.",
+          stats: { songsCount: 1 }
+        },
+        {
+          id: "fahd_bin_saeed",
+          name: "فهد بن سعيد",
+          imageName: "فهد بن سعيد",
+          era: "الأغنية الخليجية الكلاسيكية",
+          bio: "فهد بن سعيد، فنان سعودي راحل يُعد من رواد الفن الخليجي. اشتهر بصوته المميز وأغانيه العاطفية التي لا تزال تحظى بشعبية كبيرة حتى اليوم.",
+          stats: { songsCount: 2 }
+        }
+      ],
+      songs: [
+        {
+          id: "houb_eeh",
+          artistId: "um_kalthoom",
+          title: "حب إيه",
+          lyricist: "عبد الوهاب محمد",
+          composer: "بليغ حمدي",
+          year: "1960",
+          duration: "38:40",
+          lyrics: `حب إيه اللي أنت جاي تقول عليه
+أنت عارف قبله معنى الحب إيه
+لما تتكلم عليه.. لما تتكلم عليه
+حب إيه.. إيه.. إيه.. حب إيه.. إيه.. إيه
+حب إيه اللي أنت جاي تقول عليه
+
+أنت ما بينك وبين الحب دنيا
+دنيا ما تطولها ولا حتى في خيالك
+أما نفس الحب عندي حاجة تانية
+حاجة أغلى من حياتي ومن جمالك
+
+أنت فين والحب فين
+ظالمة ليه دايماً معاك
+ده أنت لو حبيت يومين
+كان هواك خلاك ملاك
+ليه بتتجنى كده عالحب ليه
+ليه بتتجنى كده عالحب ليه
+أنت عارف قبله معنى الحب إيه
+حب إيه.. إيه.. إيه.. حب إيه.. إيه.. إيه
+حب إيه اللي أنت جاي تقول عليه
+
+كنت بخلص لك في حبي بكل قلبي
+وأنت بتخون الوداد من كل قلبك
+بعت ودي.. بعت حبي.. بعت قلبي
+بعتني وفاكرني ليه أشتاق لقربك ليه
+
+أنت فين والحب فين
+ظالمة ليه دايماً معاك
+ده أنت لو حبيت يومين
+كان هواك خلاك ملاك
+ليه بتتجنى كده عالحب ليه
+أنت عارف قبله معنى الحب إيه
+حب إيه اللي أنت جاي تقول عليه
+
+ياما طول عمري رضيت منك أسية
+لما ذاب أملي وأنا بتمنى ودك
+كل شكوى كنت بتشوفها في عينيا
+وأنت في قربك ناسيني زي بعدك
+
+أنت فين والحب فين
+ظالمة ليه دايماً معاك
+ده أنت لو حبيت يومين
+كان هواك خلاك ملاك
+ليه بتتجنى كده عالحب ليه
+أنت عارف قبله معنى الحب إيه
+حب إيه اللي أنت جاي تقول عليه`
+        },
+        {
+          id: "arooh_lmeen",
+          artistId: "um_kalthoom",
+          title: "أروح لمين",
+          lyricist: "عبد المنعم السباعي",
+          composer: "رياض السنباطي",
+          year: "1958",
+          duration: "42:15",
+          lyrics: `أروح لمين وأقول يا مين ينصفني منك
+ما هو انت فرحي وأنت جرحي وكله منك
+أروح لمين وأقول يا مين ينصفني منك.. ينصفني منك
+
+كلمة ونظرة عين والقسمة وياهم
+جمعوا سوا قلبين والحب مناهم
+وبين ليالي المنى خدني الهوى وياه
+وكان وصالك هنا وكنت باتمناه
+وبعد حبي شغلت قلبي وقسيت عليه
+وكان منايا يدوم هنايا، ما دامش ليه
+لوعني حبك واليوم في بعدك بيفوت سنين
+وأروح لمين وأقول يا مين ينصفني منك.. ينصفني منك
+
+يطول بعدك.. يطول بعدك
+وأعيش بعدك
+في حيرة بين شوقي وبين ردي
+يغيب وصلك.. يغيب وصلك
+ويفضل لي مرار البعد
+أروح لمين ومين حيرحم أسايا
+ومين حيحس بيا غير هوايا
+والحب اللي كواني.. الحب اللي بيا
+وأروح لمين وأقول يا مين ينصفني منك`
+        },
+        {
+          id: "al_atlal",
+          artistId: "um_kalthoom",
+          title: "الأطلال",
+          lyricist: "إبراهيم ناجي",
+          composer: "رياض السنباطي",
+          year: "1966",
+          duration: "45:00",
+          lyrics: `يا فؤادي لا تسل أين الهوى
+كان صرحاً من خيالٍ فهوى
+اسقني واشرب على أطلاله
+واروِ عني طالما الدمع روى
+كيف ذاك الحب أمسى خبراً
+وحديثاً من أحاديث الجوى
+
+لست أنساك وقد أغريتني
+بفمٍ عذب المناداة رقيقْ
+ويدٍ تمتد نحوي كيدٍ
+من خلال الموج مدت لغريقْ
+وبريقٍ يظمأ الساري له
+أين في عينيك ذياك البريقْ
+
+يا حبيباً زرت يوماً أيكه
+طائر الشوق أغني ألمي
+لك إبطاء المذل المنعمِ
+وتجني القادر المحتكمِ
+وحنيني لك يكوي أضلعي
+والثواني جمرات في دمي
+
+أعطني حريتي أطلق يديَّ
+إنني أعطيت ما استبقيت شيَّ
+آه من قيدك أدمى معصمي
+لم أبقيه وما أبقى عليَّ
+ما احتفاظي بعهودٍ لم تصنها
+وإلام الأسر والدنيا لديَّ
+
+أين من عيني حبيبُ ساحرٌ
+في نبل وجلال وحياء
+واثق الخطوة يمشي ملكاً
+ظالم الحسن شهي الكبرياء
+عبق السحر كأنفاس الربى
+ساهم الطرف كأحلام المساء
+
+أين مني مجلس أنت به
+فتنةٌ تمت سناء وسنى
+وأنا حبٌ وقلبٌ هائمُ
+وخيالٌ حائرٌ منك دنا
+ومن الشوق رسولٌ بيننا
+ونديمٌ قدّم الكأس لنا
+
+هل رأى الحب سكارى مثلنا
+كم بنينا من خيالٍ حولنا
+ومشينا فى طريق مقمرٍ
+تثب الفرحة فيه قبلنا
+وضحكنا ضحك طفلين معاً
+وعدوّنا فسبقنا ظلنا
+
+وانتبهنا بعد ما زال الرحيق
+وأفقنا ليت أنّا لا نفيق
+يقظة طاحت بأحلام الكرى
+وتولى الليل والليل صديق
+وإذا النور نذيرٌ طالعٌ
+وإذا الفجر مطلٌ كالحريق
+وإذا الدنيا كما نعرفها
+وإذا الأحباب كلٌّ في طريق
+
+أيها الساهر تغفو
+تذكر العهد وتصحو
+وإذا ما التأم جرح
+جدّ بالتذكار جرحُ
+فتعلّم كيف تنسى
+وتعلّم كيف تمحو
+
+يا حبيبي كل شئٍ بقضاء
+ما بأيدينا خلقنا تعساء
+ربما تجمعنا أقدارنا
+ذات يوم بعد ما عز اللقاء
+فإذا أنكر خل خله
+وتلاقينا لقاء الغرباء
+ومضى كل إلى غايته
+لا تقل شئنا فإن الحظَّ شاء`
+        },
+        {
+          id: "awwidt_eini",
+          artistId: "um_kalthoom",
+          title: "عودت عيني",
+          lyricist: "أحمد رامي",
+          composer: "رياض السنباطي",
+          year: "1958",
+          duration: "40:00",
+          lyrics: `عودت عيني على رؤياك
+وقلبي سلم لك أمري
+أشوف هنا عيني في نظرتك لي
+وألقى نعيم قلبي يوم ما ألتقيك جنبي
+وإن مر يوم من غير رؤياك.. ما ينحسبش من عمري
+
+قربك نعيم الروح والعين
+ونظرتك سحر وإلهام
+وبسمتك فرحة قلبين
+عايشين على الأمل البسام
+وإن غبت يوم عني
+أفضل أنا وظني
+يقربك مني ويبعدك عني
+وأحتار في أمري معاه ومعاك
+وإن مر يوم من غير رؤياك.. ما ينحسبش من عمري
+
+لو كنت خدت على بعادك
+كنت أقدر أصبر وأستنى
+وأسهر على ضي ميعادك
+لما الزمان يجمع بينا
+أبات على نجواك وأصبح على ذكراك
+وأسرح وفكري معاك
+لكن غالبني الشوق في هواك
+وإن مر يوم من غير رؤياك.. ما ينحسبش من عمري
+
+زرعت في ظل ودادي غصن الأمل وأنت رويته
+وكل شيء في الدنيا دي وافق هواك أنا حبيته
+ومهما شفت جمال وزار خيالي خيال
+أنت اللي شاغل البال وأنت اللي قلبي وروحي معاك
+وإن مر يوم من غير رؤياك.. ما ينحسبش من عمري
+
+ويوم ما تسعدني بقربك
+ألاقي كل الناس أحباب
+ويفيض عليّ نور حبك
+أقول مافيش في الحب عذاب
+الحب كله نعيم
+لا فيه عذول بيلوم.. ولا فيه حبيب محروم
+يا ريت يدوم للقلب صفاك
+وأقضي طول العمر معاك
+ده إن مر يوم من غير رؤياك.. ما ينحسبش من عمري`
+        },
+        {
+          id: "howa_sahih",
+          artistId: "um_kalthoom",
+          title: "هو صحيح الهوى غلاب",
+          lyricist: "بيرم التونسي",
+          composer: "زكريا أحمد",
+          year: "1960",
+          duration: "35:00",
+          lyrics: `هو صحيح الهوى غلاب.. ما عرفش أنا
+والهجر قالوا مرار وعذاب.. واليوم بسنة
+جاني الهوى من غير مواعيد
+وكل ما دا حلاوته تزيد
+ما أحسبش يوم ح ياخدني بعيد
+يمني قلبي بالأفراح
+وأرجع وقلبي كله جراح
+إزاي يا ترى؟ أهو ده اللي جرى!
+وأنا ما عرفش
+
+نظره وكنت أحسبها سلام.. وتمر قوام!
+أتاري فيها وعود وعهود وصدود وآلام!
+وعود لا تصدق ولا تنصان
+عهود مع اللي ما لوش أمان
+صبر على ذله وحرمان
+وبدال ما أقول حرمت خلاص
+أقول يا رب زدني كمان
+إزاي يا ترى؟ أهو ده اللي جرى!
+وأنا ما عرفش
+
+يا قلبي آه.. الحب آه.. أشجان وألم
+واندم وأتوب.. وعلى المكتوب.. ما يفدش ندم
+يا ريت أنا أقدر أختار
+ولا كنت أعيش بين جنة ونار
+نهاري ليل.. وليلي نهار
+أهل الهوى وصفوا لي دواه
+لقيت دواه زود في أساه
+إزاي يا ترى؟ أهو ده اللي جرى!
+وأنا ما عرفش`
+        },
+        {
+          id: "zay_el_hawa",
+          artistId: "abdel_halim",
+          title: "زي الهوا",
+          lyricist: "محمد حمزة",
+          composer: "بليغ حمدي",
+          year: "1970",
+          duration: "30:00",
+          lyrics: `زي الهوا يا حبيبي زي الهوا
+وآه من الهوى يا حبيبي آه من الهوى
+
+وخدتني من إيدي يا حبيبي ومشينا
+تحت القمر غنينا وسهرنا وحكينا
+وفي عز الكلام.. سكت الكلام
+وأتاريني ماسك الهوا بإيديا.. ماسك الهوا
+وآه من الهوى يا حبيبي.. آه من الهوى
+
+وخدتني ومشينا والفرح يضمنا
+ونسيت يا حبيبي مين إنت ومين أنا
+حسيت إن هوانا هيعيش مليون سنة
+وبقيت وإنت معايا الدنيا ملك إيديا
+آمر على هوايا تقول أمرك يا عينيا
+وفي عز الكلام.. سكت الكلام
+وأتاريني ماسك الهوا بإيديا.. ماسك الهوا
+وآه من الهوى يا حبيبي.. آه من الهوى
+
+خايف.. ومشيت وأنا خايف
+إيدي في إيدك وأنا خايف
+خايف على فرحة قلبي.. خايف على شوقي وحبي
+وياما قلت لك أنا وإحنا في عز الهنا
+قلت لك يا حبيبي.. لا أنا قد الفرحة دي
+ولا حلاوة الفرحة دي
+خايف لا في يوم وليلة ما ألاقيكش بين إيديا
+تروح وتغيب.. تغيب عليا يا حبيبي.. يا حبيبي
+وقلت لي يا حبيبي ساعتها.. دي دنيتي إنت اللي مليتها
+وفي عز الكلام.. سكت الكلام
+وأتاريني ماسك الهوا بإيديا.. ماسك الهوا
+وآه من الهوى يا حبيبي.. آه من الهوى
+
+وخدتني يا حبيبي.. ورحت طاير طاير
+وفوتني يا حبيبي.. وقلبي حاير حاير
+وقلت لي راجع بكرة أنا راجع
+وفضلت مستني بآمالي.. ومالي البيت بالورد
+بالشوق.. بالحب.. بالأغاني يا حبيبي.. يا حبيبي بالأغاني
+بشمع قايد بأحلى كلمة فوق لساني
+كان ده حالي يا حبيبي لما جيت
+رددنا الغنوة الحلوة.. الحلوة سوا
+ودبنا مع نور الشمع.. دبنا سوا
+ودقنا حلاوة الحب.. دقناها سوا
+وفي لحظة لقيتك يا حبيبي.. زي دوامة هوا
+رميت الورد.. طفيت الشمع يا حبيبي
+والغنوة الحلوة ملاها الدمع يا حبيبي
+وفي عز الأمان.. ضاع مني الأمان
+وأتاريني ماسك الهوا بإيديا.. ماسك الهوا
+وآه من الهوى يا حبيبي.. آه من الهوى
+زي الهوا يا حبيبي زي الهوا
+وآه من الهوى يا حبيبي.. آه من الهوى`
+        },
+        {
+          id: "ala_hesb_widad",
+          artistId: "abdel_halim",
+          title: "على حسب وداد",
+          lyricist: "صلاح أبو سالم",
+          composer: "بليغ حمدي",
+          year: "1968",
+          duration: "28:00",
+          lyrics: `على حسب وداد قلبي يا بويا
+راح أقول للزين سلامات
+سلامات، سلامات، سلامات
+على حسب وداد قلبي يا بويا
+ضيعت عليه العمر يا بويا
+ده أنا ليا معاه حكايات
+حكايات، حكايات، حكايات
+على حسب وداد قلبي يا بويا
+
+موال الصبر أهو داب
+من يوم الحب ما غاب
+ولا عمري يا عين يا ليل
+يا ليل يا عين يا ليل
+ما ترجع لي أحباب
+وأنا صابر ع المقسوم
+يمكن يرجع لي في يوم
+وتكون لي معاه تاني يا بويا
+أيام حلوة وحكايات
+حكايات، حكايات، حكايات
+على حسب وداد قلبي يا بويا
+
+على حسب الريح ما يودي
+الريح ما يودي، الريح ما يودي
+وياه أنا ماشي، ماشي، ماشي
+ولا بيدي
+معرفش إن كنت مروح
+ولا إمتى الهوى حيهدي
+واهي دنيا بتلعب بينا
+يمكن ترجع غناوينا
+وتكون لي معاه تاني يا بويا
+أيام حلوة وحكايات
+حكايات، حكايات، حكايات
+على حسب وداد قلبي يا بويا
+
+لا هاسلم بالمكتوب
+ولا هارضا أبات مغلوب
+وهاقول للدنيا يا دنيا
+أنا راجع، أنا راجع
+أنا راجع للمحبوب
+ونغني أغاني جديدة
+مليانة حكاوي سعيدة
+وهانغزل توب الفرحة يا بويا
+وهاقول يا حبيبي سلامات
+سلامات، سلامات، سلامات
+على حسب وداد قلبي يا بويا`
+        },
+        {
+          id: "sawwah",
+          artistId: "abdel_halim",
+          title: "سواح",
+          lyricist: "محمد حمزة",
+          composer: "بليغ حمدي",
+          year: "1972",
+          duration: "25:00",
+          lyrics: `سواح وماشي في البلاد سواح
+والخطوة بيني وبين حبيبي براح
+مشوار بعيد وأنا فيه غريب
+والليل يقرب والنهار رواح
+
+وإن لقاكم حبيبي سلموا لي عليه
+طمنوني الأسمراني عاملة إيه الغربة فيه
+
+سواح وأنا ماشي ليالي
+سواح ولا داري بحالي
+سواح من الفرقة يا غالي
+سواح إيه اللي جرى لي سواح
+
+وسنين.. وسنين وأنا دايب شوق وحنين
+عايز أعرف بس طريقه منين
+وإن لقاكم حبيبي سلموا لي عليه
+طمنوني الأسمراني عاملة إيه الغربة فيه
+
+يا عيوني.. آه يا عيوني
+إيه جرى لك، فين أنت وبتعمل إيه؟
+يا ظنوني.. آه يا ظنوني
+ما تسيبوني، مش ناقص أنا حيرة عليه
+لا أنا عارف أرتاح وأنا تايه سواح
+
+يا قمر يا ناسيني رسيني عاللي غايب
+نوّر لي.. ورّيني سكة الحبايب
+وصيتك وصية يا شاهد عليّا
+تحكي له عاللي بيّه
+واللي قاسيته في لياليّا`
+        },
+        {
+          id: "maqadeer",
+          artistId: "talal_maddah",
+          title: "مقادير",
+          lyricist: "الأمير محمد العبدالله الفيصل",
+          composer: "سراج عمر",
+          year: "1975",
+          duration: "20:00",
+          lyrics: `مقادير.. مقادير
+يا قلب العنا.. مقادير
+وش ذنبي أنا.. مقادير
+مقادير وتمضي حياتي مشاوير
+وأتمنّى الهنا.. مقادير
+
+على ميعاد حنا والفرح كنّا
+وكنّا بُعاد وعشنا على الأمل حنا
+وكان الفرح غايب
+وأثر الأمل كاذب
+مقادير.. مقادير
+
+يا أهل الهوى كيف المحبة تهون
+كيف النوى يقدر ينسى العيون
+نظرة حنين وأحلى سنين
+عشناها يا قلبي الحزين
+مقادير.. مقادير`
+        },
+        {
+          id: "zaman_al_samt",
+          artistId: "talal_maddah",
+          title: "زمان الصمت",
+          lyricist: "الأمير بدر بن عبد المحسن",
+          composer: "طلال مداح",
+          year: "1980",
+          duration: "22:00",
+          lyrics: `وترحل.. صرختي.. وتذبل
+في وادي لا صدى يوصل.. ولا باقي أنين
+زمان الصمت.. يا عمر الحزن والشكوى
+يا خطوة ما غدت تقوى.. على الخطوة
+على هم السنين.. وترحل صرختي وتذبل
+في وادي لا صدى يوصل.. ولا باقي أنين
+
+حبيبي.. يا حبيبي
+كتبت اسمك على صوتي
+كتبته في جدار الوقت
+على لون السما الهادي.. على الوادي
+على موتي.. وميلادي
+حبيبي.. يا حبيبي
+
+حبيبي لو أيادي الصمت.. خذتني
+لو ملتني ليل.. حبيبي يا حبيبي
+أنا عمري.. انتظاري لك
+لا تحرمني حياتي لك.. وترحل صرختي وتذبل`
+        },
+        {
+          id: "anastna",
+          artistId: "talal_maddah",
+          title: "آنستنا",
+          lyricist: "إبراهيم خفاجي",
+          composer: "سراج عمر",
+          year: "1972",
+          duration: "18:00",
+          lyrics: `يا حبيبي آنستنا
+ربي تمم لنا أنسنا
+بالسعادة والهنا
+لما شرفتوا هنا
+يا حبيبي.. آنستنا.. آنستنا
+
+والله ما أخبي عليكم
+إني عايش في جحيم الانتظار
+والفؤاد مشتاق إليكم
+والثواني والدقايق بتزيده نار
+بالسعادة والهنا
+لما شرفتوا هنا
+يا حبيبي.. آنستنا.. آنستنا
+
+الحمد لله على السلامة.. ألف مرة
+أنت سيد أهل الوسامة والمسرة
+يا عطوفاً في كلامك يا أبو سمرة
+يا رقيق الابتسامة في كل نظرة
+بالسعادة والهنا
+لما شرفتوا هنا
+يا حبيبي.. آنستنا.. آنستنا`
+        },
+        {
+          id: "jatni_tgool",
+          artistId: "talal_maddah",
+          title: "جتني تقول",
+          lyricist: "يوسف ناصر",
+          composer: "طلال مداح",
+          year: "1985",
+          duration: "20:00",
+          lyrics: `جتني تقول، جتني تقول
+محبوبتك لا تنتظر ميعادها
+جتني تقول، جتني تقول
+هذا الجواب اللي بقى لك عندها
+
+لملم جروحك وانسحب
+ما لك نصيب باللي تحب
+وأرجوك اقبل عذرها
+هذي الحياة، وهذا حكم أقدارها
+
+يا حبها يا دنيتي وحلم العمر
+يا حبها يللي بيديك كل الأمر
+كيف الهروب من حبها وهي منايا وغايتي؟
+كيف أتحاشى قربها وعنها أداري غيرتي؟
+يا ذا القدر، شللي أقول؟
+شنهي الوسايل والحلول؟
+شنهي حياتي بعدها؟
+
+يا زولها يللي على الخاطر تمر
+عن شوقها كيف أتصبر وأعتذر؟
+كنت أحسبك حبي الجديد
+واتاري ظني مو أكيد
+حبيت وخانني الاختيار
+ضاع الرجا في الانتظار
+
+يا ذا القدر، شللي أقول؟
+شنهي الوسايل والحلول؟
+شنهي حياتي بعدها؟`
+        },
+        {
+          id: "tmannait_min_allah",
+          artistId: "talal_maddah",
+          title: "تمنيت من الله",
+          lyricist: "ثريا قابل",
+          composer: "طلال مداح",
+          year: "1978",
+          duration: "18:00",
+          lyrics: `تمنيت من الله تبقى معي
+يا حبيبي
+تمنيت من الله يجعلك
+حظي ونصيبي
+
+وكأنه ربي استجاب
+من غير ما أعمل حساب
+طليت لقيتك معايا
+حقق لي حلمي ومنايا
+يا سمر.. يا سمر
+
+حسيت برعشة في كياني
+يوم جات عيني في عينيك
+ما قدرت أقوم من مكاني
+ما عرفت أسلم عليك
+قربت مني في ثواني
+لقيتني كلي في إيديك
+يا سمر.. يا سمر
+
+قليلة قولة أحبك وفيَّ
+أسعدني زماني لنا
+ودي أدخل لقلبك
+وأشوف بعيني مكاني
+ودي من غير ما أقلّك
+تحس بشوقي وحناني`
+        },
+        {
+          id: "matgool_lna",
+          artistId: "talal_maddah",
+          title: "ماتقول لنا صاحب",
+          lyricist: "أحمد عبد الغني بنونة",
+          composer: "سراج عمر",
+          year: "1970",
+          duration: "15:00",
+          lyrics: `ما تقول لنا صاحب
+فينه زمان غايب
+نسأل عليه واجب
+كان العشم أكبر.. ألا كان العشم أكبر
+
+ما بحت لك سري
+خبيته في صدري
+أهواك وما تدري
+أصل الغلط.. أصل الغلط مني
+
+دول حنوا عذالي
+بكوا على حالي
+سر الهوى غالي
+وعذابه.. عذابه.. عذابه كان أكبر
+
+أنا كذا أتحمل
+وانت كذا تعمل
+بالصحبة ما تسأل
+غلطان.. غلطان.. غلطان في ظني`
+        },
+        {
+          id: "gal_almaana",
+          artistId: "talal_maddah",
+          title: "قال المعنى لمين اشكي واتظلم",
+          lyricist: "تراث يمني",
+          composer: "تراث",
+          year: "",
+          duration: "15:00",
+          lyrics: `قال المعنى لمين أشكي وأتظلم
+مظلوم خلي ظلمني يا عباد الله
+قد كنت أحبه سقاني المر والعلقم
+يمر جنبي ولا حتى سلام لله
+
+منه فؤادي يبات الليل يتألم
+أشكي لمن من عذابي؟ شكوتي لله
+بعد الصداقة وعيش وملح يتألم
+ينسى وينكر هوانا، أمرنا لله
+
+إحنا هويناه من صغره وهو يعلم
+وإن كان ينكر هوانا، في أمان الله
+ما يعرف الحب وأفعاله ولا يفهم
+لابد مهما طغى يرجع بحول الله
+
+لازم يجي يوم يترجى ويبكي دم
+يندم ويرجع ويصفالي بعون الله
+كل ما تنكر على الماضي أنا ما أندم
+وما عملته معه كله لوجه الله
+
+قال المعنى لمين أشكي وأتظلم
+مظلوم خلي ظلمني يا عباد الله`
+        },
+        {
+          id: "samar_ya_samar",
+          artistId: "abadi_al_johar",
+          title: "سمار يا سمار",
+          lyricist: "عبدالرحمن حجازي",
+          composer: "جميل محمود",
+          year: "1980",
+          duration: "18:00",
+          lyrics: `سمار يا سمار تكفون دلوني
+تايه غريب الدار أحبابي ما جوني
+وسألت أهل الحي.. ما سمعت عنهم شي
+وجيت يا سمار.. جيت يا سمار.. تكفون دلوني
+
+جيت القمر أسأل.. قالي القمر ما أدري
+روح اسأل السمار.. أهل الهوى العذري
+واسمح لي في أسرار.. وأقبل يا أخي عذري
+وجيت يا سمار.. جيت يا سمار.. تكفون دلوني
+
+جيت البحر بدري.. سألته عن بدري
+جاوبني موجه قال.. داعبته فوق صدري
+راح مع السمار.. أهل الهوى العذري
+وجيت يا سمار.. جيت يا سمار.. تكفون دلوني`
+        },
+        {
+          id: "feeni_haneen",
+          artistId: "abadi_al_johar",
+          title: "فيني حنين",
+          lyricist: "غير معروف",
+          composer: "عبادي الجوهر",
+          year: "1990",
+          duration: "20:00",
+          lyrics: `فيني حنين.. يا هو حنين
+ما مرّ قلوب العاشقين
+فيني حنين.. يا هو حنين
+ما مرّ قلوب العاشقين
+
+مشتاق وبقلبي كلام
+وعيوني عيّت لا تنام
+مشتاق وبقلبي كلام
+وعيوني عيّت لا تنام
+
+وينك؟ تعبت أسأل عليك
+وأشم عطرك في فضاي
+وينك؟ تعبت أسأل عليك
+وأشم عطرك في فضاي
+مصيبة.. لو عطرك يكون
+أوفى من إحساسك معاي
+
+ما سوى فيني الليلة خير
+هذا الحنين اللي لفى
+له أول وماله أخير
+جدّد جروحي وما اكتفى
+
+مشتاق وبقلبي كلام
+وعيوني عيّت لا تنام
+
+وينك؟ تعبت أسأل عليك
+وأشم عطرك في فضاي
+مصيبة.. لو عطرك يكون
+أوفى من إحساسك معاي
+
+محتاج لك كثر الألم
+اللي عشقني في غيبتك
+واشتقت لك كثر الوهم
+اللي حضنته في صورتك
+
+وينك؟ تعبت أسأل عليك
+وأشم عطرك في فضاي
+مصيبة.. لو عطرك يكون
+أوفى من إحساسك معاي`
+        },
+        {
+          id: "nassam_alayna",
+          artistId: "fairuz",
+          title: "نسم علينا الهوا",
+          lyricist: "الأخوان رحباني",
+          composer: "الأخوان رحباني",
+          year: "1967",
+          duration: "10:00",
+          lyrics: `نسّم علينا الهوا من مفرق الوادي
+يا هوا دخل الهوا خدني على بلادي
+نسّم علينا الهوا من مفرق الوادي
+يا هوا دخل الهوا خدني على بلادي
+
+يا هوا.. يا هوا.. ياللي طاير بالهوا
+في منتورة طاقة وصورة.. خدني لعندن يا هوا
+يا هوا.. يا هوا.. ياللي طاير بالهوا
+في منتورة طاقة وصورة.. خدني لعندن يا هوا
+
+فزعانة يا قلبي.. أكبر بهالغربة
+ما تعرفني بلادي.. خدني.. خدني.. خدني على بلادي
+نسّم علينا الهوا من مفرق الوادي
+يا هوا دخل الهوا خدني على بلادي
+
+شو بنا.. شو بنا.. يا حبيبي شو بنا
+كنت وكنّا تضلوا عنّا وافترقنا شو بنا
+شو بنا.. شو بنا.. يا حبيبي شو بنا
+كنت وكنّا تضلوا عنّا وافترقنا شو بنا
+
+وبعدا الشمس بتبكي.. ع الباب وما تحكي
+يحكي هوا بلادي.. خدني.. خدني.. خدني على بلادي
+نسّم علينا الهوا من مفرق الوادي
+يا هوا دخل الهوا خدني على بلادي
+
+آه.. نسّم علينا الهوا من مفرق الوادي
+يا هوا دخل الهوا خدني على بلادي`
+        },
+        {
+          id: "ya_ana_ya_ana",
+          artistId: "fairuz",
+          title: "يا أنا يا أنا",
+          lyricist: "الأخوان رحباني",
+          composer: "موزارت / الأخوان رحباني",
+          year: "1970",
+          duration: "8:00",
+          lyrics: `يا أنا.. يا أنا.. أنا ويّاكْ
+صرنا القصص الغريبة
+يا أنا.. يا أنا.. أنا ويّاكْ
+وانسرقت مكاتيبي
+وعرفوا إنك حبيبي
+وعرفوا إنك حبيبي
+
+يا أنا.. يا أنا.. هرب الصيف
+هربت عناقيد الزينة
+وإذا ضيعني الهوى شي صيف
+بقلبك بتلاقيني
+وخبّيني ولا تخبّيني
+خبّيني ولا تخبّيني
+
+لياليك بعينيي.. شبابيك مضوية
+سفّرني حبيبي.. سفّرني بلياليك
+وأنا قول لا تنسى.. على طول لا تنسى
+وعيونك تاخدني.. وتوعدني بلياليك
+
+تركوا.. تركوا سهر البال والعاشق لمّ جناحو
+تركوا أساميهن عالباب.. عكتب الدمع وراحوا
+نسيوا بعضن وارتاحوا
+نسيوا بعضن وارتاحوا
+
+يا أنا.. يا أنا.. يا أنا.. يا أنا
+يا أنا.. يا أنا.. أنا ويّاك`
+        },
+        {
+          id: "ya_nassim_al_reeh",
+          artistId: "marcel_khalife",
+          title: "يا نسيم الريح",
+          lyricist: "الحسين بن منصور الحلاج",
+          composer: "مرسيل خليفة",
+          year: "1982",
+          duration: "8:00",
+          lyrics: `يا نسيمَ الريحِ قولي للرشا
+لم يزدني الوِردُ إلا عطشا
+
+لي حبيبٌ حبهُ وسطَ الحشا
+إن يشأ يمشي على خدي مشى
+
+روحُهُ روحي وروحِي روحُهُ
+إن يشأ شئتُ وإن شئتُ يشا`
+        },
+        {
+          id: "khalas_min_hobkom",
+          artistId: "fahd_bin_saeed",
+          title: "خلاص من حبكم يازين عزلنا",
+          lyricist: "محمد سعد الجنوبي",
+          composer: "عبدالله السلوم",
+          year: "1990",
+          duration: "15:00",
+          lyrics: `خلاص من حبكم يا زين عزلنا
+ما عاد لي في هواكم شف أو رادة
+
+واللي شبكنا معك يا حلو يخلصنا
+يكفيني اللي حصل ما استحمل زيادة
+
+أظن في حبكم ما حدٍ بغاصبنا
+وأظن منت بعد في حلقي قلادة
+
+دوّر على غيرنا وبلاش تتعبنا
+في شرع الأجواد كلٍ يطلب مراده
+
+الله يوفقك وحنا الله يوفقنا
+الناس واجد وكم للحب طرادة
+
+أول رغبناك يومك مثل راغبنا
+ومن يطلب البعد حنا نطلب بعاده
+
+أيام كنا غشم ياما تكلفنا
+ندور رضاك مهما كلف أبعاده
+
+واليوم أبشرك يا سيدي تعلمنا
+وبدلت نوم الحزن بفراش ووسادة
+
+اللي هويناه حصلناه وحصلنا
+وارتاح قلبي على رغم حساده`
+        },
+        {
+          id: "ala_al_waad",
+          artistId: "fahd_bin_saeed",
+          title: "على الوعد جيتكم",
+          lyricist: "غير معروف",
+          composer: "غير معروف",
+          year: "",
+          duration: "12:00",
+          lyrics: `على الوعد جيتكم.. يا مخلفين الوعود
+جيتك على وعدكم.. ظنيت وعدك يجود
+
+كان ظني بكم.. هذا الجفا والصدود
+مشتاق والله لكم.. حبك بقلبي يزود
+
+أما كفا هجركم.. تراي زرت اللحود
+جريح من حبكم.. عندي على هذا شهود
+
+نفسي أنا وصلكم.. ما أريد هذا الصدود
+ما أريد أنا غيركم.. عساك لي تعود
+
+روحي ومالي لكم.. الله يخلي القيود`
+        }
+      ]
+    };
+
+    // ==========================================================================
+    // 1.5 SAFE STORAGE FALLBACK (For file:// protocol or private browsing compatibility)
+    // ==========================================================================
+    const storage = {
+      _fallbackStore: {},
+      getItem(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          console.warn("localStorage is not accessible. Using fallback store.", e);
+          return this._fallbackStore[key] || null;
+        }
+      },
+      setItem(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch (e) {
+          console.warn("localStorage is not writeable. Using fallback store.", e);
+          this._fallbackStore[key] = String(value);
+        }
+      }
+    };
+
+    // ==========================================================================
+    // 2. THEME MANAGER
+    // ==========================================================================
+    const themeManager = {
+      init() {
+        const savedTheme = storage.getItem('lyrics-app-theme') || 'dark';
+        this.setTheme(savedTheme);
+
+        // Theme menu button toggle
+        const menuBtn = document.getElementById('theme-menu-btn');
+        const menu = document.getElementById('theme-options');
+
+        menuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', () => {
+          menu.classList.remove('show');
+        });
+      },
+
+      setTheme(themeName) {
+        document.documentElement.setAttribute('theme', themeName);
+        storage.setItem('lyrics-app-theme', themeName);
+      }
+    };
+
+    // ==========================================================================
+    // 3. BOOKMARK (FAVORITES) STORAGE MANAGER
+    // ==========================================================================
+    const bookmarkManager = {
+      favorites: [],
+
+      init() {
+        const stored = storage.getItem('lyrics-app-favorites');
+        if (stored) {
+          try {
+            this.favorites = JSON.parse(stored);
+          } catch(e) {
+            this.favorites = [];
+          }
+        }
+        this.renderList();
+      },
+
+      add(songId) {
+        if (!this.favorites.includes(songId)) {
+          this.favorites.push(songId);
+          this.save();
+          this.renderList();
+          // Update active song views if they exist
+          const favBtn = document.getElementById('song-fav-btn');
+          if (favBtn) this.updateFavoriteButtonState(favBtn, true);
+        }
+      },
+
+      remove(songId) {
+        this.favorites = this.favorites.filter(id => id !== songId);
+        this.save();
+        this.renderList();
+        // Update active song views if they exist
+        const favBtn = document.getElementById('song-fav-btn');
+        if (favBtn) this.updateFavoriteButtonState(favBtn, false);
+      },
+
+      toggle(songId) {
+        if (this.favorites.includes(songId)) {
+          this.remove(songId);
+          return false;
+        } else {
+          this.add(songId);
+          return true;
+        }
+      },
+
+      isFavorite(songId) {
+        return this.favorites.includes(songId);
+      },
+
+      save() {
+        storage.setItem('lyrics-app-favorites', JSON.stringify(this.favorites));
+      },
+
+      updateFavoriteButtonState(button, isFav) {
+        if (isFav) {
+          button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px; color: #ef4444;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+          button.title = "إزالة من المفضلة";
+        } else {
+          button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+          button.title = "حفظ في المفضلة";
+        }
+      },
+
+      renderList() {
+        const listEl = document.getElementById('favorite-list');
+        const badgeEl = document.getElementById('fav-count');
+        badgeEl.textContent = this.favorites.length;
+
+        if (this.favorites.length === 0) {
+          listEl.innerHTML = `
+            <div class="empty-state">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+              <span>لا توجد أغانٍ محفوظة. اضغط على أيقونة القلب في الأغنية لحفظها للوصول السريع دون اتصال.</span>
+            </div>
+          `;
+          return;
+        }
+
+        listEl.innerHTML = '';
+        this.favorites.forEach(songId => {
+          const song = database.songs.find(s => s.id === songId);
+          if (song) {
+            const artist = database.artists.find(a => a.id === song.artistId);
+            const li = document.createElement('li');
+            li.className = 'favorite-item';
+            li.onclick = () => router.navigate('lyrics', { songId: song.id });
+            
+            li.innerHTML = `
+              <div class="fav-song-info">
+                <span class="fav-song-title">${song.title}</span>
+                <span class="fav-song-artist">${artist ? artist.name : ''}</span>
+              </div>
+              <button class="fav-remove-btn" onclick="event.stopPropagation(); bookmarkManager.remove('${song.id}')" title="إزالة">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            `;
+            listEl.appendChild(li);
+          }
+        });
+      }
+    };
+
+    // ==========================================================================
+    // 4. MOCK AUDIO PLAYER & VISUALIZER ENGINE
+    // ==========================================================================
+    const audioPlayer = {
+      isPlaying: false,
+      currentSong: null,
+      progress: 0,
+      durationSeconds: 270, // 4:30 mock length
+      intervalId: null,
+      canvas: null,
+      ctx: null,
+      animationFrameId: null,
+      bars: [],
+
+      init() {
+        this.canvas = document.getElementById('visualizer-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        // Handle canvas sizing
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
+
+        // Controls hooks
+        const playBtn = document.getElementById('player-play-btn');
+        const timeline = document.getElementById('timeline-slider');
+        const prevBtn = document.getElementById('player-prev-btn');
+        const nextBtn = document.getElementById('player-next-btn');
+        const closeBtn = document.getElementById('close-player-btn');
+
+        playBtn.addEventListener('click', () => this.togglePlay());
+        
+        timeline.addEventListener('click', (e) => {
+          const rect = timeline.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const percentage = clickX / rect.width;
+          this.setProgress(percentage);
+        });
+
+        prevBtn.addEventListener('click', () => this.playPrevious());
+        nextBtn.addEventListener('click', () => this.playNext());
+        closeBtn.addEventListener('click', () => this.close());
+
+        // Prepare bars data for visualizer
+        for(let i=0; i<35; i++) {
+          this.bars.push({
+            x: 0,
+            y: 0,
+            targetHeight: 5,
+            currentHeight: 5,
+            speed: 0.1 + Math.random() * 0.15
+          });
+        }
+      },
+
+      resizeCanvas() {
+        const container = this.canvas.parentElement;
+        this.canvas.width = container.clientWidth;
+        this.canvas.height = container.clientHeight;
+      },
+
+      loadSong(song) {
+        this.currentSong = song;
+        const artist = database.artists.find(a => a.id === song.artistId);
+        
+        document.getElementById('player-song-title').textContent = song.title;
+        document.getElementById('player-artist-name').textContent = artist ? artist.name : '';
+        document.getElementById('player-time-total').textContent = "04:30"; // Mock runtime
+        
+        this.setProgress(0);
+        
+        // Show dock
+        const dock = document.getElementById('player-dock');
+        dock.classList.add('show');
+        
+        this.play();
+      },
+
+      play() {
+        this.isPlaying = true;
+        document.getElementById('player-dock').classList.add('playing');
+        document.getElementById('play-icon').classList.add('hidden');
+        document.getElementById('pause-icon').classList.remove('hidden');
+
+        // Start progress incrementer
+        clearInterval(this.intervalId);
+        this.intervalId = setInterval(() => {
+          if (this.progress < 1) {
+            const nextProg = this.progress + (1 / this.durationSeconds);
+            this.setProgress(Math.min(nextProg, 1));
+          } else {
+            this.setProgress(0);
+            this.playNext();
+          }
+        }, 1000);
+
+        // Start visualizer loop
+        this.startVisualizer();
+      },
+
+      pause() {
+        this.isPlaying = false;
+        document.getElementById('player-dock').classList.remove('playing');
+        document.getElementById('play-icon').classList.remove('hidden');
+        document.getElementById('pause-icon').classList.add('hidden');
+        
+        clearInterval(this.intervalId);
+        cancelAnimationFrame(this.animationFrameId);
+        this.drawVisualizerStatic();
+      },
+
+      togglePlay() {
+        if (!this.currentSong && database.songs.length > 0) {
+          this.loadSong(database.songs[0]);
+          return;
+        }
+        if (this.isPlaying) {
+          this.pause();
+        } else {
+          this.play();
+        }
+      },
+
+      setProgress(percentage) {
+        this.progress = percentage;
+        document.getElementById('timeline-slider-fill').style.width = `${percentage * 100}%`;
+        
+        const currentSeconds = Math.floor(percentage * this.durationSeconds);
+        const minutes = Math.floor(currentSeconds / 60);
+        const seconds = currentSeconds % 60;
+        
+        document.getElementById('player-time-curr').textContent = 
+          `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      },
+
+      playNext() {
+        if (!this.currentSong) return;
+        const index = database.songs.findIndex(s => s.id === this.currentSong.id);
+        if (index !== -1) {
+          const nextIndex = (index + 1) % database.songs.length;
+          this.loadSong(database.songs[nextIndex]);
+        }
+      },
+
+      playPrevious() {
+        if (!this.currentSong) return;
+        const index = database.songs.findIndex(s => s.id === this.currentSong.id);
+        if (index !== -1) {
+          const prevIndex = (index - 1 + database.songs.length) % database.songs.length;
+          this.loadSong(database.songs[prevIndex]);
+        }
+      },
+
+      close() {
+        this.pause();
+        document.getElementById('player-dock').classList.remove('show');
+      },
+
+      startVisualizer() {
+        const render = () => {
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          
+          const barWidth = this.canvas.width / this.bars.length;
+          const spacing = 3;
+          const width = barWidth - spacing;
+          
+          // Draw wave bars
+          for(let i=0; i<this.bars.length; i++) {
+            const bar = this.bars[i];
+            
+            // Random targets to simulate active music spectrum
+            if(Math.random() < 0.15) {
+              bar.targetHeight = 5 + Math.random() * (this.canvas.height - 10);
+            }
+            
+            // Linear interpolate heights
+            bar.currentHeight += (bar.targetHeight - bar.currentHeight) * bar.speed;
+            
+            const x = i * barWidth;
+            const y = this.canvas.height - bar.currentHeight;
+            
+            // Gradient fill (Gold to Cyan/Blue)
+            const grad = this.ctx.createLinearGradient(0, y, 0, this.canvas.height);
+            grad.addColorStop(0, 'var(--accent)');
+            grad.addColorStop(1, 'var(--accent-secondary)');
+            
+            this.ctx.fillStyle = grad;
+            this.ctx.beginPath();
+            if (this.ctx.roundRect) {
+              this.ctx.roundRect(x, y, width, bar.currentHeight, 4);
+            } else {
+              this.ctx.rect(x, y, width, bar.currentHeight);
+            }
+            this.ctx.fill();
+          }
+          
+          this.animationFrameId = requestAnimationFrame(render);
+        };
+        
+        cancelAnimationFrame(this.animationFrameId);
+        this.animationFrameId = requestAnimationFrame(render);
+      },
+
+      drawVisualizerStatic() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const barWidth = this.canvas.width / this.bars.length;
+        const spacing = 3;
+        const width = barWidth - spacing;
+        
+        this.ctx.fillStyle = 'var(--text-muted)';
+        for(let i=0; i<this.bars.length; i++) {
+          const x = i * barWidth;
+          const y = this.canvas.height - 5;
+          this.ctx.beginPath();
+          if (this.ctx.roundRect) {
+            this.ctx.roundRect(x, y, width, 5, 2);
+          } else {
+            this.ctx.rect(x, y, width, 5);
+          }
+          this.ctx.fill();
+        }
+      }
+    };
+
+    // ==========================================================================
+    // 5. AUTO SCROLL CONTROLLER
+    // ==========================================================================
+    const autoScroller = {
+      isActive: false,
+      container: null,
+      speed: 1, // Pixels per interval frame
+      lastTime: 0,
+      animationId: null,
+
+      init(scrollableContainer) {
+        this.container = scrollableContainer;
+        this.isActive = false;
+        this.lastTime = 0;
+        if(this.animationId) cancelAnimationFrame(this.animationId);
+      },
+
+      setSpeed(value) {
+        // Range 1 to 5 mapping
+        this.speed = parseFloat(value) * 0.4;
+      },
+
+      toggle() {
+        if (this.isActive) {
+          this.stop();
+          return false;
+        } else {
+          this.start();
+          return true;
+        }
+      },
+
+      start() {
+        if(!this.container) return;
+        this.isActive = true;
+        this.lastTime = performance.now();
+        
+        const scrollLoop = (time) => {
+          if (!this.isActive) return;
+          
+          const delta = time - this.lastTime;
+          // Normalize scroll delta speed
+          if (delta > 16) {
+            this.container.scrollTop += (this.speed * (delta / 16.67));
+          } else {
+            this.container.scrollTop += this.speed;
+          }
+          
+          this.lastTime = time;
+          
+          // Check if reached bottom
+          const reachedBottom = this.container.scrollHeight - this.container.scrollTop <= this.container.clientHeight + 5;
+          if (reachedBottom) {
+            this.stop();
+            // Trigger UI update
+            const scrollToggleBtn = document.getElementById('scroll-toggle');
+            if (scrollToggleBtn) {
+              scrollToggleBtn.classList.remove('active');
+              scrollToggleBtn.textContent = 'تشغيل التمرير';
+            }
+          } else {
+            this.animationId = requestAnimationFrame(scrollLoop);
+          }
+        };
+
+        this.animationId = requestAnimationFrame(scrollLoop);
+      },
+
+      stop() {
+        this.isActive = false;
+        if(this.animationId) cancelAnimationFrame(this.animationId);
+      }
+    };
+
+    // ==========================================================================
+    // 6. ROUTER & PAGE RENDERING
+    // ==========================================================================
+    const router = {
+      currentView: 'artists', // artists, songs, lyrics, search
+      viewParams: {},
+      searchQuery: '',
+
+      init() {
+        const viewEl = document.getElementById('router-view');
+        
+        // Listen to Global Search
+        const searchInput = document.getElementById('global-search');
+        searchInput.addEventListener('input', (e) => {
+          const val = e.target.value.trim();
+          if (val.length > 0) {
+            this.searchQuery = val;
+            this.navigate('search', { query: val });
+          } else {
+            this.searchQuery = '';
+            // Reset to artists/songs home
+            this.navigate('artists');
+          }
+        });
+
+        // Initialize display stats
+        document.getElementById('stat-artists').textContent = database.artists.length;
+        document.getElementById('stat-songs').textContent = database.songs.length;
+
+        // Render Home
+        this.navigate('artists');
+      },
+
+      navigate(viewName, params = {}) {
+        // Stop autoscroller on view change
+        autoScroller.stop();
+
+        this.currentView = viewName;
+        this.viewParams = params;
+        this.render();
+
+        // Scroll to top
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      },
+
+      render() {
+        const viewEl = document.getElementById('router-view');
+        const heroEl = document.getElementById('hero-banner');
+        viewEl.innerHTML = '';
+        
+        // Remove active highlights in search bar if not searching
+        if (this.currentView !== 'search') {
+          document.getElementById('global-search').value = '';
+          this.searchQuery = '';
+        }
+
+        // Show/Hide hero banner based on active views
+        if (this.currentView === 'artists') {
+          heroEl.classList.remove('hidden');
+        } else {
+          heroEl.classList.add('hidden');
+        }
+
+        switch(this.currentView) {
+          case 'artists':
+            this.renderArtistsGrid(viewEl);
+            break;
+          case 'songs':
+            this.renderSongsList(viewEl, this.viewParams.artistId);
+            break;
+          case 'lyrics':
+            this.renderLyricsScreen(viewEl, this.viewParams.songId);
+            break;
+          case 'search':
+            this.renderSearchResults(viewEl, this.viewParams.query);
+            break;
+        }
+      },
+
+      // 6.1 Artist Grid
+      renderArtistsGrid(container) {
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.className = 'section-title';
+        sectionTitle.textContent = 'قائمة الفنانين';
+        container.appendChild(sectionTitle);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid-artists';
+
+        database.artists.forEach(artist => {
+          const card = document.createElement('div');
+          card.className = 'card-artist';
+          card.onclick = () => this.navigate('songs', { artistId: artist.id });
+          
+          card.innerHTML = `
+            <div class="artist-header-art">
+              <div class="artist-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width: 32px; height: 32px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </div>
+            </div>
+            <div class="artist-content">
+              <span class="artist-name">${artist.name}</span>
+              <span class="artist-details">${artist.bio}</span>
+            </div>
+            <div class="artist-footer">
+              <span>${artist.era}</span>
+              <span class="btn-text">الأغاني (${artist.stats.songsCount}) ←</span>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        container.appendChild(grid);
+      },
+
+      // 6.2 Songs List
+      renderSongsList(container, artistId) {
+        const artist = database.artists.find(a => a.id === artistId);
+        if (!artist) return;
+
+        const breadcrumbs = document.createElement('div');
+        breadcrumbs.style.margin = '0 0 1rem 0';
+        breadcrumbs.style.fontSize = '0.9rem';
+        breadcrumbs.innerHTML = `<a href="#" onclick="event.preventDefault(); router.navigate('artists')" style="color: var(--accent); text-decoration: none;">الرئيسية</a> &larr; <span>أغاني ${artist.name}</span>`;
+        container.appendChild(breadcrumbs);
+
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.className = 'section-title';
+        sectionTitle.textContent = `أغاني ${artist.name}`;
+        container.appendChild(sectionTitle);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid-songs';
+
+        const artistSongs = database.songs.filter(s => s.artistId === artistId);
+        
+        artistSongs.forEach(song => {
+          const card = document.createElement('div');
+          card.className = 'card-song';
+          card.onclick = () => this.navigate('lyrics', { songId: song.id });
+          
+          card.innerHTML = `
+            <div class="song-card-header">
+              <div class="song-title-wrap">
+                <span class="song-card-title">${song.title}</span>
+                <span class="song-card-artist">${artist.name}</span>
+              </div>
+              <span class="song-meta-badge">${song.year}</span>
+            </div>
+            <div class="song-card-body">
+              <div>الشاعر: <span>${song.lyricist}</span></div>
+              <div>الملحن: <span>${song.composer}</span></div>
+            </div>
+            <div class="song-snippet">${song.lyrics.substring(0, 70)}...</div>
+          `;
+          grid.appendChild(card);
+        });
+
+        container.appendChild(grid);
+      },
+
+      // 6.3 Dynamic Lyrics Screen
+      renderLyricsScreen(container, songId) {
+        const song = database.songs.find(s => s.id === songId);
+        if (!song) return;
+
+        const artist = database.artists.find(a => a.id === song.artistId);
+
+        // UI Builder for Lyrics Screen
+        const wrapper = document.createElement('div');
+        wrapper.className = 'lyrics-container';
+        
+        // Header
+        const header = document.createElement('div');
+        header.className = 'lyrics-header';
+        
+        const backWrap = document.createElement('div');
+        backWrap.className = 'back-btn-wrapper';
+        
+        const backBtn = document.createElement('button');
+        backBtn.className = 'btn-icon';
+        backBtn.title = "رجوع";
+        backBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        `;
+        backBtn.onclick = () => this.navigate('songs', { artistId: song.artistId });
+        backWrap.appendChild(backBtn);
+        
+        const songInfo = document.createElement('div');
+        songInfo.className = 'song-info-header';
+        songInfo.innerHTML = `
+          <span class="song-title-main">${song.title}</span>
+          <span class="song-artist-main">${artist ? artist.name : ''}</span>
+        `;
+        backWrap.appendChild(songInfo);
+        header.appendChild(backWrap);
+
+        // Bookmark action in reader
+        const favBtn = document.createElement('button');
+        favBtn.className = 'btn-icon';
+        favBtn.id = 'song-fav-btn';
+        bookmarkManager.updateFavoriteButtonState(favBtn, bookmarkManager.isFavorite(song.id));
+        favBtn.onclick = () => {
+          bookmarkManager.toggle(song.id);
+        };
+        header.appendChild(favBtn);
+        wrapper.appendChild(header);
+
+        // Metadata grid
+        const metaGrid = document.createElement('div');
+        metaGrid.className = 'lyrics-meta-grid';
+        metaGrid.innerHTML = `
+          <div class="lyrics-meta-item">كلمات: <strong>${song.lyricist}</strong></div>
+          <div class="lyrics-meta-item">ألحان: <strong>${song.composer}</strong></div>
+          <div class="lyrics-meta-item">سنة الإصدار: <strong>${song.year}</strong></div>
+          <div class="lyrics-meta-item">مدة الأغنية التقريبية: <strong>${song.duration}</strong></div>
+        `;
+        wrapper.appendChild(metaGrid);
+
+        // Toolbar Controls
+        const toolbar = document.createElement('div');
+        toolbar.className = 'reader-toolbar';
+        
+        // Font sizing UI
+        const sizeGroup = document.createElement('div');
+        sizeGroup.className = 'control-group';
+        sizeGroup.innerHTML = `
+          <span class="control-label">حجم الخط</span>
+          <div class="segmented-control">
+            <button class="seg-btn" id="font-dec-btn" style="font-size: 0.75rem;">أ-</button>
+            <button class="seg-btn" id="font-inc-btn" style="font-size: 1rem;">أ+</button>
+          </div>
+        `;
+        toolbar.appendChild(sizeGroup);
+
+        // Alignment UI
+        const alignGroup = document.createElement('div');
+        alignGroup.className = 'control-group';
+        alignGroup.innerHTML = `
+          <span class="control-label">المحاذاة</span>
+          <div class="segmented-control">
+            <button class="seg-btn active" id="align-center-btn">توسيط</button>
+            <button class="seg-btn" id="align-right-btn">يمين</button>
+          </div>
+        `;
+        toolbar.appendChild(alignGroup);
+
+        // Auto scroll UI
+        const scrollGroup = document.createElement('div');
+        scrollGroup.className = 'control-group';
+        
+        const scrollToggleBtn = document.createElement('button');
+        scrollToggleBtn.className = 'seg-btn';
+        scrollToggleBtn.id = 'scroll-toggle';
+        scrollToggleBtn.textContent = 'تشغيل التمرير';
+        
+        const speedSliderWrap = document.createElement('div');
+        speedSliderWrap.className = 'speed-slider-wrap';
+        speedSliderWrap.innerHTML = `
+          <span style="font-size: 0.7rem; color: var(--text-muted);">سرعة التمرير:</span>
+          <input type="range" class="speed-slider" id="scroll-speed" min="1" max="5" value="2">
+        `;
+        
+        scrollGroup.appendChild(scrollToggleBtn);
+        scrollGroup.appendChild(speedSliderWrap);
+        toolbar.appendChild(scrollGroup);
+
+        // Quick action triggers (Print, Copy, Play in Mock Audio)
+        const actionsGroup = document.createElement('div');
+        actionsGroup.className = 'control-group';
+        
+        // Play song button
+        const mockPlaySongBtn = document.createElement('button');
+        mockPlaySongBtn.className = 'seg-btn active';
+        mockPlaySongBtn.style.display = 'flex';
+        mockPlaySongBtn.style.alignItems = 'center';
+        mockPlaySongBtn.style.gap = '0.25rem';
+        mockPlaySongBtn.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          استمع للأغنية
+        `;
+        mockPlaySongBtn.onclick = () => {
+          audioPlayer.loadSong(song);
+        };
+        actionsGroup.appendChild(mockPlaySongBtn);
+
+        // Copy button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn-icon';
+        copyBtn.title = "نسخ الكلمات";
+        copyBtn.style.width = '34px';
+        copyBtn.style.height = '34px';
+        copyBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        `;
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(song.lyrics).then(() => {
+            alert('تم نسخ الكلمات إلى الحافظة بنجاح!');
+          });
+        };
+        actionsGroup.appendChild(copyBtn);
+
+        // Print button
+        const printBtn = document.createElement('button');
+        printBtn.className = 'btn-icon';
+        printBtn.title = "طباعة كلمات الأغنية";
+        printBtn.style.width = '34px';
+        printBtn.style.height = '34px';
+        printBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        `;
+        printBtn.onclick = () => {
+          window.print();
+        };
+        actionsGroup.appendChild(printBtn);
+
+        toolbar.appendChild(actionsGroup);
+        wrapper.appendChild(toolbar);
+
+        // Lyrics Area viewport container
+        const viewPortContainer = document.createElement('div');
+        viewPortContainer.className = 'lyrics-content-wrapper';
+        
+        const viewport = document.createElement('div');
+        viewport.className = 'lyrics-viewport text-center';
+        
+        // Write lyric line by line
+        const lines = song.lyrics.split('\n');
+        lines.forEach(lineText => {
+          const p = document.createElement('p');
+          p.className = 'lyric-line';
+          p.textContent = lineText;
+          viewport.appendChild(p);
+        });
+
+        viewPortContainer.appendChild(viewport);
+        wrapper.appendChild(viewPortContainer);
+
+        container.appendChild(wrapper);
+
+        // Core reader functionalities activation
+        let fontSize = 1.3; // rem
+        document.getElementById('font-inc-btn').onclick = () => {
+          if (fontSize < 2.0) {
+            fontSize += 0.1;
+            viewport.style.fontSize = `${fontSize}rem`;
+          }
+        };
+        document.getElementById('font-dec-btn').onclick = () => {
+          if (fontSize > 1.0) {
+            fontSize -= 0.1;
+            viewport.style.fontSize = `${fontSize}rem`;
+          }
+        };
+
+        const cAlignBtn = document.getElementById('align-center-btn');
+        const rAlignBtn = document.getElementById('align-right-btn');
+        
+        cAlignBtn.onclick = () => {
+          cAlignBtn.classList.add('active');
+          rAlignBtn.classList.remove('active');
+          viewport.classList.remove('text-right');
+          viewport.classList.add('text-center');
+        };
+        
+        rAlignBtn.onclick = () => {
+          rAlignBtn.classList.add('active');
+          cAlignBtn.classList.remove('active');
+          viewport.classList.remove('text-center');
+          viewport.classList.add('text-right');
+        };
+
+        // Scroll Engine bindings
+        autoScroller.init(viewPortContainer);
+        
+        const speedInput = document.getElementById('scroll-speed');
+        autoScroller.setSpeed(speedInput.value);
+        
+        speedInput.oninput = (e) => {
+          autoScroller.setSpeed(e.target.value);
+        };
+
+        scrollToggleBtn.onclick = () => {
+          const scrolling = autoScroller.toggle();
+          if (scrolling) {
+            scrollToggleBtn.classList.add('active');
+            scrollToggleBtn.textContent = 'إيقاف التمرير';
+          } else {
+            scrollToggleBtn.classList.remove('active');
+            scrollToggleBtn.textContent = 'تشغيل التمرير';
+          }
+        };
+      },
+
+      // 6.4 Search Results page with keyword highlighting
+      renderSearchResults(container, query) {
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.className = 'section-title';
+        sectionTitle.textContent = `نتائج البحث عن: "${query}"`;
+        container.appendChild(sectionTitle);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid-songs';
+
+        // Filter engine
+        const normalizedQuery = query.toLowerCase().replace(/[أإآا]/g, 'ا').replace(/[ىي]/g, 'ي').replace(/[ةه]/g, 'ه');
+        
+        const normalizeText = (text) => {
+          return text.toLowerCase()
+            .replace(/[أإآا]/g, 'ا')
+            .replace(/[ىي]/g, 'ي')
+            .replace(/[ةه]/g, 'ه')
+            .trim();
+        };
+
+        const matches = database.songs.filter(song => {
+          const artist = database.artists.find(a => a.id === song.artistId);
+          const artistName = artist ? artist.name : '';
+          
+          return normalizeText(song.title).includes(normalizedQuery) ||
+                 normalizeText(artistName).includes(normalizedQuery) ||
+                 normalizeText(song.lyrics).includes(normalizedQuery) ||
+                 normalizeText(song.lyricist).includes(normalizedQuery) ||
+                 normalizeText(song.composer).includes(normalizedQuery);
+        });
+
+        if (matches.length === 0) {
+          container.innerHTML = `
+            <div class="section-title">نتائج البحث عن: "${query}"</div>
+            <div class="empty-state" style="padding: 4rem 1rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 48px; height: 48px; margin-bottom:1rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span style="font-size: 1.1rem; font-weight: 600;">عذراً، لم نجد أي نتائج تطابق بحثك.</span>
+              <span style="color: var(--text-muted); margin-top: 0.25rem;">جرب كتابة كلمات مختلفة أو اسم فنان آخر.</span>
+            </div>
+          `;
+          return;
+        }
+
+        matches.forEach(song => {
+          const artist = database.artists.find(a => a.id === song.artistId);
+          const card = document.createElement('div');
+          card.className = 'card-song';
+          card.onclick = () => this.navigate('lyrics', { songId: song.id });
+          
+          // Generate highlighed snippet if query matches inside lyrics
+          let snippet = song.lyrics.substring(0, 80) + '...';
+          const matchIndex = normalizeText(song.lyrics).indexOf(normalizedQuery);
+          if (matchIndex !== -1) {
+            const start = Math.max(0, matchIndex - 30);
+            const end = Math.min(song.lyrics.length, matchIndex + query.length + 40);
+            snippet = (start > 0 ? '...' : '') + song.lyrics.substring(start, end) + (end < song.lyrics.length ? '...' : '');
+            
+            // Highlight matching query words using regex safely
+            const regex = new RegExp(`(${query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+            snippet = snippet.replace(regex, '<mark class="highlight">$1</mark>');
+          }
+
+          // Highlight title/artists if matches
+          let highlightedTitle = song.title;
+          const regexTitle = new RegExp(`(${query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+          if (normalizeText(song.title).includes(normalizedQuery)) {
+            highlightedTitle = song.title.replace(regexTitle, '<mark class="highlight">$1</mark>');
+          }
+
+          card.innerHTML = `
+            <div class="song-card-header">
+              <div class="song-title-wrap">
+                <span class="song-card-title">${highlightedTitle}</span>
+                <span class="song-card-artist">${artist ? artist.name : ''}</span>
+              </div>
+              <span class="song-meta-badge">${song.year}</span>
+            </div>
+            <div class="song-card-body">
+              <div>الشاعر: <span>${song.lyricist}</span></div>
+              <div>الملحن: <span>${song.composer}</span></div>
+            </div>
+            <div class="song-snippet">${snippet}</div>
+          `;
+          grid.appendChild(card);
+        });
+
+        container.appendChild(grid);
+      }
+    };
+
+    // ==========================================================================
+    // 7. INITIALIZATION ON PAGE LOAD
+    // ==========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        themeManager.init();
+      } catch(e) {
+        console.error("Failed to initialize themeManager:", e);
+      }
+
+      try {
+        bookmarkManager.init();
+      } catch(e) {
+        console.error("Failed to initialize bookmarkManager:", e);
+      }
+
+      try {
+        audioPlayer.init();
+      } catch(e) {
+        console.error("Failed to initialize audioPlayer:", e);
+      }
+
+      try {
+        router.init();
+      } catch(e) {
+        console.error("Failed to initialize router:", e);
+      }
+    });
+  </script>
+</body>
+</html>
