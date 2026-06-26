@@ -3,1409 +3,872 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="موسوعة الكلمات - تصفح وقراءة كلمات الأغاني العربية المفضلة لديك بالكامل بدون إنترنت وبشكل مريح.">
   <title>أثير الكلمات | كلمات الأغاني العربية</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
   <style>
-    /* ==========================================================================
-       CSS Variables & Themes
-       ========================================================================== */
+    /* ── Themes ── */
     :root[theme="dark"] {
-      --bg:           #0d0f18;
-      --bg-raised:    #141720;
-      --bg-card:      rgba(20, 23, 32, 0.75);
-      --border:       rgba(255,255,255,0.07);
-      --text:         #eef0f5;
-      --text-sub:     #8b94a8;
-      --text-muted:   #555e72;
-      --accent:       #c8a84b;
-      --accent-rgb:   200, 168, 75;
-      --accent-dim:   rgba(200, 168, 75, 0.12);
-      --accent-glow:  0 0 20px rgba(200, 168, 75, 0.25);
-      --glass:        rgba(13, 15, 24, 0.82);
-      --shadow:       0 8px 32px rgba(0,0,0,0.4);
-      --shadow-sm:    0 2px 8px rgba(0,0,0,0.2);
-      /* Lyric reading specific */
-      --lyric-font:   'Amiri', serif;
-      --lyric-color:  #dde2ed;
-      --lyric-bg:     #0d0f18;
+      --bg:#0d0f18; --bg-raised:#141720; --bg-card:rgba(20,23,32,0.78);
+      --border:rgba(255,255,255,0.07); --text:#eef0f5; --text-sub:#8b94a8; --text-muted:#555e72;
+      --accent:#c8a84b; --accent-rgb:200,168,75; --accent-dim:rgba(200,168,75,0.12);
+      --accent-glow:0 0 20px rgba(200,168,75,0.25); --glass:rgba(13,15,24,0.85);
+      --shadow:0 8px 32px rgba(0,0,0,0.45); --shadow-sm:0 2px 8px rgba(0,0,0,0.25);
+      --lyric-font:'Amiri',serif; --lyric-color:#dde2ed;
     }
-
     :root[theme="light"] {
-      --bg:           #f7f5f0;
-      --bg-raised:    #ffffff;
-      --bg-card:      rgba(255,255,255,0.9);
-      --border:       rgba(0,0,0,0.07);
-      --text:         #1a1a2e;
-      --text-sub:     #5a6070;
-      --text-muted:   #9aa0b0;
-      --accent:       #9a6f1a;
-      --accent-rgb:   154, 111, 26;
-      --accent-dim:   rgba(154, 111, 26, 0.08);
-      --accent-glow:  0 0 20px rgba(154, 111, 26, 0.12);
-      --glass:        rgba(247, 245, 240, 0.88);
-      --shadow:       0 8px 32px rgba(0,0,0,0.08);
-      --shadow-sm:    0 2px 8px rgba(0,0,0,0.05);
-      --lyric-font:   'Amiri', serif;
-      --lyric-color:  #2a2a3e;
-      --lyric-bg:     #f7f5f0;
+      --bg:#f7f5f0; --bg-raised:#ffffff; --bg-card:rgba(255,255,255,0.92);
+      --border:rgba(0,0,0,0.07); --text:#1a1a2e; --text-sub:#5a6070; --text-muted:#9aa0b0;
+      --accent:#9a6f1a; --accent-rgb:154,111,26; --accent-dim:rgba(154,111,26,0.08);
+      --accent-glow:0 0 20px rgba(154,111,26,0.12); --glass:rgba(247,245,240,0.9);
+      --shadow:0 8px 32px rgba(0,0,0,0.08); --shadow-sm:0 2px 8px rgba(0,0,0,0.05);
+      --lyric-font:'Amiri',serif; --lyric-color:#2a2a3e;
     }
-
     :root[theme="sepia"] {
-      --bg:           #f0e8d5;
-      --bg-raised:    #faf4e6;
-      --bg-card:      rgba(250,244,230,0.92);
-      --border:       rgba(100,80,40,0.12);
-      --text:         #3d2b14;
-      --text-sub:     #6b5230;
-      --text-muted:   #a08860;
-      --accent:       #7a4f12;
-      --accent-rgb:   122, 79, 18;
-      --accent-dim:   rgba(122, 79, 18, 0.1);
-      --accent-glow:  0 0 20px rgba(122, 79, 18, 0.12);
-      --glass:        rgba(240, 232, 213, 0.9);
-      --shadow:       0 8px 32px rgba(80,50,10,0.08);
-      --shadow-sm:    0 2px 8px rgba(80,50,10,0.04);
-      --lyric-font:   'Amiri', serif;
-      --lyric-color:  #3d2b14;
-      --lyric-bg:     #f0e8d5;
+      --bg:#f0e8d5; --bg-raised:#faf4e6; --bg-card:rgba(250,244,230,0.94);
+      --border:rgba(100,80,40,0.12); --text:#3d2b14; --text-sub:#6b5230; --text-muted:#a08860;
+      --accent:#7a4f12; --accent-rgb:122,79,18; --accent-dim:rgba(122,79,18,0.1);
+      --accent-glow:0 0 20px rgba(122,79,18,0.12); --glass:rgba(240,232,213,0.92);
+      --shadow:0 8px 32px rgba(80,50,10,0.08); --shadow-sm:0 2px 8px rgba(80,50,10,0.04);
+      --lyric-font:'Amiri',serif; --lyric-color:#3d2b14;
     }
 
-    /* ==========================================================================
-       Reset & Base
-       ========================================================================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    /* ── Reset ── */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden}
+    body{
+      font-family:'Cairo','Tajawal',system-ui,sans-serif;
+      background:var(--bg); color:var(--text);
+      display:flex; flex-direction:column;
+      transition:background .3s,color .3s;
+    }
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;font-family:inherit;border:none;background:transparent}
+
+    /* ── Header ── */
+    header{
+      height:52px; flex-shrink:0;
+      display:flex; align-items:center;
+      padding:0 1rem; gap:0.65rem;
+      background:var(--glass);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--border);
+      z-index:100; position:relative;
+    }
+    .logo{display:flex;align-items:center;gap:.4rem;flex-shrink:0;cursor:pointer;user-select:none}
+    .logo-mark{
+      width:30px;height:30px;
+      background:linear-gradient(135deg,var(--accent),rgba(var(--accent-rgb),.5));
+      border-radius:7px;display:flex;align-items:center;justify-content:center;
+      color:var(--bg);transition:transform .25s;
+    }
+    .logo:hover .logo-mark{transform:rotate(-8deg) scale(1.05)}
+    .logo-name{
+      font-family:'Tajawal',sans-serif;font-weight:900;font-size:1rem;
+      background:linear-gradient(120deg,var(--text),var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;
+    }
+    .search-wrap{flex:1;max-width:400px;position:relative}
+    .search-input{
+      width:100%; background:var(--bg-raised); border:1px solid var(--border);
+      border-radius:18px; padding:.42rem .9rem .42rem 2.4rem;
+      color:var(--text); font-family:'Cairo',sans-serif; font-size:.85rem;
+      outline:none; transition:border-color .2s,box-shadow .2s;
+    }
+    .search-input:focus{border-color:var(--accent);box-shadow:var(--accent-glow)}
+    .search-input::placeholder{color:var(--text-muted)}
+    .search-icon{
+      position:absolute;left:.7rem;top:50%;transform:translateY(-50%);
+      width:14px;height:14px;color:var(--text-muted);pointer-events:none;
     }
 
-    html {
-      scroll-behavior: smooth;
+    /* Column picker */
+    .col-controls{
+      display:flex;align-items:center;gap:2px;flex-shrink:0;
+      background:var(--bg-raised);border:1px solid var(--border);
+      border-radius:8px;padding:3px;
     }
+    .col-btn{
+      width:28px;height:28px;border-radius:5px;
+      display:flex;align-items:center;justify-content:center;
+      color:var(--text-muted);transition:all .15s;
+    }
+    .col-btn svg{width:15px;height:15px;pointer-events:none}
+    .col-btn:hover{color:var(--accent);background:var(--accent-dim)}
+    .col-btn.active{background:var(--accent-dim);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.3)}
 
-    body {
-      font-family: 'Cairo', 'Tajawal', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: background 0.3s ease, color 0.3s ease;
+    /* Header icon buttons */
+    .hbtn{
+      background:transparent;border:1px solid var(--border);color:var(--text-sub);
+      width:33px;height:33px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      transition:all .2s;position:relative;
     }
+    .hbtn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+    .hbtn svg{width:15px;height:15px}
+    .badge{
+      position:absolute;top:-3px;right:-3px;
+      background:var(--accent);color:var(--bg);
+      font-size:.6rem;font-weight:700;min-width:15px;height:15px;
+      border-radius:8px;display:flex;align-items:center;justify-content:center;
+      padding:0 3px;border:1.5px solid var(--bg);
+    }
+    .sidebar-toggle{
+      width:33px;height:33px;border-radius:7px;border:1px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--text-sub);flex-shrink:0;transition:all .2s;
+    }
+    .sidebar-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+    .sidebar-toggle svg{width:16px;height:16px}
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    /* Theme */
+    .theme-picker{position:relative}
+    .theme-dropdown{
+      position:absolute;top:calc(100% + 8px);left:0;
+      background:var(--bg-raised);border:1px solid var(--border);
+      border-radius:10px;padding:.3rem;
+      display:none;flex-direction:column;gap:2px;
+      min-width:110px;box-shadow:var(--shadow);z-index:300;
+    }
+    .theme-dropdown.open{display:flex;animation:dropIn .2s ease}
+    .theme-btn{
+      background:transparent;color:var(--text);
+      font-family:'Cairo',sans-serif;font-size:.78rem;
+      padding:.38rem .6rem;border-radius:7px;
+      text-align:right;display:flex;align-items:center;gap:.4rem;
+      width:100%;transition:background .15s;
+    }
+    .theme-btn:hover{background:var(--accent-dim);color:var(--accent)}
+    .theme-btn svg{width:12px;height:12px}
 
-    a { text-decoration: none; color: inherit; }
-    button { cursor: pointer; font-family: inherit; }
+    /* Fav panel */
+    .fav-panel{
+      position:absolute;top:52px;left:0;right:0;
+      background:var(--bg-raised);border-bottom:1px solid var(--border);
+      box-shadow:var(--shadow);max-height:0;overflow:hidden;
+      transition:max-height .3s cubic-bezier(.4,0,.2,1);z-index:190;
+    }
+    .fav-panel.open{max-height:300px}
+    .fav-panel-inner{padding:.7rem 1.25rem}
+    .fav-panel-header{
+      font-size:.72rem;font-weight:700;color:var(--text-muted);
+      margin-bottom:.55rem;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .fav-list{display:flex;flex-wrap:wrap;gap:.35rem;list-style:none;max-height:200px;overflow-y:auto}
+    .fav-chip{
+      display:flex;align-items:center;gap:.3rem;
+      background:var(--bg-card);border:1px solid var(--border);
+      border-radius:7px;padding:.3rem .55rem;cursor:pointer;
+      transition:all .15s;font-size:.75rem;
+    }
+    .fav-chip:hover{border-color:var(--accent);background:var(--accent-dim)}
+    .fav-chip-title{font-weight:600;color:var(--text)}
+    .fav-chip-artist{color:var(--text-muted);font-size:.68rem}
+    .fav-chip-remove{
+      background:transparent;color:var(--text-muted);
+      padding:2px;border-radius:3px;display:flex;align-items:center;
+      margin-right:.1rem;transition:color .15s;cursor:pointer;
+    }
+    .fav-chip-remove:hover{color:#ef4444}
+    .fav-chip-remove svg{width:10px;height:10px}
+    .fav-empty{color:var(--text-muted);font-size:.8rem;padding:.35rem 0}
 
-    /* ==========================================================================
-       Header — compact, single line
-       ========================================================================== */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      background: var(--glass);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border);
-      height: 58px;
-      display: flex;
-      align-items: center;
-      padding: 0 1.5rem;
-      gap: 1.25rem;
-    }
+    /* ── Main layout ── */
+    .layout{display:flex;flex:1;overflow:hidden;position:relative}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-shrink: 0;
-      cursor: pointer;
-      user-select: none;
+    /* ── Sidebar ── */
+    .sidebar{
+      width:268px;flex-shrink:0;order:-1; /* first visually in RTL = right side */
+      border-inline-end:1px solid var(--border);
+      background:var(--bg-raised);
+      display:flex;flex-direction:column;overflow:hidden;
+      transition:width .28s cubic-bezier(.4,0,.2,1);
     }
+    .sidebar.collapsed{width:0}
+    .sidebar-inner{width:268px;flex:1;overflow-y:auto;padding:.85rem}
 
-    .logo-mark {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent), rgba(var(--accent-rgb),0.5));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--bg);
-      font-size: 1rem;
-      flex-shrink: 0;
-      transition: transform 0.25s ease;
+    .sidebar-section-title{
+      font-family:'Tajawal',sans-serif;font-size:.7rem;font-weight:700;
+      color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;
+      margin-bottom:.55rem;padding-bottom:.45rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
     }
-    .logo:hover .logo-mark { transform: rotate(-8deg) scale(1.05); }
+    .sidebar-back{
+      color:var(--accent);font-size:.72rem;font-weight:700;
+      display:flex;align-items:center;gap:.25rem;transition:opacity .15s;cursor:pointer;
+    }
+    .sidebar-back:hover{opacity:.7}
+    .sidebar-back svg{width:11px;height:11px}
 
-    .logo-name {
-      font-family: 'Tajawal', sans-serif;
-      font-weight: 900;
-      font-size: 1.15rem;
-      background: linear-gradient(120deg, var(--text), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      white-space: nowrap;
+    .artist-list{display:flex;flex-direction:column;gap:2px}
+    .artist-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.42rem .6rem;border-radius:7px;cursor:pointer;
+      transition:all .15s;font-size:.83rem;
     }
+    .artist-row:hover{background:var(--accent-dim);color:var(--accent)}
+    .artist-row-name{font-weight:600}
+    .artist-row-count{font-size:.68rem;color:var(--text-muted);flex-shrink:0}
 
-    /* Search — grows to fill space */
-    .search-wrap {
-      flex: 1;
-      max-width: 480px;
-      position: relative;
+    .song-list{display:flex;flex-direction:column;gap:2px}
+    .song-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.38rem .6rem;border-radius:6px;cursor:pointer;
+      transition:all .15s;font-size:.8rem;gap:.4rem;
     }
+    .song-row:hover{background:var(--accent-dim)}
+    .song-row:hover .song-row-title{color:var(--accent)}
+    .song-row.is-open{background:var(--accent-dim);outline:1px solid rgba(var(--accent-rgb),.2)}
+    .song-row.is-open .song-row-title{color:var(--accent)}
+    .song-row-title{flex:1;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .song-row-year{font-size:.65rem;color:var(--text-muted);flex-shrink:0}
 
-    .search-input {
-      width: 100%;
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 0.5rem 1.1rem 0.5rem 2.75rem;
-      color: var(--text);
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .search-input:focus {
-      border-color: var(--accent);
-      box-shadow: var(--accent-glow);
-    }
-    .search-input::placeholder { color: var(--text-muted); }
+    .search-header{font-size:.72rem;color:var(--text-muted);margin-bottom:.55rem;padding-bottom:.45rem;border-bottom:1px solid var(--border)}
+    .search-header strong{color:var(--accent)}
+    .highlight{background:rgba(var(--accent-rgb),.22);color:var(--text);border-radius:3px;padding:0 2px}
 
-    .search-icon {
-      position: absolute;
-      left: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      color: var(--text-muted);
-      pointer-events: none;
-      transition: color 0.2s;
-    }
-    .search-input:focus ~ .search-icon { color: var(--accent); }
+    .sidebar-empty{text-align:center;padding:2rem .5rem;color:var(--text-muted);font-size:.8rem}
+    .sidebar-empty svg{width:30px;height:30px;opacity:.25;margin-bottom:.5rem;display:block;margin-left:auto;margin-right:auto}
 
-    /* Header action buttons */
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-shrink: 0;
-      margin-right: auto; /* push to the left since RTL */
+    /* ── Workspace ── */
+    .workspace{
+      flex:1;overflow-y:auto;
+      padding:1rem;
+      display:flex;flex-direction:column;gap:.75rem;
+      min-width:0;
     }
+    .workspace-empty{
+      flex:1;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      color:var(--text-muted);gap:.75rem;text-align:center;padding:3rem 1rem;
+    }
+    .workspace-empty svg{width:52px;height:52px;opacity:.18}
+    .workspace-empty h3{font-size:.95rem;font-weight:600;color:var(--text-sub)}
+    .workspace-empty p{font-size:.78rem;max-width:260px;line-height:1.6}
 
-    .hbtn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: all 0.2s ease;
-    }
-    .hbtn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-dim);
-    }
-    .hbtn svg { width: 17px; height: 17px; }
+    /* Lyric grid */
+    .lyrics-grid{display:grid;gap:1rem;align-items:start}
+    .lyrics-grid[data-cols="1"]{grid-template-columns:1fr}
+    .lyrics-grid[data-cols="2"]{grid-template-columns:repeat(2,1fr)}
+    .lyrics-grid[data-cols="3"]{grid-template-columns:repeat(3,1fr)}
+    .lyrics-grid[data-cols="auto"]{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
 
-    .hbtn .badge {
-      position: absolute;
-      top: -3px;
-      right: -3px;
-      background: var(--accent);
-      color: var(--bg);
-      font-size: 0.65rem;
-      font-weight: 700;
-      min-width: 16px;
-      height: 16px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 3px;
-      border: 1.5px solid var(--bg);
+    /* Lyric card */
+    .lyric-card{
+      background:var(--bg-card);
+      border:1px solid var(--border);
+      border-radius:12px;overflow:hidden;
+      display:flex;flex-direction:column;
+      height:calc(100vh - 52px - 2.5rem);
+      min-height:260px;
+      box-shadow:var(--shadow-sm);
+      animation:fadeUp .22s ease-out both;
+      transition:outline .2s;
     }
+    .lyric-card-header{
+      background:var(--bg-raised);border-bottom:1px solid var(--border);
+      padding:.5rem .65rem;
+      display:flex;align-items:center;gap:.45rem;flex-shrink:0;
+    }
+    .lyric-card-title-block{flex:1;min-width:0}
+    .lyric-card-song-title{
+      font-family:'Tajawal',sans-serif;font-weight:700;font-size:.9rem;
+      color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .lyric-card-artist{font-size:.45rem;color:var(--text-muted)}
 
-    /* Theme picker */
-    .theme-picker {
-      position: relative;
+    .card-actions{display:flex;align-items:center;gap:2px;flex-shrink:0}
+    .card-btn{
+      width:26px;height:26px;border-radius:5px;
+      display:flex;align-items:center;justify-content:center;
+      color:var(--text-muted);transition:all .15s;
+      font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:700;
     }
-    .theme-dropdown {
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 0;
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.4rem;
-      display: none;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 130px;
-      box-shadow: var(--shadow);
-      z-index: 300;
-    }
-    .theme-dropdown.open { display: flex; animation: dropIn 0.2s ease; }
+    .card-btn:hover{color:var(--accent);background:var(--accent-dim)}
+    .card-btn.close-btn:hover{color:#ef4444;background:rgba(239,68,68,.1)}
+    .card-btn.fav-on svg{fill:var(--accent);stroke:var(--accent)}
+    .card-btn svg{width:13px;height:13px}
+    .card-divider{width:1px;height:14px;background:var(--border);margin:0 2px;flex-shrink:0}
 
-    .theme-btn {
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.82rem;
-      padding: 0.45rem 0.75rem;
-      border-radius: 8px;
-      text-align: right;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      width: 100%;
-      transition: background 0.15s;
+    .lyric-card-body{overflow-y:auto;flex:1;padding:1rem .9rem}
+    .lyric-card-lyrics{
+      font-family:var(--lyric-font);
+      line-height:2.3;color:var(--lyric-color);
+      text-align:center;
     }
-    .theme-btn:hover { background: var(--accent-dim); color: var(--accent); }
-    .theme-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .lyric-line{display:block;padding:.05rem .25rem;border-radius:4px}
+    .lyric-blank{display:block;height:.9rem}
 
-    /* Favorites panel — slides down from header */
-    .fav-panel {
-      position: absolute;
-      top: 58px;
-      left: 0;
-      right: 0;
-      background: var(--bg-raised);
-      border-bottom: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
-      z-index: 190;
-    }
-    .fav-panel.open { max-height: 400px; }
+    /* Animations */
+    @keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    .fav-panel-inner {
-      padding: 1rem 1.5rem;
-      max-width: 900px;
-      margin: 0 auto;
+    /* Mobile */
+    @media(max-width:768px){
+      .sidebar{
+        position:absolute;top:0;bottom:0;right:0;z-index:50;
+        box-shadow:var(--shadow);
+      }
+      .logo-name{display:none}
+      .col-controls{display:none}
+      .lyric-card{height:calc(100vh - 52px - 2rem)}
     }
-
-    .fav-panel-header {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .fav-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      list-style: none;
-      max-height: 280px;
-      overflow-y: auto;
-    }
-
-    .fav-chip {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.45rem 0.75rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-size: 0.82rem;
-    }
-    .fav-chip:hover {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-    }
-    .fav-chip-title { font-weight: 600; color: var(--text); }
-    .fav-chip-artist { color: var(--text-muted); font-size: 0.75rem; }
-
-    .fav-chip-remove {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 2px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      margin-right: 0.2rem;
-      transition: color 0.15s;
-    }
-    .fav-chip-remove:hover { color: #ef4444; }
-    .fav-chip-remove svg { width: 12px; height: 12px; }
-
-    .fav-empty {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      padding: 0.5rem 0;
-    }
-
-    /* ==========================================================================
-       Main Content — full width, no sidebar
-       ========================================================================== */
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-    }
-
-    /* ==========================================================================
-       Section titles
-       ========================================================================== */
-    .section-title {
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-    .section-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ==========================================================================
-       Artist Grid — clean, text-forward cards
-       ========================================================================== */
-    .grid-artists {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-
-    .card-artist {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.5rem 1.25rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      transition: all 0.25s ease;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      overflow: hidden;
-    }
-    .card-artist::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--accent);
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-    .card-artist:hover {
-      transform: translateY(-3px);
-      border-color: rgba(var(--accent-rgb), 0.3);
-      box-shadow: var(--shadow), var(--accent-glow);
-    }
-    .card-artist:hover::before { opacity: 1; }
-
-    .artist-name {
-      font-family: 'Tajawal', sans-serif;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: var(--text);
-    }
-    .artist-count {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .artist-count span {
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    /* ==========================================================================
-       Song List — compact, scannable rows
-       ========================================================================== */
-    .breadcrumb {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .breadcrumb a {
-      color: var(--accent);
-      transition: opacity 0.15s;
-    }
-    .breadcrumb a:hover { opacity: 0.75; }
-
-    .songs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .card-song {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      transition: all 0.2s ease;
-    }
-    .card-song:hover {
-      border-color: rgba(var(--accent-rgb), 0.35);
-      background: var(--accent-dim);
-      transform: translateX(-3px);
-    }
-
-    .song-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .song-title {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .song-meta-row {
-      display: flex;
-      gap: 1rem;
-      margin-top: 0.2rem;
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .song-snippet-row {
-      margin-top: 0.3rem;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-style: italic;
-    }
-    .song-year-badge {
-      flex-shrink: 0;
-      font-size: 0.72rem;
-      background: var(--accent-dim);
-      color: var(--accent);
-      border: 1px solid rgba(var(--accent-rgb),0.25);
-      padding: 0.15rem 0.5rem;
-      border-radius: 5px;
-      font-weight: 600;
-      align-self: flex-start;
-    }
-
-    /* ==========================================================================
-       LYRICS SCREEN — the hero of the whole UI
-       ========================================================================== */
-    .lyrics-page {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Back + title bar */
-    .lyrics-topbar {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .back-btn {
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: all 0.2s ease;
-    }
-    .back-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-dim);
-    }
-    .back-btn svg { width: 18px; height: 18px; }
-
-    .lyrics-title-block {
-      flex: 1;
-      min-width: 0;
-    }
-    .lyrics-song-title {
-      font-family: 'Tajawal', sans-serif;
-      font-weight: 900;
-      font-size: 1.8rem;
-      color: var(--accent);
-      line-height: 1.15;
-    }
-    .lyrics-artist-name {
-      font-size: 0.9rem;
-      color: var(--text-sub);
-      margin-top: 0.15rem;
-    }
-
-    .lyrics-topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-shrink: 0;
-    }
-
-    /* Metadata strip — subtle, below title */
-    .lyrics-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem 2rem;
-      padding: 0.75rem 0 1.25rem;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .lyrics-meta strong { color: var(--text-sub); font-weight: 600; }
-
-    /* Reader controls — minimal floating bar */
-    .reader-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.6rem 1rem;
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 30px;
-      margin-bottom: 2.5rem;
-      width: fit-content;
-      flex-wrap: wrap;
-    }
-
-    .ctrl-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .ctrl-divider {
-      width: 1px;
-      height: 18px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-
-    .ctrl-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-sub);
-      padding: 0.28rem 0.65rem;
-      border-radius: 6px;
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-    }
-    .ctrl-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-    .ctrl-btn.active { background: var(--accent-dim); border-color: rgba(var(--accent-rgb),0.5); color: var(--accent); }
-
-    .scroll-speed {
-      accent-color: var(--accent);
-      width: 70px;
-      cursor: pointer;
-    }
-
-    /* THE LYRICS THEMSELVES */
-    .lyrics-body {
-      /* No max-height cap — lyrics flow freely on the page */
-    }
-
-    .lyrics-text {
-      font-family: var(--lyric-font);
-      font-size: 1.45rem;
-      line-height: 2.4;
-      color: var(--lyric-color);
-      text-align: center;
-      max-width: 720px;
-      margin: 0 auto;
-      letter-spacing: 0.01em;
-      transition: font-size 0.2s ease;
-    }
-
-    .lyric-line {
-      display: block;
-      padding: 0.1rem 0.5rem;
-      border-radius: 6px;
-      transition: background 0.15s ease;
-      margin-bottom: 0.4rem;
-    }
-    .lyric-line:empty::before { content: '\00a0'; } /* preserve blank separator lines */
-    .lyric-line:hover { background: rgba(var(--accent-rgb), 0.06); }
-
-    /* Empty stanza separator */
-    .lyric-blank { display: block; height: 1.4rem; }
-
-    /* ==========================================================================
-       Search Results
-       ========================================================================== */
-    .highlight {
-      background: rgba(var(--accent-rgb), 0.25);
-      color: var(--text);
-      border-radius: 3px;
-      padding: 0 2px;
-    }
-
-    /* ==========================================================================
-       Shared UI: Empty State
-       ========================================================================== */
-    .empty-state {
-      text-align: center;
-      padding: 4rem 1rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .empty-state svg { width: 40px; height: 40px; opacity: 0.5; }
-    .empty-state p { font-size: 0.95rem; }
-
-    /* ==========================================================================
-       Animations & Utilities
-       ========================================================================== */
-    .hidden { display: none !important; }
-
-    @keyframes dropIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.35s ease-out both; }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ==========================================================================
-       Responsive
-       ========================================================================== */
-    @media (max-width: 640px) {
-      header { padding: 0 1rem; gap: 0.75rem; }
-      .logo-name { display: none; }
-      .page { padding: 1.25rem 1rem 3rem; }
-      .lyrics-song-title { font-size: 1.4rem; }
-      .lyrics-text { font-size: 1.2rem; line-height: 2.2; }
-      .reader-controls { gap: 0.5rem; padding: 0.5rem 0.75rem; }
+    @media(max-width:500px){
+      .lyrics-grid[data-cols="2"],.lyrics-grid[data-cols="3"]{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
-<div class="app-container" style="position:relative;">
+<!-- ═══ HEADER ═══ -->
+<header>
+  <button class="sidebar-toggle" id="sidebar-toggle-btn" title="القائمة الجانبية" onclick="sidebarToggle()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
 
-  <!-- ========== HEADER ========== -->
-  <header>
-    <div class="logo" onclick="router.navigate('artists')">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      </div>
-      <span class="logo-name">أثير الكلمات</span>
+  <div class="logo" onclick="sidebarRouter.navigate('artists')">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
     </div>
-
-    <div class="search-wrap">
-      <input type="text" id="global-search" class="search-input" placeholder="ابحث عن أغنية، فنان، أو كلمات…">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </div>
-
-    <div class="header-actions">
-      <!-- Favorites toggle -->
-      <button class="hbtn" id="fav-toggle-btn" title="المحفوظات" onclick="favPanel.toggle()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span class="badge" id="fav-count">0</span>
-      </button>
-
-      <!-- Theme picker -->
-      <div class="theme-picker">
-        <button class="hbtn" id="theme-btn" title="تغيير المظهر">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-        </button>
-        <div class="theme-dropdown" id="theme-dropdown">
-          <button class="theme-btn" onclick="themeManager.setTheme('dark'); closeTheme()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            داكن
-          </button>
-          <button class="theme-btn" onclick="themeManager.setTheme('light'); closeTheme()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-            مضيء
-          </button>
-          <button class="theme-btn" onclick="themeManager.setTheme('sepia'); closeTheme()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            ورقي
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Favorites slide-down panel -->
-  <div class="fav-panel" id="fav-panel">
-    <div class="fav-panel-inner">
-      <div class="fav-panel-header">
-        <span>المحفوظات</span>
-        <span id="fav-panel-count" style="color:var(--text-muted)"></span>
-      </div>
-      <ul class="fav-list" id="fav-list">
-        <!-- populated by JS -->
-      </ul>
-    </div>
+    <span class="logo-name">أثير الكلمات</span>
   </div>
 
-  <!-- ========== MAIN ========== -->
-  <main class="page">
-    <div id="router-view" class="fade-up"></div>
+  <div class="search-wrap">
+    <input type="text" id="global-search" class="search-input" placeholder="ابحث عن أغنية أو فنان…">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </div>
+
+  <!-- Column controls -->
+  <div class="col-controls" title="عدد الأعمدة">
+    <button class="col-btn" data-cols="1" onclick="setColumns(1)" title="عمود واحد">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" rx="1.5"/></svg>
+    </button>
+    <button class="col-btn active" data-cols="2" onclick="setColumns(2)" title="عمودان">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="6" height="12" rx="1"/><rect x="9" y="2" width="6" height="12" rx="1"/></svg>
+    </button>
+    <button class="col-btn" data-cols="3" onclick="setColumns(3)" title="ثلاثة أعمدة">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="4" height="12" rx="1"/><rect x="6" y="2" width="4" height="12" rx="1"/><rect x="11" y="2" width="4" height="12" rx="1"/></svg>
+    </button>
+    <button class="col-btn" data-cols="auto" onclick="setColumns('auto')" title="تلقائي">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h3M2 8h5M2 12h3M7 4h7M9 8h5M7 12h7"/></svg>
+    </button>
+  </div>
+
+  <div style="margin-right:auto;display:flex;align-items:center;gap:.4rem">
+    <!-- Close all -->
+    <button class="hbtn" id="clear-all-btn" title="إغلاق الكل" onclick="lyricsManager.closeAll()" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/><circle cx="12" cy="12" r="10"/></svg>
+    </button>
+
+    <!-- Favorites -->
+    <button class="hbtn" id="fav-toggle-btn" title="المحفوظات" onclick="favPanel.toggle()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="badge" id="fav-count">0</span>
+    </button>
+
+    <!-- Theme -->
+    <div class="theme-picker">
+      <button class="hbtn" id="theme-btn" title="المظهر">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <div class="theme-dropdown" id="theme-dropdown">
+        <button class="theme-btn" onclick="themeManager.setTheme('dark');closeTheme()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>داكن
+        </button>
+        <button class="theme-btn" onclick="themeManager.setTheme('light');closeTheme()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>مضيء
+        </button>
+        <button class="theme-btn" onclick="themeManager.setTheme('sepia');closeTheme()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>ورقي
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Fav panel -->
+<div class="fav-panel" id="fav-panel">
+  <div class="fav-panel-inner">
+    <div class="fav-panel-header">
+      <span>المحفوظات</span>
+      <span id="fav-panel-count" style="color:var(--text-muted)"></span>
+    </div>
+    <ul class="fav-list" id="fav-list"></ul>
+  </div>
+</div>
+
+<!-- ═══ MAIN LAYOUT ═══ -->
+<div class="layout">
+
+  <!-- Sidebar (order:-1 = right in RTL) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div id="sidebar-view"></div>
+    </div>
+  </aside>
+
+  <!-- Workspace -->
+  <main class="workspace" id="workspace">
+    <div class="workspace-empty" id="workspace-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      <h3>اختر أغنية من القائمة</h3>
+      <p>تصفح الفنانين أو ابحث، ثم اضغط على أي أغنية لفتحها هنا. يمكنك فتح حتى ٧ أغانٍ جنباً إلى جنب.</p>
+    </div>
+    <div class="lyrics-grid" id="lyrics-grid" data-cols="2" style="display:none"></div>
   </main>
 
 </div>
 
 <script>
-// ==========================================================================
-// SAFE STORAGE
-// ==========================================================================
-const storage = {
-  _fb: {},
-  getItem(k) { try { return localStorage.getItem(k); } catch { return this._fb[k]||null; } },
-  setItem(k,v) { try { localStorage.setItem(k,v); } catch { this._fb[k]=String(v); } }
+// ═════════════════════════ STORAGE ═════════════════════════
+const storage={
+  _fb:{},
+  getItem(k){try{return localStorage.getItem(k)}catch{return this._fb[k]||null}},
+  setItem(k,v){try{localStorage.setItem(k,v)}catch{this._fb[k]=String(v)}}
 };
 
-// ==========================================================================
-// 1. DATABASE
-// ==========================================================================
-let database = null;
+// ═════════════════════════ DATABASE ═════════════════════════
+let database=null;
 
-async function loadDatabase() {
+async function loadDatabase(){
   let raw;
-  try {
-    const res = await fetch('songs.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    raw = await res.json();
-  } catch(e) {
-    throw new Error('fetch_failed: ' + e.message);
-  }
-  if (!Array.isArray(raw) || raw.length === 0) throw new Error('empty_or_invalid');
+  try{
+    const res=await fetch('songs.json');
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    raw=await res.json();
+  }catch(e){throw new Error('fetch_failed: '+e.message)}
+  if(!Array.isArray(raw)||raw.length===0)throw new Error('empty_or_invalid');
 
-  const slugify = str =>
-    str.trim().replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\u0600-\u06FF-]/g,'').toLowerCase();
+  const slugify=str=>str.trim().replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\u0600-\u06FF-]/g,'').toLowerCase();
 
-  const artistMap = new Map();
-  raw.forEach(entry => {
-    const name = (entry.artist||'').trim();
-    if (!name) return;
-    const id = slugify(name);
-    if (!artistMap.has(id)) artistMap.set(id, { id, name });
+  const artistMap=new Map();
+  raw.forEach(e=>{
+    const name=(e.artist||'').trim();
+    if(!name)return;
+    const id=slugify(name);
+    if(!artistMap.has(id))artistMap.set(id,{id,name});
   });
 
-  const songs = raw.map((entry, idx) => {
-    const artistName = (entry.artist||'').trim();
-    const artistId   = slugify(artistName);
-    const title      = (entry.title||'').trim();
-    const meta       = entry.metadata || {};
-    return {
-      id:       slugify(title + '-' + artistId) || String(idx),
-      artistId,
-      title,
-      lyrics:   (entry.lyrics||'').trim(),
-      lyricist: (meta['كلمات']||'').trim(),
-      composer: (meta['ألحان']||'').trim(),
-      year:     (meta['تاريخ']||'').trim(),
-      url:      entry.url || ''
+  const songs=raw.map((e,idx)=>{
+    const artistName=(e.artist||'').trim();
+    const artistId=slugify(artistName);
+    const title=(e.title||'').trim();
+    const meta=e.metadata||{};
+    return{
+      id:slugify(title+'-'+artistId)||String(idx),
+      artistId,title,
+      lyrics:(e.lyrics||'').trim(),
+      lyricist:(meta['كلمات']||'').trim(),
+      composer:(meta['ألحان']||'').trim(),
+      year:(meta['تاريخ']||'').trim(),
+      url:e.url||''
     };
   });
 
-  const artists = Array.from(artistMap.values()).map(a => ({
-    ...a,
-    songsCount: songs.filter(s => s.artistId === a.id).length
+  const artists=Array.from(artistMap.values()).map(a=>({
+    ...a,songsCount:songs.filter(s=>s.artistId===a.id).length
   }));
 
-  database = { artists, songs };
+  database={artists,songs};
 }
 
-// ==========================================================================
-// 2. THEME MANAGER
-// ==========================================================================
-const themeManager = {
-  init() {
-    this.setTheme(storage.getItem('theme') || 'dark');
-    document.getElementById('theme-btn').addEventListener('click', e => {
+// ═════════════════════════ THEME ═════════════════════════
+const themeManager={
+  init(){
+    this.setTheme(storage.getItem('theme')||'dark');
+    document.getElementById('theme-btn').addEventListener('click',e=>{
       e.stopPropagation();
       document.getElementById('theme-dropdown').classList.toggle('open');
     });
-    document.addEventListener('click', () =>
-      document.getElementById('theme-dropdown').classList.remove('open'));
+    document.addEventListener('click',()=>document.getElementById('theme-dropdown').classList.remove('open'));
   },
-  setTheme(t) {
-    document.documentElement.setAttribute('theme', t);
-    storage.setItem('theme', t);
-  }
+  setTheme(t){document.documentElement.setAttribute('theme',t);storage.setItem('theme',t)}
 };
-function closeTheme() {
-  document.getElementById('theme-dropdown').classList.remove('open');
-}
+function closeTheme(){document.getElementById('theme-dropdown').classList.remove('open')}
 
-// ==========================================================================
-// 3. BOOKMARK MANAGER
-// ==========================================================================
-const bookmarkManager = {
-  favs: [],
-
-  init() {
-    try { this.favs = JSON.parse(storage.getItem('favs')||'[]'); } catch { this.favs=[]; }
+// ═════════════════════════ BOOKMARKS ═════════════════════════
+const bookmarkManager={
+  favs:[],
+  init(){
+    try{this.favs=JSON.parse(storage.getItem('favs')||'[]')}catch{this.favs=[]}
     this.render();
   },
-
-  toggle(songId) {
-    if (this.favs.includes(songId)) {
-      this.favs = this.favs.filter(id => id !== songId);
-    } else {
-      this.favs.push(songId);
-    }
-    storage.setItem('favs', JSON.stringify(this.favs));
+  toggle(songId){
+    this.favs=this.favs.includes(songId)?this.favs.filter(id=>id!==songId):[...this.favs,songId];
+    storage.setItem('favs',JSON.stringify(this.favs));
     this.render();
-    return this.favs.includes(songId);
+    lyricsManager.refreshFavBtn(songId);
+    return this.isFav(songId);
   },
-
-  isFav(songId) { return this.favs.includes(songId); },
-
-  render() {
-    const listEl = document.getElementById('fav-list');
-    const countEl = document.getElementById('fav-count');
-    const panelCountEl = document.getElementById('fav-panel-count');
-    if (countEl) countEl.textContent = this.favs.length;
-    if (panelCountEl) panelCountEl.textContent = this.favs.length ? `${this.favs.length} أغنية` : '';
-
-    if (!listEl || !database) return;
-
-    if (this.favs.length === 0) {
-      listEl.innerHTML = `<li class="fav-empty">لا توجد أغانٍ محفوظة بعد. اضغط ♥ في أي أغنية لحفظها هنا.</li>`;
+  isFav(songId){return this.favs.includes(songId)},
+  render(){
+    const listEl=document.getElementById('fav-list');
+    const countEl=document.getElementById('fav-count');
+    const panelCountEl=document.getElementById('fav-panel-count');
+    if(countEl)countEl.textContent=this.favs.length;
+    if(panelCountEl)panelCountEl.textContent=this.favs.length?`${this.favs.length} أغنية`:'';
+    if(!listEl||!database)return;
+    if(this.favs.length===0){
+      listEl.innerHTML=`<li class="fav-empty">لا توجد أغانٍ محفوظة بعد. اضغط ♥ في أي أغنية.</li>`;
       return;
     }
-
-    listEl.innerHTML = '';
-    this.favs.forEach(songId => {
-      const song = database.songs.find(s => s.id === songId);
-      if (!song) return;
-      const artist = database.artists.find(a => a.id === song.artistId);
-      const li = document.createElement('li');
-      const chip = document.createElement('div');
-      chip.className = 'fav-chip';
-      chip.onclick = () => {
-        favPanel.close();
-        router.navigate('lyrics', { songId: song.id });
-      };
-      chip.innerHTML = `
+    listEl.innerHTML='';
+    this.favs.forEach(songId=>{
+      const song=database.songs.find(s=>s.id===songId);
+      if(!song)return;
+      const artist=database.artists.find(a=>a.id===song.artistId);
+      const li=document.createElement('li');
+      const chip=document.createElement('div');
+      chip.className='fav-chip';
+      chip.onclick=()=>{favPanel.close();lyricsManager.open(song.id)};
+      chip.innerHTML=`
         <div>
           <div class="fav-chip-title">${song.title}</div>
-          <div class="fav-chip-artist">${artist ? artist.name : ''}</div>
+          <div class="fav-chip-artist">${artist?artist.name:''}</div>
         </div>
-        <button class="fav-chip-remove" title="إزالة" onclick="event.stopPropagation(); bookmarkManager.toggle('${song.id}')">
+        <button class="fav-chip-remove" title="إزالة" onclick="event.stopPropagation();bookmarkManager.toggle('${song.id}')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      `;
+        </button>`;
       li.appendChild(chip);
       listEl.appendChild(li);
     });
   }
 };
 
-// ==========================================================================
-// 4. FAVORITES PANEL
-// ==========================================================================
-const favPanel = {
-  isOpen: false,
-  toggle() {
-    this.isOpen ? this.close() : this.open();
-  },
-  open() {
-    this.isOpen = true;
+// ═════════════════════════ FAV PANEL ═════════════════════════
+const favPanel={
+  isOpen:false,
+  toggle(){this.isOpen?this.close():this.open()},
+  open(){
+    this.isOpen=true;
     document.getElementById('fav-panel').classList.add('open');
-    document.getElementById('fav-toggle-btn').style.color = 'var(--accent)';
+    document.getElementById('fav-toggle-btn').style.color='var(--accent)';
   },
-  close() {
-    this.isOpen = false;
+  close(){
+    this.isOpen=false;
     document.getElementById('fav-panel').classList.remove('open');
-    document.getElementById('fav-toggle-btn').style.color = '';
+    document.getElementById('fav-toggle-btn').style.color='';
   }
 };
-
-// Close fav panel on outside click
-document.addEventListener('click', e => {
-  const panel = document.getElementById('fav-panel');
-  const btn   = document.getElementById('fav-toggle-btn');
-  if (favPanel.isOpen && !panel.contains(e.target) && !btn.contains(e.target)) {
-    favPanel.close();
-  }
+document.addEventListener('click',e=>{
+  const p=document.getElementById('fav-panel'),b=document.getElementById('fav-toggle-btn');
+  if(favPanel.isOpen&&!p.contains(e.target)&&!b.contains(e.target))favPanel.close();
 });
 
-// ==========================================================================
-// 5. AUTO SCROLLER
-// ==========================================================================
-const autoScroller = {
-  active: false,
-  speed: 0.8,
-  animId: null,
-  lastTime: 0,
-  target: null,   // element to scroll (document.documentElement for page scroll)
+// ═════════════════════════ SIDEBAR TOGGLE ═════════════════════════
+function sidebarToggle(){
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
 
-  init() {
-    // Always scroll the main page
-    this.target = document.documentElement;
-    this.stop();
-  },
+// ═════════════════════════ COLUMN CONTROL ═════════════════════════
+function setColumns(n){
+  document.getElementById('lyrics-grid').setAttribute('data-cols',n);
+  document.querySelectorAll('.col-btn').forEach(b=>b.classList.toggle('active',b.dataset.cols==n));
+}
 
-  setSpeed(v) { this.speed = parseFloat(v) * 0.5; },
+// ═════════════════════════ LYRICS MANAGER ═════════════════════════
+const lyricsManager={
+  openIds:[],
 
-  toggle() {
-    this.active ? this.stop() : this.start();
-    return this.active;
-  },
-
-  start() {
-    this.active = true;
-    this.lastTime = performance.now();
-    const loop = (time) => {
-      if (!this.active) return;
-      const delta = time - this.lastTime;
-      this.lastTime = time;
-      window.scrollBy(0, this.speed * (delta / 16.67));
-      const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 4;
-      if (atBottom) {
-        this.stop();
-        const btn = document.getElementById('scroll-toggle');
-        if (btn) { btn.classList.remove('active'); btn.textContent = 'تشغيل التمرير'; }
-      } else {
-        this.animId = requestAnimationFrame(loop);
+  open(songId){
+    if(this.openIds.includes(songId)){
+      const card=document.getElementById('lcard-'+songId);
+      if(card){
+        card.scrollIntoView({behavior:'smooth',block:'nearest'});
+        card.style.outline='2px solid var(--accent)';
+        setTimeout(()=>card.style.outline='',1000);
       }
-    };
-    this.animId = requestAnimationFrame(loop);
+      return;
+    }
+    if(this.openIds.length>=7){
+      alert('الحد الأقصى هو ٧ أغانٍ في آنٍ واحد. أغلق إحداها أولاً.');
+      return;
+    }
+    this.openIds.push(songId);
+    this._renderCard(songId);
+    this._updateUI();
+    sidebarRouter.markOpenSongs();
   },
 
-  stop() {
-    this.active = false;
-    if (this.animId) cancelAnimationFrame(this.animId);
+  close(songId){
+    this.openIds=this.openIds.filter(id=>id!==songId);
+    document.getElementById('lcard-'+songId)?.remove();
+    this._updateUI();
+    sidebarRouter.markOpenSongs();
+  },
+
+  closeAll(){
+    this.openIds=[];
+    document.getElementById('lyrics-grid').innerHTML='';
+    this._updateUI();
+    sidebarRouter.markOpenSongs();
+  },
+
+  _updateUI(){
+    const hasCards=this.openIds.length>0;
+    document.getElementById('workspace-empty').style.display=hasCards?'none':'';
+    document.getElementById('lyrics-grid').style.display=hasCards?'':'none';
+    const cb=document.getElementById('clear-all-btn');
+    if(cb)cb.style.display=hasCards?'':'none';
+  },
+
+  refreshFavBtn(songId){
+    const btn=document.getElementById('fav-btn-'+songId);
+    if(!btn)return;
+    const on=bookmarkManager.isFav(songId);
+    btn.classList.toggle('fav-on',on);
+    const svg=btn.querySelector('svg');
+    if(svg){svg.setAttribute('fill',on?'var(--accent)':'none');svg.setAttribute('stroke',on?'var(--accent)':'currentColor')}
+  },
+
+  adjustFont(songId,dir){
+    const el=document.getElementById('llyrics-'+songId);
+    if(!el)return;
+    let sz=parseFloat(el.dataset.fs||'1.15');
+    sz=Math.min(2.2,Math.max(.85,Math.round((sz+dir*.1)*10)/10));
+    el.dataset.fs=sz;el.style.fontSize=sz+'rem';
+  },
+
+  copy(songId){
+    const song=database.songs.find(s=>s.id===songId);
+    if(!song)return;
+    navigator.clipboard.writeText(song.lyrics).catch(()=>{});
+  },
+
+  _renderCard(songId){
+    const song=database.songs.find(s=>s.id===songId);
+    if(!song)return;
+    const artist=database.artists.find(a=>a.id===song.artistId);
+    const isFav=bookmarkManager.isFav(songId);
+
+    const card=document.createElement('div');
+    card.className='lyric-card';
+    card.id='lcard-'+songId;
+
+    // Header
+    const hdr=document.createElement('div');
+    hdr.className='lyric-card-header';
+
+    const titleBlock=document.createElement('div');
+    titleBlock.className='lyric-card-title-block';
+    const metaParts=[artist?artist.name:''];
+    if(song.lyricist)metaParts.push('كلمات: '+song.lyricist);
+    if(song.year)metaParts.push('السنة: '+song.year);
+    titleBlock.innerHTML=`
+      <div class="lyric-card-song-title">${song.title}</div>
+      <div class="lyric-card-artist">${metaParts.join(' · ')}</div>`;
+
+    const actions=document.createElement('div');
+    actions.className='card-actions';
+
+    // font –
+    const fontDec=document.createElement('button');
+    fontDec.className='card-btn';fontDec.title='تصغير الخط';fontDec.textContent='أ−';
+    fontDec.onclick=()=>this.adjustFont(songId,-1);
+
+    // font +
+    const fontInc=document.createElement('button');
+    fontInc.className='card-btn';fontInc.title='تكبير الخط';fontInc.textContent='أ+';
+    fontInc.onclick=()=>this.adjustFont(songId,1);
+
+    const div1=document.createElement('div');div1.className='card-divider';
+
+    // copy
+    const copyBtn=document.createElement('button');
+    copyBtn.className='card-btn';copyBtn.title='نسخ الكلمات';
+    copyBtn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    copyBtn.onclick=()=>this.copy(songId);
+
+    // fav
+    const favBtn=document.createElement('button');
+    favBtn.className='card-btn'+(isFav?' fav-on':'');
+    favBtn.id='fav-btn-'+songId;
+    favBtn.title='حفظ';
+    favBtn.innerHTML=`<svg viewBox="0 0 24 24" fill="${isFav?'var(--accent)':'none'}" stroke="${isFav?'var(--accent)':'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+    favBtn.onclick=()=>bookmarkManager.toggle(songId);
+
+    const div2=document.createElement('div');div2.className='card-divider';
+
+    // close
+    const closeBtn=document.createElement('button');
+    closeBtn.className='card-btn close-btn';closeBtn.title='إغلاق';
+    closeBtn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    closeBtn.onclick=()=>this.close(songId);
+
+    actions.append(fontDec,fontInc,div1,copyBtn,favBtn,div2,closeBtn);
+    hdr.append(titleBlock,actions);
+
+    // Body + lyrics
+    const body=document.createElement('div');
+    body.className='lyric-card-body';
+
+    const lyricsEl=document.createElement('div');
+    lyricsEl.className='lyric-card-lyrics';
+    lyricsEl.id='llyrics-'+songId;
+    lyricsEl.dataset.fs='1.15';
+
+    song.lyrics.split('\n').forEach(line=>{
+      const p=document.createElement('p');
+      if(line.trim()===''){p.className='lyric-blank'}
+      else{p.className='lyric-line';p.textContent=line}
+      lyricsEl.appendChild(p);
+    });
+
+    body.appendChild(lyricsEl);
+    card.append(hdr,body);
+    document.getElementById('lyrics-grid').appendChild(card);
+    card.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
 };
 
-// ==========================================================================
-// 6. ROUTER
-// ==========================================================================
-const router = {
-  view: 'artists',
-  params: {},
+// ═════════════════════════ SIDEBAR ROUTER ═════════════════════════
+const sidebarRouter={
+  view:'artists',
+  params:{},
 
-  init() {
-    document.getElementById('stat-songs-count') &&
-      (document.getElementById('stat-songs-count').textContent = database.songs.length);
-
-    const search = document.getElementById('global-search');
-    search.addEventListener('input', e => {
-      const q = e.target.value.trim();
-      if (q.length > 0) this.navigate('search', { query: q });
-      else this.navigate('artists');
-    });
-
-    this.navigate('artists');
+  navigate(view,params={}){
+    this.view=view;this.params=params;
+    if(view!=='search')document.getElementById('global-search').value='';
+    this._render();
   },
 
-  navigate(view, params = {}) {
-    autoScroller.stop();
-    this.view   = view;
-    this.params = params;
-    if (view !== 'search') {
-      document.getElementById('global-search').value = '';
-    }
-    this.render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  },
-
-  render() {
-    const el = document.getElementById('router-view');
-    el.innerHTML = '';
-    el.className = 'fade-up';
-    // force re-trigger animation
-    void el.offsetWidth;
-
-    switch(this.view) {
-      case 'artists': this.renderArtists(el); break;
-      case 'songs':   this.renderSongs(el, this.params.artistId); break;
-      case 'lyrics':  this.renderLyrics(el, this.params.songId); break;
-      case 'search':  this.renderSearch(el, this.params.query); break;
+  _render(){
+    const el=document.getElementById('sidebar-view');
+    el.innerHTML='';
+    switch(this.view){
+      case 'artists':this._renderArtists(el);break;
+      case 'songs':  this._renderSongs(el,this.params.artistId);break;
+      case 'search': this._renderSearch(el,this.params.query);break;
     }
   },
 
-  // ── Artists Grid ──────────────────────────────────────────────────────────
-  renderArtists(el) {
-    const title = document.createElement('h2');
-    title.className = 'section-title';
-    title.textContent = 'الفنانون';
-    el.appendChild(title);
-
-    const grid = document.createElement('div');
-    grid.className = 'grid-artists';
-
-    database.artists.forEach(artist => {
-      const card = document.createElement('div');
-      card.className = 'card-artist';
-      card.onclick = () => this.navigate('songs', { artistId: artist.id });
-      card.innerHTML = `
-        <div class="artist-name">${artist.name}</div>
-        <div class="artist-count"><span>${artist.songsCount}</span> أغنية</div>
-      `;
-      grid.appendChild(card);
+  markOpenSongs(){
+    document.querySelectorAll('.song-row[data-sid]').forEach(r=>{
+      r.classList.toggle('is-open',lyricsManager.openIds.includes(r.dataset.sid));
     });
-
-    el.appendChild(grid);
   },
 
-  // ── Songs List ────────────────────────────────────────────────────────────
-  renderSongs(el, artistId) {
-    const artist = database.artists.find(a => a.id === artistId);
-    if (!artist) return;
+  _renderArtists(el){
+    const t=document.createElement('div');
+    t.className='sidebar-section-title';t.textContent='الفنانون';
+    el.appendChild(t);
 
-    // Breadcrumb
-    const bc = document.createElement('div');
-    bc.className = 'breadcrumb';
-    bc.innerHTML = `
-      <a href="#" onclick="event.preventDefault(); router.navigate('artists')">الفنانون</a>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-      <span>${artist.name}</span>
-    `;
-    el.appendChild(bc);
-
-    const title = document.createElement('h2');
-    title.className = 'section-title';
-    title.textContent = `أغاني ${artist.name}`;
-    el.appendChild(title);
-
-    const list = document.createElement('div');
-    list.className = 'songs-list';
-
-    database.songs.filter(s => s.artistId === artistId).forEach(song => {
-      const card = document.createElement('div');
-      card.className = 'card-song';
-      card.onclick = () => this.navigate('lyrics', { songId: song.id });
-
-      const metaParts = [];
-      if (song.lyricist) metaParts.push(`كلمات: ${song.lyricist}`);
-      if (song.composer) metaParts.push(`ألحان: ${song.composer}`);
-
-      card.innerHTML = `
-        <div class="song-info">
-          <div class="song-title">${song.title}</div>
-          ${metaParts.length ? `<div class="song-meta-row">${metaParts.join('<span style="color:var(--border)">·</span>')}</div>` : ''}
-          <div class="song-snippet-row">${song.lyrics.substring(0,80)}…</div>
-        </div>
-        ${song.year ? `<div class="song-year-badge">${song.year}</div>` : ''}
-      `;
-      list.appendChild(card);
+    const list=document.createElement('div');list.className='artist-list';
+    database.artists.forEach(artist=>{
+      const row=document.createElement('div');row.className='artist-row';
+      row.innerHTML=`<span class="artist-row-name">${artist.name}</span><span class="artist-row-count">${artist.songsCount}</span>`;
+      row.onclick=()=>this.navigate('songs',{artistId:artist.id});
+      list.appendChild(row);
     });
-
     el.appendChild(list);
   },
 
-  // ── Lyrics Screen ─────────────────────────────────────────────────────────
-  renderLyrics(el, songId) {
-    const song = database.songs.find(s => s.id === songId);
-    if (!song) return;
-    const artist = database.artists.find(a => a.id === song.artistId);
+  _renderSongs(el,artistId){
+    const artist=database.artists.find(a=>a.id===artistId);
+    if(!artist)return;
 
-    autoScroller.init();
+    const hdr=document.createElement('div');hdr.className='sidebar-section-title';
+    hdr.innerHTML=`<span>${artist.name}</span>`;
+    const back=document.createElement('span');back.className='sidebar-back';
+    back.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>الكل`;
+    back.onclick=()=>this.navigate('artists');
+    hdr.appendChild(back);
+    el.appendChild(hdr);
 
-    const page = document.createElement('div');
-    page.className = 'lyrics-page';
-
-    // ── Top bar: back + title + bookmark
-    const topbar = document.createElement('div');
-    topbar.className = 'lyrics-topbar';
-
-    const backBtn = document.createElement('button');
-    backBtn.className = 'back-btn';
-    backBtn.title = 'رجوع';
-    backBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`;
-    backBtn.onclick = () => this.navigate('songs', { artistId: song.artistId });
-
-    const titleBlock = document.createElement('div');
-    titleBlock.className = 'lyrics-title-block';
-    titleBlock.innerHTML = `
-      <div class="lyrics-song-title">${song.title}</div>
-      <div class="lyrics-artist-name">${artist ? artist.name : ''}</div>
-    `;
-
-    // Bookmark + Copy actions
-    const actions = document.createElement('div');
-    actions.className = 'lyrics-topbar-actions';
-
-    // Copy button
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'hbtn';
-    copyBtn.title = 'نسخ الكلمات';
-    copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(song.lyrics).then(() => {
-        copyBtn.style.color = 'var(--accent)';
-        setTimeout(() => copyBtn.style.color = '', 1500);
-      });
-    };
-
-    // Bookmark button
-    const favBtn = document.createElement('button');
-    favBtn.className = 'hbtn';
-    favBtn.id = 'song-fav-btn';
-    const updateFavBtn = (isFav) => {
-      favBtn.title = isFav ? 'إزالة من المحفوظات' : 'حفظ في المحفوظات';
-      favBtn.innerHTML = isFav
-        ? `<svg viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`
-        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
-    };
-    updateFavBtn(bookmarkManager.isFav(song.id));
-    favBtn.onclick = () => {
-      bookmarkManager.toggle(song.id);
-      updateFavBtn(bookmarkManager.isFav(song.id));
-    };
-
-    actions.appendChild(copyBtn);
-    actions.appendChild(favBtn);
-    topbar.appendChild(backBtn);
-    topbar.appendChild(titleBlock);
-    topbar.appendChild(actions);
-    page.appendChild(topbar);
-
-    // ── Metadata strip
-    if (song.lyricist || song.composer || song.year) {
-      const meta = document.createElement('div');
-      meta.className = 'lyrics-meta';
-      if (song.lyricist) meta.innerHTML += `<span>كلمات: <strong>${song.lyricist}</strong></span>`;
-      if (song.composer) meta.innerHTML += `<span>ألحان: <strong>${song.composer}</strong></span>`;
-      if (song.year)     meta.innerHTML += `<span>سنة: <strong>${song.year}</strong></span>`;
-      page.appendChild(meta);
-    }
-
-    // ── Reader controls (font size + auto-scroll only)
-    const controls = document.createElement('div');
-    controls.className = 'reader-controls';
-
-    // Font size
-    const fontLabel = document.createElement('span');
-    fontLabel.className = 'ctrl-label';
-    fontLabel.textContent = 'الخط';
-    controls.appendChild(fontLabel);
-
-    let fontSize = 1.45;
-    const decBtn = document.createElement('button');
-    decBtn.className = 'ctrl-btn';
-    decBtn.textContent = 'أ−';
-    decBtn.title = 'تصغير الخط';
-    decBtn.onclick = () => {
-      if (fontSize > 1.0) { fontSize = Math.round((fontSize - 0.1) * 10) / 10; lyricsText.style.fontSize = fontSize + 'rem'; }
-    };
-    const incBtn = document.createElement('button');
-    incBtn.className = 'ctrl-btn';
-    incBtn.textContent = 'أ+';
-    incBtn.title = 'تكبير الخط';
-    incBtn.onclick = () => {
-      if (fontSize < 2.2) { fontSize = Math.round((fontSize + 0.1) * 10) / 10; lyricsText.style.fontSize = fontSize + 'rem'; }
-    };
-    controls.appendChild(decBtn);
-    controls.appendChild(incBtn);
-
-    const div1 = document.createElement('div'); div1.className = 'ctrl-divider';
-    controls.appendChild(div1);
-
-    // Auto-scroll
-    const scrollLabel = document.createElement('span');
-    scrollLabel.className = 'ctrl-label';
-    scrollLabel.textContent = 'تمرير';
-    controls.appendChild(scrollLabel);
-
-    const scrollBtn = document.createElement('button');
-    scrollBtn.className = 'ctrl-btn';
-    scrollBtn.id = 'scroll-toggle';
-    scrollBtn.textContent = 'تشغيل ▶';
-    scrollBtn.onclick = () => {
-      const on = autoScroller.toggle();
-      scrollBtn.classList.toggle('active', on);
-      scrollBtn.textContent = on ? 'إيقاف ◼' : 'تشغيل ▶';
-    };
-    controls.appendChild(scrollBtn);
-
-    const speedSlider = document.createElement('input');
-    speedSlider.type = 'range';
-    speedSlider.className = 'scroll-speed';
-    speedSlider.min = 1; speedSlider.max = 5; speedSlider.value = 2;
-    autoScroller.setSpeed(2);
-    speedSlider.oninput = e => autoScroller.setSpeed(e.target.value);
-    controls.appendChild(speedSlider);
-
-    page.appendChild(controls);
-
-    // ── The lyrics
-    const lyricsBody = document.createElement('div');
-    lyricsBody.className = 'lyrics-body';
-
-    const lyricsText = document.createElement('div');
-    lyricsText.className = 'lyrics-text';
-
-    song.lyrics.split('\n').forEach(line => {
-      const p = document.createElement('p');
-      if (line.trim() === '') {
-        p.className = 'lyric-blank';
-      } else {
-        p.className = 'lyric-line';
-        p.textContent = line;
-      }
-      lyricsText.appendChild(p);
+    const list=document.createElement('div');list.className='song-list';
+    database.songs.filter(s=>s.artistId===artistId).forEach(song=>{
+      const row=document.createElement('div');
+      row.className='song-row'+(lyricsManager.openIds.includes(song.id)?' is-open':'');
+      row.dataset.sid=song.id;
+      row.innerHTML=`<span class="song-row-title">${song.title}</span>${song.year?`<span class="song-row-year">${song.year}</span>`:''}`;
+      row.onclick=()=>lyricsManager.open(song.id);
+      list.appendChild(row);
     });
-
-    lyricsBody.appendChild(lyricsText);
-    page.appendChild(lyricsBody);
-    el.appendChild(page);
+    el.appendChild(list);
   },
 
-  // ── Search Results ────────────────────────────────────────────────────────
-  renderSearch(el, query) {
-    const norm = t => t.toLowerCase()
-      .replace(/[أإآا]/g,'ا').replace(/[ىي]/g,'ي').replace(/[ةه]/g,'ه').trim();
-    const nq = norm(query);
+  _renderSearch(el,query){
+    const norm=t=>t.toLowerCase().replace(/[أإآا]/g,'ا').replace(/[ىي]/g,'ي').replace(/[ةه]/g,'ه').trim();
+    const nq=norm(query);
 
-    const matches = database.songs.filter(s => {
-      const a = database.artists.find(x => x.id === s.artistId);
-      return norm(s.title).includes(nq)
-          || norm(s.lyrics).includes(nq)
-          || norm(s.lyricist).includes(nq)
-          || norm(s.composer).includes(nq)
-          || (a && norm(a.name).includes(nq));
+    const matches=database.songs.filter(s=>{
+      const a=database.artists.find(x=>x.id===s.artistId);
+      return norm(s.title).includes(nq)||norm(s.lyrics).includes(nq)
+          ||norm(s.lyricist).includes(nq)||norm(s.composer).includes(nq)
+          ||(a&&norm(a.name).includes(nq));
     });
 
-    const title = document.createElement('h2');
-    title.className = 'section-title';
-    title.textContent = `نتائج البحث عن: "${query}"`;
-    el.appendChild(title);
+    const hdr=document.createElement('div');hdr.className='search-header';
+    hdr.innerHTML=`نتائج: <strong>${query}</strong> (${matches.length})`;
+    el.appendChild(hdr);
 
-    if (matches.length === 0) {
-      el.innerHTML += `<div class="empty-state">
+    if(matches.length===0){
+      el.innerHTML+=`<div class="sidebar-empty">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <p>لم نجد نتائج لـ «${query}»</p>
-      </div>`;
+        لا نتائج لـ «${query}»</div>`;
       return;
     }
 
-    const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-    const highlightRx = new RegExp(`(${escape(query)})`, 'gi');
+    const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const rx=new RegExp(`(${esc(query)})`,'gi');
 
-    const list = document.createElement('div');
-    list.className = 'songs-list';
-
-    matches.forEach(song => {
-      const artist = database.artists.find(a => a.id === song.artistId);
-      const card = document.createElement('div');
-      card.className = 'card-song';
-      card.onclick = () => this.navigate('lyrics', { songId: song.id });
-
-      // Snippet with highlight
-      let snippet = song.lyrics.substring(0, 90) + '…';
-      const mi = norm(song.lyrics).indexOf(nq);
-      if (mi !== -1) {
-        const s = Math.max(0, mi - 30);
-        const e = Math.min(song.lyrics.length, mi + query.length + 50);
-        snippet = (s > 0 ? '…' : '') + song.lyrics.substring(s, e) + (e < song.lyrics.length ? '…' : '');
-        snippet = snippet.replace(highlightRx, '<mark class="highlight">$1</mark>');
-      }
-
-      let htitle = song.title;
-      if (norm(song.title).includes(nq)) htitle = htitle.replace(highlightRx, '<mark class="highlight">$1</mark>');
-
-      card.innerHTML = `
-        <div class="song-info">
-          <div class="song-title">${htitle}</div>
-          <div class="song-meta-row">${artist ? artist.name : ''}</div>
-          <div class="song-snippet-row">${snippet}</div>
+    const list=document.createElement('div');list.className='song-list';
+    matches.forEach(song=>{
+      const artist=database.artists.find(a=>a.id===song.artistId);
+      const row=document.createElement('div');
+      row.className='song-row'+(lyricsManager.openIds.includes(song.id)?' is-open':'');
+      row.dataset.sid=song.id;
+      const ht=norm(song.title).includes(nq)?song.title.replace(rx,'<mark class="highlight">$1</mark>'):song.title;
+      row.innerHTML=`
+        <div style="min-width:0;flex:1">
+          <div class="song-row-title">${ht}</div>
+          ${artist?`<div style="font-size:.65rem;color:var(--text-muted)">${artist.name}</div>`:''}
         </div>
-        ${song.year ? `<div class="song-year-badge">${song.year}</div>` : ''}
-      `;
-      list.appendChild(card);
+        ${song.year?`<span class="song-row-year">${song.year}</span>`:''}`;
+      row.onclick=()=>lyricsManager.open(song.id);
+      list.appendChild(row);
     });
-
     el.appendChild(list);
   }
 };
 
-// ==========================================================================
-// INIT
-// ==========================================================================
-window.addEventListener('DOMContentLoaded', async () => {
+// ═════════════════════════ INIT ═════════════════════════
+window.addEventListener('DOMContentLoaded',async()=>{
   themeManager.init();
 
-  // Show loader
-  const view = document.getElementById('router-view');
-  view.innerHTML = `
-    <div class="empty-state">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation:spin 1s linear infinite">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-      </svg>
-      <p>جارٍ تحميل البيانات…</p>
-    </div>
-  `;
+  document.getElementById('workspace-empty').innerHTML=`
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="animation:spin 1s linear infinite;opacity:.3">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+    </svg>
+    <p style="font-size:.85rem">جارٍ تحميل البيانات…</p>`;
 
-  try {
-    await loadDatabase();
-  } catch(e) {
-    console.error(e);
-    view.innerHTML = `<div class="empty-state"><p style="color:#ef4444">تعذّر تحميل <strong>songs.json</strong>. تأكد من وجوده في نفس المجلد وأن الصفحة تعمل عبر خادم ويب.</p></div>`;
+  try{await loadDatabase()}
+  catch(e){
+    document.getElementById('workspace-empty').innerHTML=`<p style="color:#ef4444;font-size:.85rem">تعذّر تحميل <strong>songs.json</strong>. تأكد من وجوده في نفس المجلد وأن الصفحة تعمل عبر خادم ويب.</p>`;
     return;
   }
 
   bookmarkManager.init();
-  router.init();
+  lyricsManager._updateUI();
+  sidebarRouter.navigate('artists');
+
+  document.getElementById('global-search').addEventListener('input',e=>{
+    const q=e.target.value.trim();
+    if(q.length>0)sidebarRouter.navigate('search',{query:q});
+    else sidebarRouter.navigate('artists');
+  });
 });
 </script>
 </body>
