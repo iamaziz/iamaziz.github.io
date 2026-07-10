@@ -895,11 +895,10 @@
             constructor() {
                 this.exchangeRates = {};
                 this.baseCurrency = 'USD';
-                this.activeCurrencies = ['SAR', 'USD', 'THB', 'IDR' ,'PHP'];
+                this.activeCurrencies = ['SAR', 'USD', 'THB', 'IDR', 'USDT'];
                 this.calculator = null;
                 this.allCurrencies = {
                     'AED': { name: 'UAE Dirham', flag: '🇦🇪' },
-                    'ARS': { name: 'Argentine Peso', flag: '🇦🇷' },
                     'AUD': { name: 'Australian Dollar', flag: '🇦🇺' },
                     'BRL': { name: 'Brazilian Real', flag: '🇧🇷' },
                     'CAD': { name: 'Canadian Dollar', flag: '🇨🇦' },
@@ -925,6 +924,7 @@
                     'SGD': { name: 'Singapore Dollar', flag: '🇸🇬' },
                     'THB': { name: 'Thai Baht', flag: '🇹🇭' },
                     'TRY': { name: 'Turkish Lira', flag: '🇹🇷' },
+                    'USDT': { name: 'Tether', flag: '💰' },
                     'USD': { name: 'US Dollar', flag: '🇺🇸' },
                     'UYU': { name: 'Uruguayan Peso', flag: '🇺🇾' },
                     'VES': { name: 'Venezuelan Bolívar', flag: '🇻🇪' },
@@ -1031,7 +1031,7 @@
                         'BRL': 5.02, 'NOK': 10.87, 'NZD': 1.64, 'PLN': 4.08,
                         'RUB': 92.50, 'SEK': 10.95, 'TRY': 27.85, 'ZAR': 18.75,
                         'PHP': 56.25, 'VND': 24350, 'MAD': 10.12, 'EGP': 30.85,
-                        'ARS': 850.50, 'COP': 4125.75, 'UYU': 38.95, 'VES': 36.45
+                        'USDT': 1, 'COP': 4125.75, 'UYU': 38.95, 'VES': 36.45
                     };
                     
                     this.updateStatusIndicator('success');
@@ -1185,8 +1185,8 @@
             }
 
             getDecimalPlaces(currency) {
-                const noDecimalCurrencies = ['JPY', 'KRW', 'IDR', 'VND', 'COP', 'ARS', 'UYU'];
-                const highPrecisionCurrencies = ['BTC', 'ETH'];
+                const noDecimalCurrencies = ['JPY', 'KRW', 'IDR', 'VND', 'COP', 'UYU'];
+                const highPrecisionCurrencies = ['BTC', 'ETH', 'USDT'];
                 
                 if (noDecimalCurrencies.includes(currency)) {
                     return 0;
