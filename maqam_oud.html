@@ -350,6 +350,20 @@
   .note-dot { cursor:pointer; pointer-events:all; }
   .note-dot:hover circle { filter: brightness(1.2); }
 
+  /* Duplicate maqam notes (alternate fingerings) — subdued, still discoverable */
+  .dup-dot { opacity: 0.6; transition: opacity 0.2s, filter 0.2s; }
+  .dup-dot:hover { opacity: 1; }
+  .dup-dot:hover .note-circle { filter: brightness(1.5); stroke: var(--gold-light); }
+
+  /* Secondary / passing chromatic notes — de-emphasised but reachable */
+  .ghost-dot { opacity: 0.5; transition: opacity 0.2s; }
+  .ghost-dot:hover { opacity: 1; }
+  .ghost-dot:hover .note-circle {
+    filter: brightness(1.4);
+    stroke: var(--gold);
+    stroke-width: 1.4;
+  }
+
   /* ── Note illumination when played ── */
   @keyframes noteFlash {
     0%   { opacity: 1; }
@@ -392,6 +406,8 @@
   .legend-dot.root { background:#e8432a; box-shadow:0 0 8px rgba(232,67,42,0.4); }
   .legend-dot.scale { background:var(--gold); box-shadow:0 0 8px rgba(201,162,39,0.4); }
   .legend-dot.half { background:linear-gradient(135deg, var(--gold) 50%, #4a3000 50%); border:1px solid var(--gold); }
+  .legend-dot.alt { background:#6b5518; border:1px solid rgba(201,162,39,0.45); box-shadow:none; opacity:0.6; width:12px; height:12px; }
+  .legend-dot.other { background:rgba(30,20,8,0.55); border:1.5px solid rgba(201,162,39,0.28); box-shadow:none; opacity:0.7; }
 
   /* MAQAM GRID */
   .section-title {
@@ -1115,8 +1131,19 @@
     </div>
   </div>
 
+  <div class="oud-section">
+    <div class="oud-container">
+      <div class="oud-neck" id="oudNeck">
+        <div class="peg-area" id="pegArea"></div>
+        <div class="neck-nut"></div>
+        <div class="neck-body"></div>
+        <svg class="neck-svg" id="neckSvg" viewBox="0 0 900 300" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+  </div>
+
   <!-- SEQUENCE BUILDER -->
-  <div class="seq-builder" id="seqBuilder">
+  <div class="seq-builder collapsed" id="seqBuilder">
     <div class="seq-builder-header" onclick="toggleSeqBuilder()">
       <div class="sound-icon">🎼</div>
       <div class="sound-title" data-i18n="seq_builder_title">Sequence Builder</div>
@@ -1163,17 +1190,6 @@
     </div>
   </div>
 
-  <div class="oud-section">
-    <div class="oud-container">
-      <div class="oud-neck" id="oudNeck">
-        <div class="peg-area" id="pegArea"></div>
-        <div class="neck-nut"></div>
-        <div class="neck-body"></div>
-        <svg class="neck-svg" id="neckSvg" viewBox="0 0 900 300" preserveAspectRatio="none"></svg>
-      </div>
-    </div>
-  </div>
-
   <div class="legend">
     <div class="legend-item">
       <div class="legend-dot root"></div>
@@ -1186,6 +1202,14 @@
     <div class="legend-item">
       <div class="legend-dot half"></div>
       <span data-i18n="legend_half">Half-Flat (♭½)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot alt"></div>
+      <span data-i18n="legend_alt">Alternate Position</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot other"></div>
+      <span data-i18n="legend_other">Other Note</span>
     </div>
   </div>
 
@@ -1329,9 +1353,10 @@ const MAQAMAT = [
 // Fa-Fa: F C D g c f′  → semitones from C: 5,0,2,7,0,5
 const TUNINGS = {
   // Do-Do: C2 F2 A2 d3 g3 c′4  → semitones from C: 0,5,9,2,7,0
-  dodo: { notes:[0,5,9,2,7,0],  labels:['C','F','A','d','g','c′'] },
+  // openAbs = absolute ascending semitones (C = 0 reference) for scale-path tracing
+  dodo: { notes:[0,5,9,2,7,0],  labels:['C','F','A','d','g','c′'], openAbs:[0,5,9,14,19,24] },
   // Fa-Fa: F2 A2 D3 g3 c4 f′4  → semitones from C: 5,9,2,7,0,5
-  fafa: { notes:[5,9,2,7,0,5],  labels:['F','A','D','g','c','f′'] },
+  fafa: { notes:[5,9,2,7,0,5],  labels:['F','A','D','g','c','f′'], openAbs:[5,9,14,19,24,29] },
 };
 
 // ── STATE
@@ -1345,6 +1370,7 @@ const I18N = {
   en:{ app_title_en:'Maqam Oud', app_title_ar:'مقام العود',
        select_maqam:'Select Maqam', select_tuning:'Oud Tuning',
        legend_root:'Root (Qarar)', legend_note:'Scale Note', legend_half:'Half-Flat (♭½)',
+       legend_alt:'Alternate Position', legend_other:'Other Note',
        all_maqamat:'All Maqamat', open:'Open', string:'String', fret:'Fret',
        sound_title:'Listen to Maqam', play_maqam:'Play Maqam', stop:'Stop',
        tempo:'Tempo', click_note:'Click any note circle to hear it',
@@ -1359,6 +1385,7 @@ const I18N = {
   ar:{ app_title_en:'Maqam Oud', app_title_ar:'مقام العود',
        select_maqam:'اختر المقام', select_tuning:'ضبط العود',
        legend_root:'القرار', legend_note:'نغمة السلم', legend_half:'نصف بيمول (♭½)',
+       legend_alt:'موضع بديل', legend_other:'نغمة أخرى',
        all_maqamat:'جميع المقامات', open:'مفتوح', string:'وتر', fret:'دستان',
        sound_title:'استمع إلى المقام', play_maqam:'شغّل المقام', stop:'إيقاف',
        tempo:'السرعة', click_note:'انقر على أي نغمة لسماعها',
@@ -1563,6 +1590,11 @@ function renderNeck() {
   // ── COMPUTE MAQAM NOTE SET (mod 12, with half-tone precision)
   const maqamSet = buildMaqamSet();
 
+  // ── COMPUTE THE PRIMARY SCALE PATH (one ascending octave in its main position)
+  // Returns a Set of "string:fretDistance" keys marking the featured fingering.
+  const primarySet = computePrimaryScalePath(tuning, openNotes);
+  const isPrimary = (s, dist) => primarySet.has(s + ':' + dist);
+
   // ── PLACE NOTES
   for (let s = 0; s < nStrings; s++) {
     const openPitch = openNotes[s]; // mod-12
@@ -1571,7 +1603,9 @@ function renderNeck() {
     // Open string
     const openMatch = findMatch(openPitch, maqamSet);
     if (openMatch) {
-      drawNote(svg, NUT - 28, sy, openPitch, openMatch, s, -1, true);
+      drawNote(svg, NUT - 28, sy, openPitch, openMatch, s, -1, true, isPrimary(s, 0));
+    } else {
+      drawGhostNote(svg, NUT - 28, sy, openPitch, s, -1, true);
     }
 
     // Frets 1..FRET_COUNT + half-flat positions
@@ -1581,16 +1615,91 @@ function renderNeck() {
       const cx = (fretX(f-1) + fretX(f)) / 2;
 
       const m = findMatch(pitch, maqamSet);
-      if (m) drawNote(svg, cx, sy, pitch, m, s, f, false);
+      if (m) drawNote(svg, cx, sy, pitch, m, s, f, false, isPrimary(s, f));
+      else   drawGhostNote(svg, cx, sy, pitch, s, f, false);
 
       // Quarter-tone (half-flat): position at ~62% between fret f-1 and f
       // only check non-integer pitches in maqam
       const halfPitch = (openPitch + f - 0.5 + 12) % 12; // 0.5 semitone before fret f
       const hx = fretX(f-1) + (fretX(f) - fretX(f-1)) * 0.58;
       const hm = findMatch(halfPitch, maqamSet, true);
-      if (hm) drawNote(svg, hx, sy, halfPitch, hm, s, f - 0.5, false);
+      if (hm) drawNote(svg, hx, sy, halfPitch, hm, s, f - 0.5, false, isPrimary(s, f - 0.5));
     }
   }
+}
+
+// ── PRIMARY SCALE PATH
+// Traces a single ascending octave of the maqam starting from the lowest
+// available root, walking upward across strings in a compact hand position.
+// Returns Set of "string:fretDistance" keys (fretDistance: 0 = open string,
+// integer = fret, x.5 = quarter-tone position).
+function computePrimaryScalePath(tuning, openNotes) {
+  const openAbs = tuning.openAbs;
+  const nStrings = openAbs.length;
+  const root = currentMaqam.root;
+  const intervals = currentMaqam.intervals;
+
+  // Begin the primary scale on the A string (the natural/common oud position),
+  // allowing it to continue onto the D string and above.
+  const aIdx = tuning.labels.findIndex(l => l.toUpperCase() === 'A');
+  const startString = aIdx >= 0 ? aIdx : 0;
+
+  // Find lowest absolute root on/above the A string to anchor the scale
+  let rootAbs = Infinity;
+  for (let s = startString; s < nStrings; s++) {
+    for (let d = 0; d <= FRET_COUNT; d += 0.5) {
+      const abs = openAbs[s] + d;
+      if (((abs % 12) + 12) % 12 === ((root % 12) + 12) % 12) {
+        if (abs < rootAbs) rootAbs = abs;
+      }
+    }
+  }
+  if (!isFinite(rootAbs)) return new Set();
+
+  // Target absolute pitches for each scale degree
+  const targets = intervals.map(iv => rootAbs + iv);
+
+  const path = new Set();
+  let curString = startString;
+  let curFret = -1;
+
+  targets.forEach((target, i) => {
+    let best = null;
+    for (let s = startString; s < nStrings; s++) {
+      const dist = target - openAbs[s];
+      if (dist < 0 || dist > FRET_COUNT) continue;
+      // Never descend to a lower string as the scale ascends
+      if (i > 0 && s < curString) continue;
+      // Strongly prefer open strings — the most natural/idiomatic oud fingering
+      const openBonus = dist === 0 ? -250 : 0;
+      let score;
+      if (i === 0) {
+        // Start: prefer the lowest string with the lowest fret (open if available)
+        score = s * 100 + dist + openBonus;
+      } else {
+        const stringJump = s - curString;
+        score = stringJump * 14 + dist + openBonus;
+        // Keep a compact hand position: penalise high frets on the same string
+        if (stringJump === 0 && dist > 5) score += 40;
+      }
+      if (!best || score < best.score) best = { s, dist, score };
+    }
+    // Fallback: relax the compact-position constraint but stay on/above A string
+    if (!best) {
+      for (let s = startString; s < nStrings; s++) {
+        const dist = target - openAbs[s];
+        if (dist < 0 || dist > FRET_COUNT) continue;
+        if (!best || dist < best.dist) best = { s, dist, score: 0 };
+      }
+    }
+    if (best) {
+      path.add(best.s + ':' + best.dist);
+      curString = best.s;
+      curFret = best.dist;
+    }
+  });
+
+  return path;
 }
 
 function buildMaqamSet() {
@@ -1618,9 +1727,11 @@ function findMatch(pitch, maqamSet, onlyHalf) {
   return null;
 }
 
-function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
+function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen, isPrimary = true) {
   const { isRoot, isHalf } = matchInfo;
-  const R = isOpen ? 10 : 9;
+  const baseR = isRoot ? 11.5 : isOpen ? 10 : 9.5;
+  // Duplicate (alternate-fingering) notes are rendered smaller & softer
+  const R = isPrimary ? baseR : baseR * 0.68;
   const lang = currentLang;
   const nn = noteName(pitch, lang);
 
@@ -1628,7 +1739,7 @@ function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
   const pitchKey = Math.round(((pitch % 12) + 12) % 12 * 2) / 2;
 
   const g = makeSvg('g');
-  g.setAttribute('class', 'note-dot');
+  g.setAttribute('class', 'note-dot' + (isPrimary ? '' : ' dup-dot'));
   g.setAttribute('data-pitch', pitchKey);
 
   // ── Pulse ring (hidden until .lit is added) ──
@@ -1646,23 +1757,31 @@ function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
   innerGlow.setAttribute('class', 'inner-glow');
   g.appendChild(innerGlow);
 
-  // ── Ambient glow (always visible) ──
-  const glow = makeSvg('circle');
-  setAttr(glow, { cx:x, cy:y, r:R+6,
-    fill: isRoot ? 'rgba(232,67,42,0.22)' : isHalf ? 'rgba(139,105,20,0.2)' : 'rgba(201,162,39,0.18)',
-    'pointer-events':'none' });
-  g.appendChild(glow);
+  // ── Ambient glow (only for the primary scale — keeps it dominant) ──
+  if (isPrimary) {
+    const glow = makeSvg('circle');
+    setAttr(glow, { cx:x, cy:y, r:R+6,
+      fill: isRoot ? 'rgba(232,67,42,0.22)' : isHalf ? 'rgba(139,105,20,0.2)' : 'rgba(201,162,39,0.18)',
+      'pointer-events':'none' });
+    g.appendChild(glow);
+  }
 
   // ── Main circle ──
   const circ = makeSvg('circle');
-  const fillColor = isRoot ? '#d43a24' : isHalf ? '#7a5c10' : '#c9a227';
-  const strokeColor = isRoot ? '#ff8070' : isHalf ? '#d4a828' : '#ffe080';
-  setAttr(circ, { cx:x, cy:y, r:R, fill:fillColor, stroke:strokeColor, 'stroke-width':'1.5' });
+  // Duplicates use muted, desaturated fills so the primary scale stands out
+  const fillColor = isPrimary
+    ? (isRoot ? '#d43a24' : isHalf ? '#7a5c10' : '#c9a227')
+    : (isRoot ? '#7a2418' : isHalf ? '#443309' : '#6b5518');
+  const strokeColor = isPrimary
+    ? (isRoot ? '#ff8070' : isHalf ? '#d4a828' : '#ffe080')
+    : (isRoot ? 'rgba(232,120,100,0.5)' : 'rgba(201,162,39,0.45)');
+  setAttr(circ, { cx:x, cy:y, r:R, fill:fillColor, stroke:strokeColor,
+    'stroke-width': isPrimary ? '1.5' : '1' });
   circ.setAttribute('class', 'note-circle');
   g.appendChild(circ);
 
   // ── Quarter-tone stripe ──
-  if (isHalf) {
+  if (isHalf && isPrimary) {
     const stripe = makeSvg('circle');
     setAttr(stripe, { cx:x, cy:y, r:R, fill:'url(#halfPattern)',
       stroke:'none', 'clip-path':`circle(${R}px at ${x}px ${y}px)` });
@@ -1671,9 +1790,13 @@ function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
 
   // ── Label text ──
   const txt = makeSvg('text');
-  const fs = nn.length > 3 ? '6.5' : nn.length > 2 ? '7.5' : '8.5';
+  const fsScale = isPrimary ? 1 : 0.82;
+  const fs = (nn.length > 3 ? 6.5 : nn.length > 2 ? 7.5 : 8.5) * fsScale;
+  const txtFill = isPrimary
+    ? (isRoot ? '#fff' : isHalf ? '#ffe5a0' : '#1a0d00')
+    : (isRoot ? 'rgba(255,220,210,0.85)' : 'rgba(240,220,160,0.8)');
   setAttr(txt, { x:x, y:y+0.5, 'text-anchor':'middle', 'dominant-baseline':'middle',
-    fill: isRoot ? '#fff' : isHalf ? '#ffe5a0' : '#1a0d00',
+    fill: txtFill,
     'font-size':fs, 'font-family': lang==='ar' ? 'Amiri,serif' : 'Cinzel,serif',
     'font-weight':'700', 'pointer-events':'none' });
   txt.textContent = nn;
@@ -1683,14 +1806,25 @@ function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
   if (isOpen) {
     const ring = makeSvg('circle');
     setAttr(ring, { cx:x, cy:y, r:R+3, fill:'none',
-      stroke: isRoot ? 'rgba(232,67,42,0.6)' : 'rgba(201,162,39,0.5)', 'stroke-width':'1' });
+      stroke: isRoot ? 'rgba(232,67,42,0.6)' : 'rgba(201,162,39,0.5)',
+      'stroke-width':'1', opacity: isPrimary ? '1' : '0.5' });
     g.appendChild(ring);
+  }
+
+  // ── Root emphasis halo (only on the primary tonic / qarar) ──
+  if (isRoot && isPrimary) {
+    const halo = makeSvg('circle');
+    setAttr(halo, { cx:x, cy:y, r:R+4, fill:'none',
+      stroke:'rgba(255,128,110,0.7)', 'stroke-width':'1.5',
+      'stroke-dasharray':'2.5 3', 'pointer-events':'none' });
+    g.appendChild(halo);
   }
 
   // Tooltip events + click to play
   g.addEventListener('mouseenter', e => {
     const fretLabel = fret === -1 ? t('open') : `${t('fret')} ${fret}`;
-    showTip(e, `${nn}  ·  ${t('string')} ${stringIdx+1}  ·  ${fretLabel}${isRoot ? '  ★' : ''}`);
+    const tag = isRoot && isPrimary ? '  ★' : (!isPrimary ? `  ·  ${t('legend_alt')}` : '');
+    showTip(e, `${nn}  ·  ${t('string')} ${stringIdx+1}  ·  ${fretLabel}${tag}`);
   });
   g.addEventListener('mousemove', moveTip);
   g.addEventListener('mouseleave', hideTip);
@@ -1717,6 +1851,65 @@ function drawNote(svg, x, y, pitch, matchInfo, stringIdx, fret, isOpen) {
       const octOff = matchIv !== undefined ? 0 : 0;
       addNoteToActiveSequence(pitchSemitone, octOff, 1);
     }
+  });
+  g.style.cursor = 'pointer';
+
+  svg.appendChild(g);
+}
+
+// ── GHOST NOTE (chromatic reference note NOT in the current maqam)
+// Rendered small, dim, and outline-only so the maqam notes clearly dominate,
+// while the full chromatic context stays available and clickable.
+function drawGhostNote(svg, x, y, pitch, stringIdx, fret, isOpen) {
+  const lang = currentLang;
+  const nn = noteName(pitch, lang);
+  const pitchKey = Math.round(((pitch % 12) + 12) % 12 * 2) / 2;
+  const R = 6;
+
+  const g = makeSvg('g');
+  g.setAttribute('class', 'note-dot ghost-dot');
+  g.setAttribute('data-pitch', pitchKey);
+
+  // Pulse ring for the "played" illumination (kept faint)
+  const pulseRing = makeSvg('circle');
+  setAttr(pulseRing, { cx:x, cy:y, r:R+3, fill:'none',
+    stroke:'#ffe060', 'stroke-width':'1.5', opacity:'0', 'pointer-events':'none' });
+  pulseRing.setAttribute('class', 'pulse-ring');
+  g.appendChild(pulseRing);
+
+  // Subtle hit target (transparent, widens the clickable area)
+  const hit = makeSvg('circle');
+  setAttr(hit, { cx:x, cy:y, r:R+5, fill:'rgba(0,0,0,0.001)' });
+  g.appendChild(hit);
+
+  // Outline-only circle
+  const circ = makeSvg('circle');
+  setAttr(circ, { cx:x, cy:y, r:R, fill:'rgba(30,20,8,0.55)',
+    stroke:'rgba(201,162,39,0.28)', 'stroke-width':'1' });
+  circ.setAttribute('class', 'note-circle');
+  g.appendChild(circ);
+
+  // Dim label
+  const txt = makeSvg('text');
+  const fs = nn.length > 2 ? '5' : '6';
+  setAttr(txt, { x:x, y:y+0.5, 'text-anchor':'middle', 'dominant-baseline':'middle',
+    fill:'rgba(160,128,64,0.55)', 'font-size':fs,
+    'font-family': lang==='ar' ? 'Amiri,serif' : 'Cinzel,serif',
+    'font-weight':'600', 'pointer-events':'none' });
+  txt.textContent = nn;
+  g.appendChild(txt);
+
+  // Tooltip + click to play (as a passing/chromatic tone)
+  g.addEventListener('mouseenter', e => {
+    const fretLabel = fret === -1 ? t('open') : `${t('fret')} ${fret}`;
+    showTip(e, `${nn}  ·  ${t('string')} ${stringIdx+1}  ·  ${fretLabel}  ·  ${t('legend_other')}`);
+  });
+  g.addEventListener('mousemove', moveTip);
+  g.addEventListener('mouseleave', hideTip);
+  g.addEventListener('click', () => {
+    const pitchSemitone = ((pitch % 12) + 12) % 12;
+    playOudNote(semitoneToHz(pitchSemitone), 2.0);
+    illuminateNeckNotes(pitchSemitone);
   });
   g.style.cursor = 'pointer';
 
