@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Evolve</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 16px; }
+  h2 { margin-top: 0; }
+  .layout { display: flex; gap: 40px; align-items: flex-start; }
+  .inputs { flex: 0 0 220px; }
+  .results { flex: 1; }
+  label { display: block; margin-top: 10px; font-size: 14px; }
+  input { width: 100%; padding: 6px; margin-top: 2px; box-sizing: border-box; }
+  table { width: 100%; border-collapse: collapse; }
+  td, th { text-align: left; padding: 4px 8px; border-bottom: 1px solid #ddd; font-size: 14px; }
+  th { font-weight: 600; }
+  @media (max-width: 600px) {
+    .layout { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<h2>Growth</h2>
+<p style="margin-top:-8px; color:#666; font-size:14px;">
+  V<sub>d</sub> = V<sub>0</sub> × (1 + r)<sup>d</sup>
+
+</p>
+
+<div class="layout">
+  <div class="inputs">
+    <label>Starting value
+      <input id="value" type="number" value="100" step="10" oninput="run()">
+    </label>
+    <label>Daily growth rate (e.g. 0.1 = 10%)
+      <input id="rate" type="number" value="0.15" step="0.05" oninput="run()">
+    </label>
+    <label>Number of days
+      <input id="days" type="number" value="20" step="1" oninput="run()">
+    </label>
+    <label>Start date
+      <input id="startDate" type="date" value="2026-09-06" oninput="run()">
+    </label>
+  </div>
+  <div class="results">
+    <table id="out"></table>
+  </div>
+</div>
+
+<script>
+function run() {
+  let v = +value.value, r = +rate.value, d = +days.value;
+  let date = new Date(startDate.value + 'T00:00:00');
+
+  out.innerHTML = '<tr><th>Date</th><th>Value</th></tr>';
+
+  for (let i = 0; i <= d; i++, date.setDate(date.getDate() + 1), v *= 1 + r) {
+    let row = out.insertRow();
+    row.insertCell().textContent =
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    row.insertCell().textContent = v.toFixed(2);
+  }
+}
+
+run();
+</script>
+
+</body>
+</html>
