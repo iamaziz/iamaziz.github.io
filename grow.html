@@ -10,10 +10,18 @@
   .inputs { flex: 0 0 220px; }
   .results { flex: 1; }
   label { display: block; margin-top: 10px; font-size: 14px; }
-  input { width: 100%; padding: 6px; margin-top: 2px; box-sizing: border-box; }
+  input, select { width: 100%; padding: 6px; margin-top: 2px; box-sizing: border-box; }
   table { width: 100%; border-collapse: collapse; }
   td, th { text-align: left; padding: 4px 8px; border-bottom: 1px solid #ddd; font-size: 14px; }
   th { font-weight: 600; }
+  td.growth { color: #1a7f37; font-style: italic; }
+  td.growth.neg { color: #cf222e; }
+  td.rate.neg { color: #cf222e; }
+  .seed-row { display: flex; gap: 6px; }
+  .seed-row input { flex: 1; }
+  .seed-row button { flex: 0 0 auto; padding: 6px 10px; }
+  fieldset { border: 1px solid #ddd; border-radius: 6px; margin: 18px 0 0; padding: 4px 12px 12px; }
+  legend { font-size: 13px; color: #666; padding: 0 4px; }
   @media (max-width: 600px) {
     .layout { flex-direction: column; }
   }
@@ -23,8 +31,10 @@
 
 <h2>Growth</h2>
 <p style="margin-top:-8px; color:#666; font-size:14px;">
-  V<sub>d</sub> = V<sub>0</sub> × (1 + r)<sup>d</sup>
-
+  V<sub>d</sub> = V<sub>0</sub> &times; (1 + r)<sub>d</sub>
+</p>
+<p id="formula" style="margin-top:-8px; color:#666; font-size:14px;">
+  r<sub>d</sub> = clamp(&mu; + &phi;(r<sub>d-1</sub> &minus; &mu;) + &sigma;<sub>d</sub>&middot;&epsilon;<sub>d</sub>, r<sub>min</sub>, r<sub>max</sub>)
 </p>
 
 <div class="layout">
@@ -32,8 +42,8 @@
     <label>Starting value
       <input id="value" type="number" value="100" step="10" oninput="run()">
     </label>
-    <label>Daily growth rate (e.g. 0.1 = 10%)
-      <input id="rate" type="number" value="0.15" step="0.05" oninput="run()">
+    <label>Drift: average daily growth rate (e.g. 0.1 = 10%)
+      <input id="mu" type="number" value="0.15" step="0.01" oninput="run()">
     </label>
     <label>Number of days
       <input id="days" type="number" value="20" step="1" oninput="run()">
@@ -41,6 +51,46 @@
     <label>Start date
       <input id="startDate" type="date" value="2026-09-06" oninput="run()">
     </label>
+
+    <fieldset>
+      <legend>Daily rate</legend>
+      <label>Mode
+        <select id="mode" onchange="run()">
+          <option value="fixed" selected>Fixed</option>
+          <option value="random">Random (bounded)</option>
+        </select>
+      </label>
+      <div id="boundsBox">
+        <label>Min rate (e.g. -0.3 = -30%)
+          <input id="rMin" type="number" value="-0.1" step="0.05" oninput="run()">
+        </label>
+        <label>Max rate (e.g. 0.4 = 40%)
+          <input id="rMax" type="number" value="0.4" step="0.05" oninput="run()">
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset id="randomBox">
+      <legend>Randomness</legend>
+      <label>Base volatility &sigma; (e.g. 0.05 = 5%)
+        <input id="sigma" type="number" value="0.05" step="0.01" oninput="run()">
+      </label>
+      <label>Reversion &phi; (0 = walk, 1 = snap back)
+        <input id="phi" type="number" value="0.8" step="0.05" oninput="run()">
+      </label>
+      <label>Volatility persistence &beta;
+        <input id="beta" type="number" value="0.85" step="0.05" oninput="run()">
+      </label>
+      <label>Shock sensitivity &alpha;
+        <input id="alpha" type="number" value="0.1" step="0.05" oninput="run()">
+      </label>
+      <label>Seed
+        <span class="seed-row">
+          <input id="seed" type="number" value="42" step="1" oninput="run()">
+          <button type="button" onclick="newSeed()">&#x2684;</button>
+        </span>
+      </label>
+    </fieldset>
   </div>
   <div class="results">
     <table id="out"></table>
@@ -48,17 +98,92 @@
 </div>
 
 <script>
+// Seeded PRNG (mulberry32). Same seed gives the same path.
+function mulberry32(a) {
+  return function() {
+    a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+// Box-Muller: standard normal from a uniform generator.
+function gauss(rand) {
+  let u = 0, v = 0;
+  while (u === 0) u = rand();
+  while (v === 0) v = rand();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+function clamp(x, lo, hi) {
+  return Math.min(hi, Math.max(lo, x));
+}
+
+function newSeed() {
+  document.getElementById('seed').value = Math.floor(Math.random() * 1e9);
+  run();
+}
+
 function run() {
-  let v = +value.value, r = +rate.value, d = +days.value;
-  let date = new Date(startDate.value + 'T00:00:00');
+  const el = id => document.getElementById(id);
+  const v0 = +el('value').value;
+  const mu = +el('mu').value;
+  const d = Math.max(0, Math.trunc(+el('days').value));
+  const randomMode = el('mode').value === 'random';
+  el('boundsBox').style.display = randomMode ? '' : 'none';
+  el('randomBox').style.display = randomMode ? '' : 'none';
+  el('formula').style.display = randomMode ? '' : 'none';
+  const rMin = Math.min(+el('rMin').value, +el('rMax').value);
+  const rMax = Math.max(+el('rMin').value, +el('rMax').value);
 
-  out.innerHTML = '<tr><th>Date</th><th>Value</th></tr>';
+  const sigma = Math.max(0, +el('sigma').value);
+  const phi = clamp(+el('phi').value, 0, 1);
 
-  for (let i = 0; i <= d; i++, date.setDate(date.getDate() + 1), v *= 1 + r) {
-    let row = out.insertRow();
-    row.insertCell().textContent =
+  // GARCH(1,1): omega is set so the long-run volatility equals sigma.
+  let alpha = Math.max(0, +el('alpha').value);
+  let beta = Math.max(0, +el('beta').value);
+  const sum = alpha + beta;
+  if (sum > 0.99) { alpha *= 0.99 / sum; beta *= 0.99 / sum; }
+  const omega = sigma * sigma * (1 - alpha - beta);
+
+  const seed = (Math.trunc(+el('seed').value) >>> 0) || 1;
+  const rand = mulberry32(seed);
+
+  const date = new Date(el('startDate').value + 'T00:00:00');
+  const out = el('out');
+  out.innerHTML = '<tr><th>Date</th><th>Total</th><th>Increase</th><th>Rate</th></tr>';
+
+  let v = v0;
+  let r = mu;
+  let s = sigma; // current volatility
+
+  for (let i = 0; i <= d; i++) {
+    const dateText =
       `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    if (randomMode && i > 0) {
+      r = clamp(mu + phi * (r - mu) + s * gauss(rand), rMin, rMax);
+      s = Math.sqrt(omega + alpha * Math.abs(r - mu) * Math.abs(r - mu) + beta * s * s);
+    } else if (!randomMode) {
+      r = mu;
+    }
+
+    const row = out.insertRow();
+    row.insertCell().textContent = dateText;
     row.insertCell().textContent = v.toFixed(2);
+
+    const g = row.insertCell();
+    const inc = v * r;
+    g.className = inc < 0 ? 'growth neg' : 'growth';
+    g.textContent = (inc >= 0 ? '+' : '') + inc.toFixed(2);
+
+    const rc = row.insertCell();
+    rc.className = r < 0 ? 'rate neg' : 'rate';
+    rc.textContent = (r * 100).toFixed(2) + '%';
+
+    v *= 1 + r;
+    date.setDate(date.getDate() + 1);
   }
 }
 
